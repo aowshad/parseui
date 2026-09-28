@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="ParseUI is the design system and React UI library for ParseLab apps: tokens, components, blocks and dashboard examples.">
+<meta property="og:title" content="ParseUI — Design system by ParseLab">
+<meta property="og:description" content="Tokens, React components, blocks and dashboard examples for every ParseLab app.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<title>ParseUI — Design system by ParseLab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root, .scope-light{
+  --bg:#FFFFFF; --bg-subtle:#F8F8FA; --bg-muted:#F1F1F4; --bg-inset:#EBEBEF;
+  --border:#E7E7EC; --border-strong:#D6D6DD;
+  --text:#14141B; --text-2:#51515E; --text-3:#8B8B98;
+  --success:#12915A; --success-soft:#E7F6EE; --warning:#C27A04; --warning-soft:#FDF3E1;
+  --danger:#DC3E42; --danger-soft:#FDECEC; --info:#2F6FEB; --info-soft:#EAF1FE;
+  --sh-xs:0 1px 2px rgba(20,20,27,.05);
+  --sh-sm:0 1px 3px rgba(20,20,27,.08),0 1px 2px rgba(20,20,27,.04);
+  --sh-md:0 4px 10px -2px rgba(20,20,27,.08),0 2px 4px -2px rgba(20,20,27,.05);
+  --sh-lg:0 14px 28px -8px rgba(20,20,27,.14),0 4px 8px -4px rgba(20,20,27,.06);
+  --sh-xl:0 24px 48px -12px rgba(20,20,27,.22);
+  --code-bg:#FAFAFB; --grid-dot:#E2E2E8; --logo-word:#696969;
+  color-scheme:light;
+}
+:root[data-theme="dark"], .scope-dark{
+  --bg:#0F0F14; --bg-subtle:#15151C; --bg-muted:#1C1C24; --bg-inset:#24242E;
+  --border:#26262F; --border-strong:#34343F;
+  --text:#EDEDF2; --text-2:#A6A6B3; --text-3:#6E6E7C;
+  --success:#3DC98A; --success-soft:#12291F; --warning:#F0B34A; --warning-soft:#2C2311;
+  --danger:#F26B6E; --danger-soft:#2E1517; --info:#6B9CF7; --info-soft:#141F35;
+  --sh-xs:0 1px 2px rgba(0,0,0,.4); --sh-sm:0 1px 3px rgba(0,0,0,.5);
+  --sh-md:0 4px 12px rgba(0,0,0,.5); --sh-lg:0 14px 30px rgba(0,0,0,.55); --sh-xl:0 24px 50px rgba(0,0,0,.6);
+  --code-bg:#13131A; --grid-dot:#23232C; --logo-word:#FFFFFF;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F0F14; --bg-subtle:#15151C; --bg-muted:#1C1C24; --bg-inset:#24242E;
+    --border:#26262F; --border-strong:#34343F;
+    --text:#EDEDF2; --text-2:#A6A6B3; --text-3:#6E6E7C;
+    --success:#3DC98A; --success-soft:#12291F; --warning:#F0B34A; --warning-soft:#2C2311;
+    --danger:#F26B6E; --danger-soft:#2E1517; --info:#6B9CF7; --info-soft:#141F35;
+    --sh-xs:0 1px 2px rgba(0,0,0,.4); --sh-sm:0 1px 3px rgba(0,0,0,.5);
+    --sh-md:0 4px 12px rgba(0,0,0,.5); --sh-lg:0 14px 30px rgba(0,0,0,.55); --sh-xl:0 24px 50px rgba(0,0,0,.6);
+    --code-bg:#13131A; --grid-dot:#23232C; --logo-word:#FFFFFF; color-scheme:dark;
+  }
+}
+/* derived tokens: recomputed in every scope */
+:root, .scope-light, .scope-dark{
+  --p:var(--brand, var(--text));
+  --p-fg:var(--brand-fg, var(--bg));
+  --p-hover:color-mix(in oklab, var(--p) 86%, var(--text));
+  --p-soft:color-mix(in oklab, var(--p) 11%, var(--bg));
+  --p-soft-2:color-mix(in oklab, var(--p) 20%, var(--bg));
+  --p-text:color-mix(in oklab, var(--p) 82%, var(--text));
+  --ring:color-mix(in oklab, var(--p) 40%, transparent);
+  --r:var(--radius, 8px);
+  --r-sm:calc(var(--r) * .75);
+  --r-lg:calc(var(--r) * 1.5);
+  --r-xl:calc(var(--r) * 2);
+  --font:"Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono:"Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+:root{ --brand:#2488FF; --brand-fg:#fff; --radius:8px; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px); }
+html{ scroll-padding-top:calc(env(safe-area-inset-top,0px) + 76px); }
+*,*::before,*::after{ box-sizing:border-box; }
+body{ margin:0; background:var(--bg); color:var(--text); font:400 15px/1.6 var(--font);
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+a{ color:inherit; text-decoration:none; }
+img,svg{ max-width:100%; }
+button{ font:inherit; color:inherit; }
+code,kbd,pre{ font-family:var(--mono); }
+::selection{ background:var(--p-soft-2); }
+.ico{ width:16px; height:16px; flex:none; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.ico-lg{ width:20px; height:20px; }
+:focus-visible{ outline:2px solid var(--p); outline-offset:2px; }
+@media (prefers-reduced-motion: reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+
+/* ============ SITE CHROME ============ */
+.topbar{ position:sticky; top:env(safe-area-inset-top,0px); z-index:40; height:60px; display:flex; align-items:center; gap:20px;
+  padding:0 20px; background:color-mix(in oklab, var(--bg) 86%, transparent); backdrop-filter:saturate(1.6) blur(12px);
+  -webkit-backdrop-filter:saturate(1.6) blur(12px); border-bottom:1px solid var(--border); }
+.logo{ display:flex; align-items:center; gap:9px; font-weight:600; font-size:16px; letter-spacing:-.01em; }
+.logo-full,.logo-tile{ display:block; flex:none; max-width:none; } .lw{ fill:var(--logo-word,#696969); transition:fill .2s; }
+.ver{ font:500 11px/1 var(--mono); color:var(--text-2); border:1px solid var(--border); padding:4px 6px; border-radius:6px; }
+.nav-links{ display:flex; gap:2px; }
+.nav-links a{ padding:6px 10px; border-radius:7px; font-size:14px; color:var(--text-2); font-weight:500; }
+.nav-links a:hover{ color:var(--text); background:var(--bg-muted); }
+.nav-links a.on{ color:var(--text); }
+.top-right{ margin-left:auto; display:flex; align-items:center; gap:6px; }
+.search-btn{ display:flex; align-items:center; gap:8px; height:34px; width:240px; padding:0 8px 0 10px; border:1px solid var(--border);
+  border-radius:9px; background:var(--bg-subtle); color:var(--text-3); font-size:13.5px; cursor:pointer; }
+.search-btn:hover{ border-color:var(--border-strong); }
+.search-btn .kbd{ margin-left:auto; }
+.kbd{ font:500 11px/1 var(--mono); padding:4px 5px; border-radius:5px; border:1px solid var(--border); background:var(--bg); color:var(--text-2); box-shadow:0 1px 0 var(--border); }
+.icon-btn{ width:34px; height:34px; display:grid; place-items:center; border-radius:8px; border:0; background:none; color:var(--text-2); cursor:pointer; }
+.icon-btn:hover{ background:var(--bg-muted); color:var(--text); }
+.menu-btn{ display:none; }
+
+.layout{ display:grid; grid-template-columns:260px minmax(0,1fr) 220px; max-width:1480px; margin:0 auto; }
+.layout.no-toc{ grid-template-columns:260px minmax(0,1fr); }
+.sidebar{ position:sticky; top:calc(env(safe-area-inset-top,0px) + 60px); height:calc(100vh - 60px); overflow-y:auto; padding:22px 14px 40px 20px; border-right:1px solid var(--border); }
+.sb-group{ margin-bottom:22px; }
+.sb-title{ font-size:12.5px; font-weight:600; color:var(--text); padding:0 10px; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+.sb-title .count{ font:500 11px var(--mono); color:var(--text-3); margin-left:auto; }
+.sb-link{ display:flex; align-items:center; gap:8px; padding:5px 10px; border-radius:7px; font-size:14px; color:var(--text-2); }
+.sb-link:hover{ color:var(--text); background:var(--bg-muted); }
+.sb-link.on{ color:var(--p-text); background:var(--p-soft); font-weight:500; }
+.sb-group + .sb-group{ border-top:1px dashed var(--border-strong); padding-top:18px; }
+.sb-group.nested .sb-link{ margin-left:10px; padding-left:14px; border-radius:0 7px 7px 0; border-left:1px solid var(--border); }
+.sb-group.nested .sb-link.on{ border-left:2px solid var(--p); padding-left:13px; background:transparent; }
+.sb-group.nested .sb-link.on:hover{ background:var(--bg-muted); }
+.sb-link.soon{ color:var(--text-3); pointer-events:none; }
+.sb-link .tag{ margin-left:auto; }
+.tag{ font:500 10.5px/1 var(--font); padding:3px 6px; border-radius:5px; background:var(--bg-muted); color:var(--text-3); }
+.tag.new{ background:var(--p-soft); color:var(--p-text); }
+.tag.pro{ background:var(--text); color:var(--bg); }
+.tag.free{ background:var(--success-soft); color:var(--success); }
+
+.main{ min-width:0; padding:36px 56px 90px; }
+.doc{ max-width:800px; margin:0 auto; }
+.crumbs{ display:flex; align-items:center; gap:6px; font-size:13px; color:var(--text-3); margin-bottom:14px; }
+.crumbs .ico{ width:14px; height:14px; }
+.eyebrow{ font-size:13px; font-weight:500; color:var(--p-text); margin-bottom:8px; }
+.doc .meta-row{ padding-bottom:22px; margin-bottom:26px; border-bottom:1px dashed var(--border-strong); }
+.doc h1 .muted{ color:var(--text-3); }
+.doc h1{ font-size:32px; line-height:1.2; letter-spacing:-.025em; font-weight:600; margin:0 0 10px; }
+.doc .lead{ font-size:17px; color:var(--text-2); margin:0 0 22px; max-width:640px; }
+.doc h2{ font-size:21px; letter-spacing:-.015em; font-weight:600; margin:52px 0 12px; padding-top:4px; }
+.doc h3{ font-size:16px; font-weight:600; margin:32px 0 8px; }
+.doc p{ color:var(--text-2); margin:0 0 14px; max-width:680px; }
+.doc p code, .doc li code, .props code, .inline-code{ font-size:.86em; padding:2px 5px; border-radius:5px; background:var(--bg-muted); color:var(--text); border:1px solid var(--border); }
+.doc ul{ color:var(--text-2); padding-left:20px; }
+.doc li{ margin:4px 0; }
+.meta-row{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
+.chip-link{ display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 10px; border:1px solid var(--border); border-radius:7px; font-size:13px; color:var(--text-2); background:var(--bg); }
+.chip-link:hover{ border-color:var(--border-strong); color:var(--text); }
+.chip-link .ico{ width:14px; height:14px; }
+
+.toc{ position:sticky; top:calc(env(safe-area-inset-top,0px) + 60px); height:calc(100vh - 60px); overflow-y:auto; padding:40px 20px; }
+.toc-title{ display:flex; align-items:center; gap:6px; font:600 11px/1 var(--font); letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); margin-bottom:12px; }
+.toc-title .ico{ width:14px; height:14px; }
+.toc a.sub{ padding-left:24px; font-size:12.5px; }
+.toc a{ display:block; font-size:13px; color:var(--text-3); padding:4px 0 4px 12px; border-left:1px solid var(--border); }
+.toc a:hover{ color:var(--text); }
+.toc a.on{ color:var(--p-text); border-left-color:var(--p); }
+.toc-card{ margin-top:24px; padding:14px; border:1px solid var(--border); border-radius:12px; background:var(--bg-subtle); font-size:13px; color:var(--text-2); }
+.toc-card b{ color:var(--text); display:block; margin-bottom:4px; font-weight:600; }
+
+/* preview + code blocks */
+.demo{ border:1px solid var(--border); border-radius:12px; overflow:hidden; margin:14px 0 8px; background:var(--bg); }
+.demo-bar{ display:flex; align-items:center; gap:4px; padding:6px; border-bottom:1px solid var(--border); background:var(--bg-subtle); }
+.seg{ display:inline-flex; padding:2px; background:var(--bg-muted); border-radius:8px; gap:2px; }
+.seg button{ border:0; background:none; padding:4px 10px; font-size:13px; font-weight:500; border-radius:6px; color:var(--text-2); cursor:pointer; }
+.seg button.on{ background:var(--bg); color:var(--text); box-shadow:var(--sh-xs); }
+.demo-bar .spacer{ flex:1; }
+.preview{ position:relative; min-height:200px; padding:44px 28px; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px;
+  background:var(--bg); color:var(--text);
+  background-image:radial-gradient(var(--grid-dot) 1px, transparent 1px); background-size:16px 16px; }
+.preview.left{ justify-content:flex-start; }
+.preview.col{ flex-direction:column; }
+.preview.flush{ padding:0; display:block; background-image:none; }
+.codewrap{ position:relative; }
+.codewrap.lined{ display:flex; background:var(--code-bg); }
+.codewrap.lined pre.code:not(.gutter){ flex:1; min-width:0; padding-left:14px; }
+pre.code.gutter{ flex:none; padding-right:0; text-align:right; color:var(--text-3); opacity:.7; user-select:none; overflow:visible; min-width:44px; }
+pre.code{ margin:0; padding:18px 20px; overflow-x:auto; background:var(--code-bg); font-size:13px; line-height:1.7; color:var(--text); tab-size:2; }
+.demo pre.code{ max-height:460px; }
+.copy{ position:absolute; top:10px; right:10px; width:30px; height:30px; display:grid; place-items:center; border-radius:7px; border:1px solid var(--border); background:var(--bg); color:var(--text-2); cursor:pointer; }
+.copy:hover{ color:var(--text); border-color:var(--border-strong); }
+.copy .ico{ width:14px; height:14px; }
+.cblock{ border:1px solid var(--border); border-radius:12px; overflow:hidden; margin:12px 0 18px; }
+.cblock-head{ display:flex; align-items:center; gap:8px; padding:0 8px 0 14px; height:42px; border-bottom:1px solid var(--border); background:var(--bg-subtle); font:500 12.5px var(--mono); color:var(--text-2); }
+.cblock-head .seg{ margin-left:auto; }
+.tk-k{ color:#C0359B; } .tk-s{ color:#1F8A4C; } .tk-t{ color:#2F5FD0; } .tk-a{ color:#9A5B00; } .tk-c{ color:var(--text-3); font-style:italic; } .tk-n{ color:#B5470E; }
+[data-theme="dark"] .tk-k,.scope-dark .tk-k{ color:#F28FD4; } [data-theme="dark"] .tk-s{ color:#7EDC9E; } [data-theme="dark"] .tk-t{ color:#8DB2FF; } [data-theme="dark"] .tk-a{ color:#F2C06B; } [data-theme="dark"] .tk-n{ color:#FF9E6B; }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .tk-k{ color:#F28FD4; } :root:not([data-theme="light"]) .tk-s{ color:#7EDC9E; } :root:not([data-theme="light"]) .tk-t{ color:#8DB2FF; } :root:not([data-theme="light"]) .tk-a{ color:#F2C06B; } :root:not([data-theme="light"]) .tk-n{ color:#FF9E6B; } }
+
+.steps{ counter-reset:st; margin:18px 0; }
+.step{ position:relative; padding:0 0 26px 44px; border-left:1px solid var(--border); margin-left:14px; }
+.step:last-child{ border-left-color:transparent; }
+.step::before{ counter-increment:st; content:counter(st); position:absolute; left:-15px; top:-2px; width:29px; height:29px; border-radius:50%;
+  display:grid; place-items:center; background:var(--bg); border:1px solid var(--border-strong); font:600 13px var(--font); color:var(--text); }
+.step h4{ margin:2px 0 6px; font-size:15px; font-weight:600; }
+.step p{ margin-bottom:8px; }
+
+.props-wrap{ overflow-x:auto; border:1px solid var(--border); border-radius:12px; margin:12px 0; }
+table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:560px; }
+.props th{ text-align:left; font-weight:500; color:var(--text-3); padding:10px 14px; background:var(--bg-subtle); border-bottom:1px solid var(--border); font-size:12.5px; }
+.props td{ padding:11px 14px; border-bottom:1px solid var(--border); vertical-align:top; color:var(--text-2); }
+.props tr:last-child td{ border-bottom:0; }
+.props td:first-child code{ color:var(--p-text); background:var(--p-soft); border-color:transparent; }
+.props td.type{ font:12.5px var(--mono); color:var(--text-2); }
+
+.callout{ display:flex; gap:12px; padding:14px 16px; border-radius:12px; background:var(--bg-subtle); border:1px solid var(--border); margin:18px 0; font-size:14px; color:var(--text-2); }
+.callout .ico{ margin-top:3px; color:var(--p-text); }
+.callout b{ color:var(--text); font-weight:600; }
+
+.pager{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:64px; }
+.pager a{ padding:14px 16px; border:1px solid var(--border); border-radius:12px; font-size:13px; color:var(--text-3); }
+.pager a:hover{ border-color:var(--border-strong); }
+.pager a b{ display:block; font-size:15px; color:var(--text); font-weight:500; margin-top:2px; }
+.pager a.next{ text-align:right; grid-column:2; }
+
+.card-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; margin:18px 0; }
+.ccard{ display:block; border:1px solid var(--border); border-radius:12px; overflow:hidden; background:var(--bg); transition:border-color .15s, box-shadow .15s; }
+.ccard:hover{ border-color:var(--border-strong); box-shadow:var(--sh-md); }
+.ccard-thumb{ height:128px; display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; padding:14px; background:var(--bg-subtle); border-bottom:1px solid var(--border); pointer-events:none; overflow:hidden; }
+.ccard-body{ padding:12px 14px; display:flex; align-items:center; gap:8px; }
+.ccard-body b{ font-weight:500; font-size:14px; }
+.ccard-body span{ font-size:12.5px; color:var(--text-3); margin-left:auto; }
+.ccard-thumb{ --gl:color-mix(in oklab, var(--border) 60%, transparent); background:linear-gradient(var(--gl),var(--gl)) 0 24%/100% 1px no-repeat, linear-gradient(var(--gl),var(--gl)) 0 76%/100% 1px no-repeat,linear-gradient(var(--gl),var(--gl)) 14% 0/1px 100% no-repeat, linear-gradient(var(--gl),var(--gl)) 86% 0/1px 100% no-repeat, var(--bg-subtle); }
+.ccard-body{ flex-wrap:wrap; } .ccard-body small{ flex-basis:100%; font-size:12.5px; color:var(--text-3); margin-top:-4px; }
+/* ============ PARSEUI COMPONENTS (pu-*) ============ */
+.pu-btn{ display:inline-flex; align-items:center; justify-content:center; gap:6px; height:36px; padding:0 14px; border-radius:var(--r);
+  font:500 14px/1 var(--font); letter-spacing:-.005em; border:1px solid transparent; cursor:pointer; white-space:nowrap; text-decoration:none;
+  transition:background-color .15s, border-color .15s, box-shadow .15s, color .15s; }
+.pu-btn:focus-visible{ outline:none; box-shadow:0 0 0 2px var(--bg), 0 0 0 4px var(--p); }
+.pu-btn.primary{ background:var(--p); color:var(--p-fg); box-shadow:var(--sh-xs), inset 0 1px 0 rgba(255,255,255,.14); }
+.pu-btn.primary:hover{ background:var(--p-hover); }
+.pu-btn.secondary{ background:var(--bg); color:var(--text); border-color:var(--border-strong); box-shadow:var(--sh-xs); }
+.pu-btn.secondary:hover{ background:var(--bg-subtle); }
+.pu-btn.soft{ background:var(--p-soft); color:var(--p-text); }
+.pu-btn.soft:hover{ background:var(--p-soft-2); }
+.pu-btn.ghost{ background:transparent; color:var(--text-2); }
+.pu-btn.ghost:hover{ background:var(--bg-muted); color:var(--text); }
+.pu-btn.danger{ background:var(--danger); color:#fff; box-shadow:var(--sh-xs); }
+.pu-btn.danger:hover{ background:color-mix(in oklab, var(--danger) 88%, #000); }
+.pu-btn.link{ height:auto; padding:0; background:none; color:var(--p-text); }
+.pu-btn.link:hover{ text-decoration:underline; text-underline-offset:3px; }
+.pu-btn.xs{ height:28px; padding:0 10px; font-size:13px; border-radius:var(--r-sm); }
+.pu-btn.sm{ height:32px; padding:0 12px; font-size:13.5px; }
+.pu-btn.lg{ height:44px; padding:0 18px; font-size:15px; }
+.pu-btn.icon{ width:36px; padding:0; } .pu-btn.icon.sm{ width:32px; } .pu-btn.icon.xs{ width:28px; } .pu-btn.icon.lg{ width:44px; }
+.pu-btn.full{ width:100%; }
+.pu-btn[disabled]{ opacity:.5; cursor:not-allowed; pointer-events:none; }
+.spin{ animation:spin .8s linear infinite; } @keyframes spin{ to{ transform:rotate(360deg); } }
+.pu-group{ display:inline-flex; }
+.pu-group .pu-btn{ border-radius:0; margin-left:-1px; box-shadow:none; }
+.pu-group .pu-btn:first-child{ border-radius:var(--r) 0 0 var(--r); margin-left:0; }
+.pu-group .pu-btn:last-child{ border-radius:0 var(--r) var(--r) 0; }
+.pu-group .pu-btn.on{ background:var(--bg-muted); }
+
+.pu-badge{ display:inline-flex; align-items:center; gap:5px; height:22px; padding:0 8px; border-radius:calc(var(--r) * .75); font:500 12px/1 var(--font); white-space:nowrap; }
+.pu-badge.round{ border-radius:999px; }
+.pu-badge.gray{ background:var(--bg-muted); color:var(--text-2); }
+.pu-badge.brand{ background:var(--p-soft); color:var(--p-text); }
+.pu-badge.success{ background:var(--success-soft); color:var(--success); }
+.pu-badge.warning{ background:var(--warning-soft); color:var(--warning); }
+.pu-badge.danger{ background:var(--danger-soft); color:var(--danger); }
+.pu-badge.info{ background:var(--info-soft); color:var(--info); }
+.pu-badge.outline{ background:var(--bg); border:1px solid var(--border-strong); color:var(--text-2); }
+.pu-badge.solid{ background:var(--p); color:var(--p-fg); }
+.pu-badge .dot{ width:6px; height:6px; border-radius:50%; background:currentColor; }
+
+.pu-field{ display:flex; flex-direction:column; gap:6px; width:100%; max-width:340px; text-align:left; }
+.pu-label{ font-size:13.5px; font-weight:500; color:var(--text); display:flex; gap:4px; }
+.pu-label .req{ color:var(--danger); }
+.pu-hint{ font-size:12.5px; color:var(--text-3); }
+.pu-hint.err{ color:var(--danger); }
+.pu-input{ display:flex; align-items:center; gap:8px; height:38px; padding:0 12px; border:1px solid var(--border-strong); border-radius:var(--r);
+  background:var(--bg); box-shadow:var(--sh-xs); transition:border-color .15s, box-shadow .15s; color:var(--text-3); width:100%; }
+.pu-input:hover{ border-color:color-mix(in oklab, var(--border-strong) 60%, var(--text-3)); }
+.pu-input:focus-within{ border-color:var(--p); box-shadow:0 0 0 3px var(--ring); }
+.pu-input.err{ border-color:var(--danger); } .pu-input.err:focus-within{ box-shadow:0 0 0 3px color-mix(in oklab, var(--danger) 30%, transparent); }
+.pu-input input{ flex:1; min-width:0; border:0; outline:0; background:none; font:400 14px var(--font); color:var(--text); height:100%; }
+.pu-input input::placeholder, .pu-textarea::placeholder{ color:var(--text-3); }
+.pu-input .addon{ font-size:14px; color:var(--text-3); padding-right:10px; border-right:1px solid var(--border); height:100%; display:flex; align-items:center; }
+.pu-input.disabled{ background:var(--bg-muted); opacity:.7; }
+.pu-input.sm{ height:32px; } .pu-input.lg{ height:44px; }
+.pu-textarea{ width:100%; min-height:96px; padding:10px 12px; border:1px solid var(--border-strong); border-radius:var(--r); background:var(--bg);
+  font:400 14px/1.5 var(--font); color:var(--text); resize:vertical; box-shadow:var(--sh-xs); outline:0; }
+.pu-textarea:focus{ border-color:var(--p); box-shadow:0 0 0 3px var(--ring); }
+.pu-select{ appearance:none; -webkit-appearance:none; height:38px; width:100%; padding:0 34px 0 12px; border:1px solid var(--border-strong); border-radius:var(--r);
+  background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238B8B98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center/16px;
+  font:400 14px var(--font); color:var(--text); box-shadow:var(--sh-xs); outline:0; cursor:pointer; }
+.pu-select:focus{ border-color:var(--p); box-shadow:0 0 0 3px var(--ring); }
+.pu-select.sm{ height:32px; font-size:13.5px; }
+
+.pu-check{ display:flex; align-items:flex-start; gap:10px; font-size:14px; cursor:pointer; text-align:left; }
+.pu-check input{ appearance:none; -webkit-appearance:none; margin:2px 0 0; width:17px; height:17px; flex:none; border:1px solid var(--border-strong); border-radius:calc(var(--r) * .5);
+  background:var(--bg) center/12px no-repeat; box-shadow:var(--sh-xs); cursor:pointer; transition:background-color .12s, border-color .12s; }
+.pu-check input:checked{ background-color:var(--p); border-color:var(--p);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E"); }
+.pu-check input:indeterminate{ background-color:var(--p); border-color:var(--p);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.2' stroke-linecap='round'%3E%3Cpath d='M6 12h12'/%3E%3C/svg%3E"); }
+.pu-check input[type=radio]{ border-radius:50%; }
+.pu-check input[type=radio]:checked{ background:var(--bg); border:5px solid var(--p); }
+.pu-check input:focus-visible{ outline:none; box-shadow:0 0 0 3px var(--ring); }
+.pu-check input:disabled{ opacity:.5; cursor:not-allowed; }
+.pu-check .t b{ display:block; font-weight:500; color:var(--text); }
+.pu-check .t span{ display:block; font-size:13px; color:var(--text-3); }
+
+.pu-switch{ display:inline-flex; align-items:center; gap:10px; font-size:14px; cursor:pointer; }
+.pu-switch input{ appearance:none; -webkit-appearance:none; margin:0; width:36px; height:20px; border-radius:999px; background:var(--bg-inset); position:relative; cursor:pointer; transition:background-color .18s; flex:none; }
+.pu-switch input::after{ content:""; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#fff; box-shadow:0 1px 2px rgba(0,0,0,.25); transition:transform .18s; }
+.pu-switch input:checked{ background:var(--p); }
+.pu-switch input:checked::after{ transform:translateX(16px); }
+.pu-switch input:focus-visible{ outline:none; box-shadow:0 0 0 3px var(--ring); }
+.pu-switch.sm input{ width:30px; height:16px; } .pu-switch.sm input::after{ width:12px; height:12px; } .pu-switch.sm input:checked::after{ transform:translateX(14px); }
+
+.pu-avatar{ width:36px; height:36px; border-radius:50%; display:inline-grid; place-items:center; font:600 13px var(--font); color:#fff; flex:none; position:relative; box-shadow:0 0 0 2px var(--bg); }
+.pu-avatar.sm{ width:28px; height:28px; font-size:11px; } .pu-avatar.lg{ width:48px; height:48px; font-size:16px; } .pu-avatar.xl{ width:64px; height:64px; font-size:20px; }
+.pu-avatar.sq{ border-radius:var(--r); }
+.pu-avatar .st{ position:absolute; right:0; bottom:0; width:28%; height:28%; border-radius:50%; background:var(--success); box-shadow:0 0 0 2px var(--bg); }
+.pu-avatars{ display:flex; } .pu-avatars .pu-avatar{ margin-left:-8px; } .pu-avatars .pu-avatar:first-child{ margin-left:0; }
+.pu-avatar.more{ background:var(--bg-muted); color:var(--text-2); }
+
+.pu-alert{ display:flex; gap:12px; padding:14px 16px; border-radius:var(--r-lg); border:1px solid var(--border); background:var(--bg); width:100%; max-width:520px; text-align:left; box-shadow:var(--sh-xs); }
+.pu-alert .ico{ margin-top:2px; }
+.pu-alert .t{ flex:1; font-size:14px; color:var(--text-2); }
+.pu-alert .t b{ display:block; color:var(--text); font-weight:600; margin-bottom:2px; }
+.pu-alert .acts{ display:flex; gap:12px; margin-top:10px; }
+.pu-alert.info{ background:var(--info-soft); border-color:color-mix(in oklab, var(--info) 22%, transparent); } .pu-alert.info>.ico{ color:var(--info); }
+.pu-alert.success{ background:var(--success-soft); border-color:color-mix(in oklab, var(--success) 22%, transparent); } .pu-alert.success>.ico{ color:var(--success); }
+.pu-alert.warning{ background:var(--warning-soft); border-color:color-mix(in oklab, var(--warning) 25%, transparent); } .pu-alert.warning>.ico{ color:var(--warning); }
+.pu-alert.danger{ background:var(--danger-soft); border-color:color-mix(in oklab, var(--danger) 22%, transparent); } .pu-alert.danger>.ico{ color:var(--danger); }
+.pu-alert .x{ background:none; border:0; color:var(--text-3); cursor:pointer; padding:0; height:18px; }
+
+.pu-card{ background:var(--bg); border:1px solid var(--border); border-radius:var(--r-xl); box-shadow:var(--sh-xs); text-align:left; }
+.pu-card-h{ padding:16px 18px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
+.pu-card-h h4{ margin:0; font-size:15px; font-weight:600; }
+.pu-card-h p{ margin:2px 0 0; font-size:13px; color:var(--text-3); }
+.pu-card-b{ padding:18px; }
+.pu-card-f{ padding:12px 18px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:8px; background:var(--bg-subtle); border-radius:0 0 var(--r-xl) var(--r-xl); }
+
+.pu-tabs{ display:flex; gap:20px; border-bottom:1px solid var(--border); width:100%; }
+.pu-tabs button{ border:0; background:none; padding:10px 0; margin-bottom:-1px; font-size:14px; font-weight:500; color:var(--text-3); border-bottom:2px solid transparent; cursor:pointer; display:flex; align-items:center; gap:6px; }
+.pu-tabs button:hover{ color:var(--text); }
+.pu-tabs button.on{ color:var(--text); border-bottom-color:var(--p); }
+.pu-tabs.pill{ border:0; gap:4px; padding:3px; background:var(--bg-muted); border-radius:calc(var(--r) + 2px); width:auto; }
+.pu-tabs.pill button{ padding:6px 12px; border:0; border-radius:var(--r-sm); margin:0; }
+.pu-tabs.pill button.on{ background:var(--bg); box-shadow:var(--sh-sm); }
+.pu-tabs .n{ font-size:11.5px; background:var(--bg-muted); padding:1px 6px; border-radius:99px; color:var(--text-2); }
+.pu-tabpanel{ padding:16px 2px; font-size:14px; color:var(--text-2); width:100%; text-align:left; }
+
+.pu-progress{ width:100%; height:8px; border-radius:99px; background:var(--bg-inset); overflow:hidden; }
+.pu-progress i{ display:block; height:100%; border-radius:inherit; background:var(--p); transition:width .4s; }
+.pu-progress.sm{ height:5px; }
+.pu-ring{ --v:65; width:64px; height:64px; border-radius:50%; display:grid; place-items:center; font:600 14px var(--font);
+  background:radial-gradient(closest-side, var(--bg) 78%, transparent 80% 100%), conic-gradient(var(--p) calc(var(--v) * 1%), var(--bg-inset) 0); }
+
+.pu-tip{ position:relative; display:inline-flex; }
+.pu-tip .tip{ position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%) translateY(4px); background:var(--text); color:var(--bg); font-size:12.5px; font-weight:500;
+  padding:6px 9px; border-radius:var(--r-sm); white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .15s, transform .15s; box-shadow:var(--sh-md); z-index:5; }
+.pu-tip .tip::after{ content:""; position:absolute; top:100%; left:50%; margin-left:-5px; border:5px solid transparent; border-top-color:var(--text); }
+.pu-tip:hover .tip, .pu-tip:focus-within .tip{ opacity:1; transform:translateX(-50%); }
+.pu-tip .tip.bot{ bottom:auto; top:calc(100% + 8px); } .pu-tip .tip.bot::after{ top:auto; bottom:100%; border-top-color:transparent; border-bottom-color:var(--text); }
+
+.pu-kbd{ font:500 12px/1 var(--mono); padding:4px 6px; min-width:22px; text-align:center; border-radius:5px; border:1px solid var(--border-strong); background:var(--bg); box-shadow:0 1px 0 var(--border-strong); color:var(--text-2); display:inline-block; }
+
+.pu-acc{ width:100%; max-width:560px; text-align:left; border:1px solid var(--border); border-radius:var(--r-lg); background:var(--bg); overflow:hidden; }
+.pu-acc details{ border-bottom:1px solid var(--border); } .pu-acc details:last-child{ border-bottom:0; }
+.pu-acc summary{ list-style:none; cursor:pointer; padding:14px 16px; font-weight:500; font-size:14.5px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.pu-acc summary::-webkit-details-marker{ display:none; }
+.pu-acc summary .ico{ transition:transform .2s; color:var(--text-3); }
+.pu-acc details[open] summary .ico{ transform:rotate(180deg); }
+.pu-acc .body{ padding:0 16px 16px; font-size:14px; color:var(--text-2); }
+
+.pu-table-wrap{ width:100%; overflow-x:auto; border:1px solid var(--border); border-radius:var(--r-lg); background:var(--bg); text-align:left; }
+.pu-table{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:560px; }
+.pu-table th{ text-align:left; padding:10px 14px; font-weight:500; font-size:12.5px; color:var(--text-3); background:var(--bg-subtle); border-bottom:1px solid var(--border); white-space:nowrap; }
+.pu-table td{ padding:12px 14px; border-bottom:1px solid var(--border); color:var(--text-2); white-space:nowrap; }
+.pu-table tr:last-child td{ border-bottom:0; }
+.pu-table tbody tr:hover td{ background:var(--bg-subtle); }
+.pu-table td b{ color:var(--text); font-weight:500; }
+.pu-table .num{ text-align:right; font-variant-numeric:tabular-nums; }
+.pu-person{ display:flex; align-items:center; gap:10px; } .pu-person small{ display:block; color:var(--text-3); font-size:12.5px; }
+
+.pu-pag{ display:flex; align-items:center; gap:4px; }
+.pu-pag button{ min-width:34px; height:34px; border:0; background:none; border-radius:var(--r); color:var(--text-2); font-size:14px; cursor:pointer; display:grid; place-items:center; padding:0 6px; }
+.pu-pag button:hover{ background:var(--bg-muted); }
+.pu-pag button.on{ background:var(--p-soft); color:var(--p-text); font-weight:600; }
+
+.pu-crumb{ display:flex; align-items:center; gap:6px; font-size:14px; color:var(--text-3); }
+.pu-crumb a:hover{ color:var(--text); } .pu-crumb .cur{ color:var(--text); font-weight:500; }
+.pu-crumb .ico{ width:14px; height:14px; }
+
+.pu-slider{ width:100%; max-width:320px; appearance:none; -webkit-appearance:none; height:6px; border-radius:99px; outline:none; cursor:pointer;
+  background:linear-gradient(var(--p),var(--p)) 0/var(--v,50%) 100% no-repeat, var(--bg-inset); }
+.pu-slider::-webkit-slider-thumb{ -webkit-appearance:none; width:18px; height:18px; border-radius:50%; background:#fff; border:2px solid var(--p); box-shadow:var(--sh-sm); }
+.pu-slider::-moz-range-thumb{ width:14px; height:14px; border-radius:50%; background:#fff; border:2px solid var(--p); }
+.pu-slider:focus-visible::-webkit-slider-thumb{ box-shadow:0 0 0 4px var(--ring); }
+
+.pu-toast{ display:flex; gap:12px; align-items:flex-start; width:360px; max-width:100%; padding:14px; border:1px solid var(--border); border-radius:var(--r-lg);
+  background:var(--bg); box-shadow:var(--sh-lg); text-align:left; font-size:14px; }
+.pu-toast .t{ flex:1; color:var(--text-2); font-size:13.5px; } .pu-toast .t b{ display:block; color:var(--text); font-weight:600; font-size:14px; }
+.pu-toast .x{ background:none; border:0; color:var(--text-3); cursor:pointer; padding:0; }
+.pu-toast .ic{ width:32px; height:32px; border-radius:50%; display:grid; place-items:center; flex:none; }
+.toaster{ position:fixed; right:20px; bottom:calc(20px + env(safe-area-inset-bottom,0px)); z-index:90; display:flex; flex-direction:column; gap:10px; }
+.toaster .pu-toast{ animation:tin .28s cubic-bezier(.2,.9,.3,1.2); }
+@keyframes tin{ from{ opacity:0; transform:translateY(12px) scale(.97); } }
+
+.pu-modal-back{ position:fixed; inset:0; z-index:80; background:rgba(12,12,18,.45); display:grid; place-items:center; padding:20px; animation:fade .18s; }
+@keyframes fade{ from{ opacity:0; } }
+.pu-modal{ width:440px; max-width:100%; background:var(--bg); border-radius:var(--r-xl); box-shadow:var(--sh-xl); border:1px solid var(--border); animation:pop .22s cubic-bezier(.2,.9,.3,1.1); text-align:left; }
+@keyframes pop{ from{ opacity:0; transform:scale(.96) translateY(6px); } }
+.pu-modal .mb{ padding:22px; } .pu-modal h4{ margin:14px 0 6px; font-size:17px; font-weight:600; } .pu-modal p{ margin:0; font-size:14px; color:var(--text-2); }
+.pu-modal .mf{ padding:14px 22px 22px; display:flex; gap:10px; }
+.pu-modal .mf .pu-btn{ flex:1; }
+.feat-ic{ width:44px; height:44px; border-radius:50%; display:grid; place-items:center; }
+.feat-ic.danger{ background:var(--danger-soft); color:var(--danger); box-shadow:0 0 0 6px color-mix(in oklab, var(--danger-soft) 50%, transparent); }
+.feat-ic.brand{ background:var(--p-soft); color:var(--p-text); box-shadow:0 0 0 6px color-mix(in oklab, var(--p-soft) 50%, transparent); }
+.feat-ic.success{ background:var(--success-soft); color:var(--success); }
+
+.pu-empty{ text-align:center; padding:36px 20px; max-width:380px; margin:0 auto; }
+.pu-empty h4{ margin:14px 0 4px; font-size:16px; font-weight:600; } .pu-empty p{ margin:0 0 18px; font-size:14px; color:var(--text-2); }
+.pu-empty .feat-ic{ margin:0 auto; }
+.pu-divider{ display:flex; align-items:center; gap:12px; color:var(--text-3); font-size:13px; } .pu-divider::before,.pu-divider::after{ content:""; flex:1; height:1px; background:var(--border); }
+.pu-upload{ border:1.5px dashed var(--border-strong); border-radius:var(--r-lg); padding:24px; text-align:center; font-size:14px; color:var(--text-2); width:100%; max-width:420px; background:var(--bg); }
+.pu-upload b{ color:var(--p-text); font-weight:600; }
+/* ============ LANDING ============ */
+.home{ overflow:hidden; }
+.wrap{ max-width:1200px; margin:0 auto; padding:0 28px; }
+.hero{ position:relative; padding:84px 0 40px; }
+.hero-grid{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); gap:56px; align-items:center; }
+.pill-note{ display:inline-flex; align-items:center; gap:8px; height:30px; padding:0 12px 0 4px; border:1px solid var(--border); border-radius:99px; font-size:13px; color:var(--text-2); background:var(--bg); margin-bottom:22px; }
+.pill-note .pu-badge{ height:22px; }
+.hero h1{ font-size:clamp(40px,5.2vw,62px); line-height:1.02; letter-spacing:-.045em; font-weight:600; margin:0 0 20px; max-width:12ch; text-wrap:balance; }
+.hero .sub{ font-size:18px; color:var(--text-2); max-width:470px; margin:0 0 28px; line-height:1.55; }
+.hero-cta{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:28px; }
+.install{ display:inline-flex; align-items:center; gap:12px; height:42px; padding:0 6px 0 14px; border:1px solid var(--border); border-radius:10px; background:var(--bg-subtle); font:13.5px var(--mono); color:var(--text-2); }
+.install .dollar{ color:var(--text-3); }
+.install button{ border:0; background:none; width:30px; height:30px; display:grid; place-items:center; border-radius:6px; color:var(--text-3); cursor:pointer; }
+.install button:hover{ background:var(--bg-muted); color:var(--text); }
+.brand-try{ display:flex; align-items:center; gap:12px; margin-top:26px; font-size:13.5px; color:var(--text-3); }
+.swatches{ display:flex; gap:6px; }
+.sw{ width:22px; height:22px; border-radius:50%; border:0; cursor:pointer; box-shadow:inset 0 0 0 1px rgba(0,0,0,.12); position:relative; }
+.sw.on::after{ content:""; position:absolute; inset:-4px; border-radius:50%; border:2px solid var(--text); }
+
+.stage{ position:relative; display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.stage::before{ content:""; position:absolute; inset:-60px -200px -60px -40px; z-index:-1;
+  background-image:linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size:48px 48px;
+  mask-image:radial-gradient(ellipse 60% 55% at 45% 50%, #000 30%, transparent 75%); -webkit-mask-image:radial-gradient(ellipse 60% 55% at 45% 50%, #000 30%, transparent 75%); opacity:.7; }
+.stage .pu-card{ box-shadow:var(--sh-lg); }
+.stage .span2{ grid-column:span 2; }
+.kpi{ padding:16px 18px; }
+.kpi .l{ font-size:13px; color:var(--text-3); display:flex; align-items:center; gap:6px; }
+.kpi .v{ font-size:26px; font-weight:600; letter-spacing:-.03em; margin:4px 0 2px; font-variant-numeric:tabular-nums; }
+.kpi .d{ font-size:12.5px; display:flex; align-items:center; gap:6px; color:var(--text-3); }
+.up{ color:var(--success); font-weight:500; } .down{ color:var(--danger); font-weight:500; }
+
+.sec{ padding:88px 0 0; }
+.sec-h{ display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:28px; flex-wrap:wrap; }
+.sec-h h2{ font-size:34px; letter-spacing:-.035em; line-height:1.1; margin:0 0 10px; font-weight:600; max-width:24ch; text-wrap:balance; }
+.sec-h p{ margin:0; color:var(--text-2); max-width:520px; font-size:16px; }
+.found-grid{ display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:14px; }
+.fcard{ border:1px solid var(--border); border-radius:16px; padding:20px; background:var(--bg); display:flex; flex-direction:column; gap:16px; min-height:220px; }
+.fcard:hover{ border-color:var(--border-strong); }
+.fcard h3{ margin:0; font-size:15px; font-weight:600; } .fcard p{ margin:2px 0 0; font-size:13.5px; color:var(--text-3); }
+.ramp{ display:flex; border-radius:10px; overflow:hidden; height:56px; margin-top:auto; }
+.ramp i{ flex:1; }
+.typespec{ margin-top:auto; display:flex; align-items:baseline; gap:14px; }
+.typespec .Aa{ font-size:64px; font-weight:600; letter-spacing:-.04em; line-height:.9; }
+.typespec .w{ font-size:12.5px; color:var(--text-3); line-height:1.7; }
+.radii{ margin-top:auto; display:flex; gap:10px; align-items:flex-end; }
+.radii i{ width:44px; height:44px; border:1.5px solid var(--p); background:var(--p-soft); }
+
+.use-grid{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+.use-card{ border:1px solid var(--border); border-radius:16px; overflow:hidden; background:var(--bg); }
+.use-card .h{ padding:18px 18px 12px; display:flex; gap:12px; }
+.use-card .n{ width:26px; height:26px; flex:none; border-radius:50%; background:var(--p-soft); color:var(--p-text); font-weight:600; font-size:13px; display:grid; place-items:center; }
+.use-card h3{ margin:0 0 2px; font-size:15px; font-weight:600; } .use-card p{ margin:0; font-size:13.5px; color:var(--text-3); }
+.use-card pre.code{ border-top:1px solid var(--border); font-size:12.5px; padding:14px 18px; min-height:112px; }
+
+.plans{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+.plan{ border:1px solid var(--border); border-radius:16px; padding:24px; background:var(--bg); display:flex; flex-direction:column; }
+.plan.feat{ border-color:var(--p); box-shadow:0 0 0 3px var(--ring), var(--sh-lg); }
+.plan .ph{ display:flex; align-items:center; justify-content:space-between; }
+.plan h3{ margin:0; font-size:16px; font-weight:600; }
+.plan .price{ font-size:40px; font-weight:600; letter-spacing:-.04em; margin:14px 0 2px; }
+.plan .price small{ font-size:14px; color:var(--text-3); font-weight:400; letter-spacing:0; }
+.plan .pd{ font-size:14px; color:var(--text-2); margin:0 0 20px; min-height:44px; }
+.plan ul{ list-style:none; padding:0; margin:20px 0 0; display:flex; flex-direction:column; gap:10px; font-size:14px; color:var(--text-2); }
+.plan li{ display:flex; gap:10px; } .plan li .ico{ color:var(--p-text); margin-top:3px; }
+
+.road{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0; border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+.road > div{ padding:22px; border-right:1px solid var(--border); background:var(--bg); }
+.road > div:last-child{ border-right:0; }
+.road .ph{ font:500 12.5px var(--mono); color:var(--text-3); display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.road h3{ margin:0 0 6px; font-size:15.5px; font-weight:600; }
+.road p{ margin:0; font-size:13.5px; color:var(--text-2); }
+.road .now{ background:var(--p-soft); }
+.foot{ margin-top:100px; border-top:1px solid var(--border); padding:32px 0 48px; }
+.foot .wrap{ display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap; font-size:13.5px; color:var(--text-3); }
+.foot nav{ display:flex; gap:20px; } .foot a:hover{ color:var(--text); }
+
+/* ============ DASHBOARD EXAMPLE ============ */
+.dash{ display:grid; grid-template-columns:224px minmax(0,1fr); min-height:760px; background:var(--bg-subtle); text-align:left; font-size:14px; }
+.dash-side{ background:var(--bg); border-right:1px solid var(--border); padding:16px 12px; display:flex; flex-direction:column; gap:2px; }
+.dash-store{ display:flex; align-items:center; gap:10px; padding:6px 8px 16px; border-bottom:1px solid var(--border); margin-bottom:10px; }
+.dash-store b{ font-size:14px; display:block; font-weight:600; } .dash-store small{ color:var(--text-3); font-size:12px; }
+.dnav{ display:flex; align-items:center; gap:10px; padding:7px 10px; border-radius:var(--r); color:var(--text-2); font-weight:500; font-size:14px; cursor:pointer; }
+.dnav:hover{ background:var(--bg-muted); color:var(--text); }
+.dnav.on{ background:var(--bg-muted); color:var(--text); }
+.dnav.on .ico{ color:var(--p-text); }
+.dnav .pu-badge{ margin-left:auto; height:20px; }
+.dnav-label{ font-size:12px; color:var(--text-3); padding:14px 10px 4px; font-weight:500; }
+.dash-up{ margin-top:auto; padding:14px; border-radius:var(--r-lg); background:var(--bg-subtle); border:1px solid var(--border); font-size:13px; color:var(--text-2); }
+.dash-up b{ display:block; color:var(--text); margin-bottom:4px; }
+.dash-main{ min-width:0; }
+.dash-top{ height:60px; display:flex; align-items:center; gap:12px; padding:0 24px; background:var(--bg); border-bottom:1px solid var(--border); }
+.dash-top .pu-input{ max-width:320px; height:36px; }
+.dash-body{ padding:24px; display:flex; flex-direction:column; gap:16px; }
+.dash-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+.dash-head h3{ margin:0; font-size:22px; letter-spacing:-.02em; font-weight:600; } .dash-head p{ margin:2px 0 0; color:var(--text-3); font-size:14px; }
+.dash-kpis{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; }
+.dash-row{ display:grid; grid-template-columns:minmax(0,2fr) minmax(0,1fr); gap:16px; }
+.spark{ width:100%; height:auto; display:block; }
+.legend{ display:flex; gap:16px; font-size:12.5px; color:var(--text-3); } .legend i{ display:inline-block; width:8px; height:8px; border-radius:2px; margin-right:6px; }
+.bar-list{ display:flex; flex-direction:column; gap:14px; }
+.bar-list .r{ display:flex; justify-content:space-between; font-size:13.5px; margin-bottom:6px; } .bar-list .r span{ color:var(--text-3); font-variant-numeric:tabular-nums; }
+.prod-thumb{ width:34px; height:34px; border-radius:var(--r); flex:none; display:grid; place-items:center; }
+
+/* ============ OVERLAYS ============ */
+.cmdk-back{ position:fixed; inset:0; z-index:100; background:rgba(12,12,18,.4); display:flex; justify-content:center; align-items:flex-start; padding:12vh 16px 16px; animation:fade .15s; }
+.cmdk{ width:600px; max-width:100%; background:var(--bg); border:1px solid var(--border); border-radius:14px; box-shadow:var(--sh-xl); overflow:hidden; animation:pop .18s; }
+.cmdk-in{ display:flex; align-items:center; gap:10px; padding:0 16px; height:54px; border-bottom:1px solid var(--border); color:var(--text-3); }
+.cmdk-in input{ flex:1; border:0; outline:0; background:none; font:400 16px var(--font); color:var(--text); }
+.cmdk-list{ max-height:380px; overflow-y:auto; padding:8px; }
+.cmdk-g{ font-size:12px; color:var(--text-3); padding:10px 10px 4px; font-weight:500; }
+.cmdk-i{ display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:8px; font-size:14px; cursor:pointer; color:var(--text-2); }
+.cmdk-i.on{ background:var(--bg-muted); color:var(--text); }
+.cmdk-i .ico{ color:var(--text-3); }
+.cmdk-foot{ display:flex; gap:16px; padding:10px 16px; border-top:1px solid var(--border); font-size:12px; color:var(--text-3); background:var(--bg-subtle); }
+.cmdk-foot span{ display:flex; align-items:center; gap:6px; }
+.cmdk-empty{ padding:36px; text-align:center; color:var(--text-3); font-size:14px; }
+
+.pop{ position:fixed; z-index:70; top:calc(env(safe-area-inset-top,0px) + 66px); right:16px; width:310px; background:var(--bg); border:1px solid var(--border); border-radius:14px; box-shadow:var(--sh-xl); padding:18px; animation:pop .18s; }
+.pop h4{ margin:0 0 2px; font-size:15px; font-weight:600; } .pop > p{ margin:0 0 16px; font-size:13px; color:var(--text-3); }
+.pop .lbl{ font-size:12.5px; font-weight:500; margin:14px 0 8px; color:var(--text-2); }
+.pop .swatches{ flex-wrap:wrap; gap:8px; }
+.pop .sw{ width:26px; height:26px; }
+.opt-row{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+.opt-row.r6{ grid-template-columns:repeat(6,1fr); }
+.opt{ height:32px; border:1px solid var(--border); border-radius:8px; background:var(--bg); font-size:12.5px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; color:var(--text-2); }
+.opt:hover{ border-color:var(--border-strong); }
+.opt.on{ border-color:var(--p); color:var(--p-text); box-shadow:0 0 0 1px var(--p); }
+.drawer-back{ position:fixed; inset:0; z-index:60; background:rgba(12,12,18,.35); }
+.hidden{ display:none !important; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1180px){
+  .layout{ grid-template-columns:240px minmax(0,1fr); }
+  .toc{ display:none; }
+  .main{ padding:32px 36px 80px; }
+  .hero-grid{ grid-template-columns:1fr; gap:48px; }
+  .dash-kpis{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:900px){
+  .nav-links, .search-btn .t, .search-btn .kbd{ display:none; }
+  .search-btn{ width:34px; padding:0; justify-content:center; border:0; background:none; }
+  .menu-btn{ display:grid; }
+  .layout, .layout.no-toc{ grid-template-columns:minmax(0,1fr); }
+  .sidebar{ position:fixed; z-index:65; left:0; top:0; height:100%; width:290px; background:var(--bg); transform:translateX(-100%); transition:transform .22s; padding-top:calc(env(safe-area-inset-top,0px) + 20px); }
+  .sidebar.open{ transform:none; box-shadow:var(--sh-xl); }
+  .main{ padding:26px 18px 70px; }
+  .found-grid, .use-grid, .plans, .dash-row{ grid-template-columns:1fr; }
+  .road{ grid-template-columns:1fr 1fr; } .road > div{ border-bottom:1px solid var(--border); }
+  .dash{ grid-template-columns:1fr; } .dash-side{ display:none; }
+  .stage{ grid-template-columns:1fr; } .stage .span2{ grid-column:auto; }
+  .wrap{ padding:0 18px; } .hero{ padding-top:48px; }
+}
+@media (max-width:560px){
+  .dash-kpis{ grid-template-columns:1fr; } .road{ grid-template-columns:1fr; }
+  .doc h1{ font-size:27px; } .pager{ grid-template-columns:1fr; } .pager a.next{ grid-column:1; }
+  .preview{ padding:32px 16px; } .ver{ display:none; }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open navigation"><svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  <a class="logo" href="#/" aria-label="ParseUI home">
+    <svg class="logo-full" fill="none" viewBox="0 0 507 120" style="height:28px;width:auto" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><g><rect width="120" height="120" rx="16" fill="white"/><rect width="120" height="120" rx="16" fill="url(#paint0_linear_2_269h)" fill-opacity="0.2"/><rect x="1" y="1" width="118" height="118" rx="15" stroke="#E6E6E6" stroke-width="2"/><path fill-rule="evenodd" clip-rule="evenodd" d="M40.863 72.5991L40.8632 59.378C40.8632 54.1961 42.9241 49.2264 46.5926 45.5623C50.2611 41.8982 55.2367 39.8397 60.4247 39.8397C62.9936 39.8397 65.5373 40.3451 67.9107 41.3269C70.284 42.3088 72.4404 43.748 74.2569 45.5623C76.0733 47.3766 77.5143 49.5305 78.4973 51.901C79.4804 54.2715 79.9863 56.8122 79.9863 59.378C79.9863 61.9438 79.4804 64.4845 78.4973 66.8549C77.5143 69.2254 76.0733 71.3793 74.2569 73.1936C72.4404 75.0079 70.284 76.4471 67.9107 77.429C65.5373 78.4109 62.9936 78.9163 60.4247 78.9163H47.4812V98.4545H60.4247H60.6283C70.9666 98.4008 80.8633 94.2476 88.156 86.9283C95.4486 79.6089 99.5442 69.704 99.5479 59.3779C99.5479 49.0142 95.426 39.0749 88.089 31.7466C80.752 24.4183 70.8009 20.3014 60.4247 20.3014C50.1165 20.3078 40.2273 24.3775 32.9064 31.626C25.5854 38.8744 21.4245 48.7158 21.3278 59.0114L21.3016 59.378V72.4969L21.3014 98.548H40.863V72.5991Z" fill="#696969"/><path d="M51.8391 50.8392C54.1162 48.5622 57.2045 47.283 60.4246 47.283C63.6448 47.283 66.7331 48.5622 69.0101 50.8392C71.2871 53.1162 72.5663 56.2045 72.5663 59.4247C72.5663 62.6448 71.2871 65.7331 69.0101 68.0101C66.7331 70.2872 63.6448 71.5664 60.4246 71.5664H48.2829V59.4247C48.2829 56.2045 49.5621 53.1162 51.8391 50.8392Z" fill="#2488FF"/><path d="M20.1507 20.3014H96.0959" stroke="#2488FF" stroke-width="1.15068"/><path d="M23.6027 98.548H99.5479" stroke="#2488FF" stroke-width="1.15068"/><path d="M99.5479 21.452L99.5479 97.3972" stroke="#2488FF" stroke-width="1.15068"/><path d="M21.3014 21.452L21.3014 97.3972" stroke="#2488FF" stroke-width="1.15068"/><path d="M24.1779 23.1777L18.425 23.1777V17.4248L24.1779 17.4248V23.1777Z" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="24.1781" y="53.0959" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(90 24.1781 53.0959)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="24.1781" y="96.8219" width="5.75343" height="5.75342" transform="rotate(90 24.1781 96.8219)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="66.7534" y="23.1781" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(-180 66.7534 23.1781)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="66.7534" y="101.425" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(-180 66.7534 101.425)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="102.425" y="17.4247" width="5.75343" height="5.75342" transform="rotate(90 102.425 17.4247)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="102.425" y="53.0959" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(90 102.425 53.0959)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="102.425" y="96.8219" width="5.75343" height="5.75342" transform="rotate(90 102.425 96.8219)" fill="white" stroke="#2488FF" stroke-width="1.15068"/></g><path d="M494.52 21.6914H507V97.6574H494.52V21.6914Z" fill="#2488FF"/><path d="M433.652 21.6914V65.7517C433.652 72.9142 435.063 78.3042 437.884 81.9216C440.706 85.4667 445.083 87.2392 451.016 87.2392C457.021 87.2392 461.434 85.4667 464.256 81.9216C467.149 78.3042 468.596 72.9142 468.596 65.7517V21.6914H481.077V65.1005C481.077 75.9528 478.508 84.2006 473.371 89.8438C468.307 95.4869 460.855 98.3085 451.016 98.3085C441.249 98.3085 433.833 95.4869 428.769 89.8438C423.704 84.2006 421.172 75.9528 421.172 65.1005V21.6914H433.652Z" fill="#2488FF"/><path d="M356.459 69.9841C356.459 64.2686 357.58 59.2765 359.823 55.008C362.138 50.6671 365.321 47.339 369.373 45.0239C373.497 42.6364 378.199 41.4426 383.481 41.4426C388.835 41.4426 393.537 42.5278 397.589 44.6983C401.713 46.8688 404.932 49.9436 407.247 53.9227C409.635 57.9019 410.865 62.5684 410.937 67.9222C410.937 69.3692 410.828 70.8523 410.611 72.3716H368.722V73.0228C369.011 77.8701 370.53 81.7046 373.28 84.5262C376.029 87.3478 379.682 88.7586 384.24 88.7586C387.858 88.7586 390.896 87.9266 393.356 86.2625C395.816 84.5262 397.444 82.1025 398.24 78.9915H409.96C408.947 84.6347 406.198 89.265 401.713 92.8824C397.299 96.4999 391.765 98.3086 385.109 98.3086C379.321 98.3086 374.256 97.151 369.915 94.8358C365.647 92.4483 362.319 89.1203 359.931 84.8517C357.616 80.5832 356.459 75.6273 356.459 69.9841ZM398.999 63.7983C398.493 59.7468 396.865 56.5996 394.116 54.3568C391.439 52.0417 388.039 50.8841 383.915 50.8841C380.08 50.8841 376.752 52.0778 373.931 54.4653C371.181 56.7805 369.59 59.8915 369.156 63.7983H398.999Z" class="lw"/><path d="M311.79 79.317C312.007 82.2109 313.346 84.5984 315.806 86.4795C318.338 88.2882 321.594 89.1926 325.573 89.1926C329.118 89.1926 331.976 88.5414 334.146 87.2392C336.389 85.8645 337.51 84.0558 337.51 81.813C337.51 79.932 337.004 78.5212 335.991 77.5806C334.978 76.6401 333.603 75.989 331.867 75.6272C330.203 75.1931 327.598 74.759 324.053 74.325C319.206 73.7462 315.191 72.9865 312.007 72.046C308.896 71.0331 306.364 69.4776 304.411 67.3795C302.53 65.209 301.589 62.3151 301.589 58.6977C301.589 55.2973 302.53 52.2948 304.411 49.6903C306.364 47.0134 309.005 44.9514 312.333 43.5045C315.733 42.0575 319.568 41.334 323.836 41.334C330.854 41.334 336.533 42.8895 340.874 46.0005C345.288 49.1115 347.675 53.4886 348.037 59.1318H336.642C336.353 56.5996 335.087 54.5376 332.844 52.946C330.601 51.2819 327.779 50.4499 324.379 50.4499C320.979 50.4499 318.229 51.1011 316.131 52.4033C314.033 53.7056 312.984 55.4781 312.984 57.721C312.984 59.385 313.49 60.6511 314.503 61.5193C315.589 62.3151 316.927 62.8939 318.519 63.2556C320.11 63.545 322.679 63.9068 326.224 64.3409C330.999 64.8473 335.014 65.6431 338.27 66.7284C341.526 67.7412 344.13 69.4052 346.083 71.7204C348.037 73.9632 349.014 77.038 349.014 80.9448C349.014 84.4176 348.001 87.4924 345.975 90.1693C343.949 92.7738 341.164 94.7996 337.619 96.2466C334.074 97.6212 330.094 98.3085 325.681 98.3085C318.229 98.3085 312.188 96.6445 307.558 93.3164C303 89.9161 300.649 85.2496 300.504 79.317H311.79Z" class="lw"/><path d="M296.607 42.0937V53.0545H291.397C286.55 53.0545 283.041 54.6461 280.871 57.8295C278.7 60.9405 277.615 64.9196 277.615 69.767V97.6574H265.895V42.0937H276.313L277.615 50.4499C279.207 47.8454 281.269 45.8196 283.801 44.3726C286.333 42.8533 289.733 42.0937 294.002 42.0937H296.607Z" class="lw"/><path d="M259.51 87.4563V97.6574H253.324C249.707 97.6574 247.102 96.8978 245.511 95.3785C243.919 93.8591 243.123 91.6525 243.123 88.7586C238.927 95.1252 232.813 98.3086 224.783 98.3086C218.561 98.3086 213.569 96.8616 209.807 93.9677C206.045 91.0737 204.163 87.0946 204.163 82.0302C204.163 76.3146 206.189 71.9375 210.241 68.8989C214.292 65.7879 220.189 64.2324 227.93 64.2324H241.929V60.8682C241.929 57.7572 240.844 55.3335 238.674 53.5972C236.503 51.7885 233.501 50.8841 229.666 50.8841C226.266 50.8841 223.444 51.6438 221.202 53.1631C219.031 54.6101 217.729 56.5635 217.295 59.0233H205.791C206.37 53.4525 208.83 49.1477 213.171 46.1091C217.512 42.9981 223.191 41.4426 230.209 41.4426C237.661 41.4426 243.413 43.179 247.464 46.6517C251.516 50.1244 253.541 55.1165 253.541 61.6279V83.5495C253.541 86.154 254.771 87.4563 257.231 87.4563H259.51ZM241.929 72.9142H227.387C223.77 72.9142 220.984 73.6377 219.031 75.0847C217.078 76.4593 216.101 78.5212 216.101 81.2705C216.101 83.658 217.005 85.5752 218.814 87.0222C220.695 88.4692 223.227 89.1927 226.411 89.1927C231.258 89.1927 235.02 87.8904 237.697 85.2858C240.446 82.6813 241.857 79.2086 241.929 74.8676V72.9142Z" class="lw"/><path d="M174.952 21.6914C180.161 21.6914 184.756 22.7043 188.735 24.73C192.714 26.6835 195.789 29.5051 197.959 33.1948C200.13 36.8123 201.215 41.0446 201.215 45.892C201.215 50.7394 200.13 55.0079 197.959 58.6977C195.789 62.3151 192.714 65.1367 188.735 67.1625C184.756 69.1159 180.161 70.0926 174.952 70.0926H157.48V97.6574H145V21.6914H174.952ZM157.48 59.2403H173.867C178.353 59.2403 181.898 58.0466 184.502 55.6591C187.179 53.1992 188.518 49.9435 188.518 45.892C188.518 41.7681 187.215 38.5124 184.611 36.1249C182.006 33.7374 178.461 32.5437 173.976 32.5437H157.48V59.2403Z" class="lw"/><defs><linearGradient id="paint0_linear_2_269h" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse"><stop stop-color="white"/><stop offset="1" stop-color="#B8B8B8"/></linearGradient></defs></svg>
+  </a>
+  <span class="ver">v0.1 preview</span>
+  <nav class="nav-links" id="topNav">
+    <a href="#/docs/introduction" data-sec="docs">Docs</a>
+    <a href="#/docs/button" data-sec="components">Components</a>
+    <a href="#/docs/colors" data-sec="foundations">Foundations</a>
+    <a href="#/docs/blocks" data-sec="blocks">Blocks</a>
+    <a href="#/docs/dashboard" data-sec="examples">Examples</a>
+  </nav>
+  <div class="top-right">
+    <button class="search-btn" id="searchBtn" aria-label="Search docs"><svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="t">Search docs</span><span class="kbd">⌘K</span></button>
+    <button class="icon-btn" id="custBtn" aria-label="Customize theme" title="Customize"><svg class="ico ico-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="10" r="1.2"/><circle cx="12" cy="7" r="1.2"/><circle cx="16" cy="10" r="1.2"/><path d="M12 21a2.5 2.5 0 0 1 0-5h2a3 3 0 0 0 3-3"/></svg></button>
+    <button class="icon-btn" id="themeBtn" aria-label="Toggle dark mode" title="Toggle theme"></button>
+    <a class="icon-btn" href="https://github.com/aowshad/parseui" target="_blank" rel="noopener" aria-label="ParseUI on GitHub" title="ParseUI on GitHub"><svg class="ico ico-lg" viewBox="0 0 24 24" style="fill:currentColor;stroke:none"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.8 18.3 5.1 18.3 5.1c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12C23.5 5.7 18.3.5 12 .5Z"/></svg></a>
+  </div>
+</header>
+<div id="app"></div>
+<div class="toaster" id="toaster" aria-live="polite"></div>
+<div id="overlay"></div>
+<script>
+/* ---------- icons ---------- */
+const ICONS={toc:'<path d="M4 6h16M8 12h12M8 18h12"/>',
+search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',plus:'<path d="M12 5v14M5 12h14"/>',check:'<path d="M20 6 9 17l-5-5"/>',
+x:'<path d="M18 6 6 18M6 6l12 12"/>',chevR:'<path d="m9 18 6-6-6-6"/>',chevD:'<path d="m6 9 6 6 6-6"/>',chevL:'<path d="m15 18-6-6 6-6"/>',
+copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
+sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>',arrowR:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+download:'<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>',trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v5M14 11v5"/>',
+bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10 21h4"/>',
+sliders:'<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
+home:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',box:'<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/>',
+cart:'<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.5 12h11L21 7H6"/>',
+users:'<circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M16 3.5a4 4 0 0 1 0 9M22 21a6 6 0 0 0-4-5.6"/>',
+chart:'<path d="M3 3v18h18M7 15l4-4 3 3 5-6"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+alert:'<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>',
+checkC:'<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',xC:'<circle cx="12" cy="12" r="9"/><path d="m15 9-6 6M9 9l6 6"/>',
+mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+filter:'<path d="M3 5h18l-7 8v6l-4 2v-8z"/>',more:'<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
+upload:'<path d="M12 21V9M7 14l5-5 5 5M5 3h14"/>',star:'<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/>',
+layers:'<path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/>',type:'<path d="M4 7V5h16v2M12 5v14M9 19h6"/>',
+grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+terminal:'<path d="m4 17 6-5-6-5M12 19h8"/>',pen:'<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+loader:'<path d="M12 3a9 9 0 1 0 9 9"/>',calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+link:'<path d="M14 4h6v6M20 4 10 14M18 14v6H4V6h6"/>',refresh:'<path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5"/>',
+book:'<path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>',
+palette:'<circle cx="12" cy="12" r="9"/><circle cx="8" cy="10" r="1"/><circle cx="12" cy="7" r="1"/><circle cx="16" cy="10" r="1"/>',
+square:'<rect x="4" y="4" width="16" height="16" rx="3"/>',shadow:'<rect x="3" y="3" width="14" height="14" rx="2"/><path d="M21 7v12a2 2 0 0 1-2 2H7"/>',
+spacing:'<path d="M4 4v16M20 4v16M8 12h8M8 12l2-2M8 12l2 2M16 12l-2-2M16 12l-2 2"/>',
+figma:'<path d="M9 3h3v6H9a3 3 0 0 1 0-6zM12 3h3a3 3 0 0 1 0 6h-3zM9 9h3v6H9a3 3 0 0 1 0-6zM15 12a3 3 0 1 1-3-3 3 3 0 0 1 3 3zM9 15h3v3a3 3 0 1 1-3-3z"/>',
+tag:'<path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z"/><circle cx="8" cy="8" r="1.5"/>',globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+zap:'<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+shield:'<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/>',help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17h.01"/>'
+};
+const I=(n,c='')=>`<svg class="ico ${c}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]||''}</svg>`;
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+/* ---------- syntax highlighter (tsx / bash / css) ---------- */
+function hl(src,lang='tsx'){
+  if(lang==='bash'){ return src.split('\n').map(l=>{ if(l.trim().startsWith('#')) return `<span class="tk-c">${esc(l)}</span>`;
+    const m=l.match(/^(\s*)(\S+)(.*)$/); if(!m) return esc(l); return esc(m[1])+`<span class="tk-t">${esc(m[2])}</span>`+esc(m[3]).replace(/(@[\w\/.-]+)/g,'<span class="tk-s">$1</span>'); }).join('\n'); }
+  const re=lang==='css'
+    ? /(\/\*[\s\S]*?\*\/)|("[^"]*"|'[^']*')|(--[\w-]+)|(#[0-9a-fA-F]{3,8}\b|\b\d+(?:\.\d+)?(?:px|rem|%)?\b)|(@\w+|:root|\.dark)/g
+    : /(\/\/[^\n]*|\{\/\*[\s\S]*?\*\/\})|("[^"]*"|'[^']*'|`[^`]*`)|(<\/?[A-Za-z][\w.]*|\/?>)|(\b(?:import|from|export|default|function|return|const|let|type|interface|extends|React|true|false|null|undefined|async|await|as)\b)|(\b[a-zA-Z-]+(?==))/g;
+  let out='',last=0,m;
+  while((m=re.exec(src))){ out+=esc(src.slice(last,m.index)); const t=esc(m[0]);
+    if(lang==='css'){ out+= m[1]?`<span class="tk-c">${t}</span>`:m[2]?`<span class="tk-s">${t}</span>`:m[3]?`<span class="tk-a">${t}</span>`:m[4]?`<span class="tk-n">${t}</span>`:`<span class="tk-k">${t}</span>`; }
+    else { out+= m[1]?`<span class="tk-c">${t}</span>`:m[2]?`<span class="tk-s">${t}</span>`:m[3]?`<span class="tk-t">${t}</span>`:m[4]?`<span class="tk-k">${t}</span>`:`<span class="tk-a">${t}</span>`; }
+    last=re.lastIndex; }
+  return out+esc(src.slice(last));
+}
+const CODES=[]; // copy registry
+const codeBlock=(src,lang='tsx',title='')=>{ const id=CODES.push(src)-1;
+  const n=src.split('\n').length, gut=n>3?`<pre class="code gutter" aria-hidden="true">${Array.from({length:n},(_,i)=>i+1).join('\n')}</pre>`:'';
+  return `<div class="cblock">${title?`<div class="cblock-head">${esc(title)}</div>`:''}<div class="codewrap ${gut?'lined':''}">${gut}<pre class="code">${hl(src,lang)}</pre><button class="copy" data-copy="${id}" aria-label="Copy code">${I('copy')}</button></div></div>`; };
+
+/* ---------- theme state ---------- */
+const BRANDS=[
+  {id:'parse',name:'Parse blue',c:'#2488FF'},{id:'violet',name:'Violet',c:'#5B3DF5'},{id:'emerald',name:'Emerald',c:'#0E9F6E'},
+  {id:'orange',name:'Orange',c:'#EA580C'},{id:'rose',name:'Rose',c:'#E11D48'},{id:'neutral',name:'Neutral',c:null}];
+const store={ get(k,d){ try{ const v=localStorage.getItem('parseui:'+k); return v===null?d:v; }catch(e){ return d; } }, set(k,v){ try{ localStorage.setItem('parseui:'+k,v); }catch(e){} } };
+const state={ brand:store.get('brand','parse'), radius:store.get('radius','8'), theme:store.get('theme','system') };
+function applyTheme(){
+  const b=BRANDS.find(x=>x.id===state.brand)||BRANDS[0], s=document.documentElement.style;
+  if(b.c){ s.setProperty('--brand',b.c); s.setProperty('--brand-fg','#fff'); } else { s.setProperty('--brand','initial'); s.setProperty('--brand-fg','initial'); }
+  s.setProperty('--radius',state.radius+'px');
+  if(state.theme==='system') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme',state.theme);
+  document.getElementById('themeBtn').innerHTML=I(isDark()?'sun':'moon','ico-lg');
+  document.querySelectorAll('[data-brand]').forEach(el=>el.classList.toggle('on',el.dataset.brand===state.brand));
+  document.querySelectorAll('[data-radius]').forEach(el=>el.classList.toggle('on',el.dataset.radius===state.radius));
+  document.querySelectorAll('[data-mode]').forEach(el=>el.classList.toggle('on',el.dataset.mode===state.theme));
+  document.querySelectorAll('.brand-ramp').forEach(renderRamp);
+}
+const isDark=()=>state.theme==='dark'||(state.theme==='system'&&matchMedia('(prefers-color-scheme: dark)').matches);
+const swatches=(cls='')=>`<div class="swatches ${cls}">${BRANDS.map(b=>`<button class="sw" data-brand="${b.id}" title="${b.name}" aria-label="${b.name} brand color" style="background:${b.c||'var(--text)'}"></button>`).join('')}</div>`;
+
+/* ---------- avatar helper ---------- */
+const AV_COLORS=['#5B3DF5','#0E9F6E','#EA580C','#2563EB','#DB2777','#0891B2','#7C3AED','#CA8A04'];
+const av=(name,cls='',st=false)=>{ const ini=name.split(' ').map(w=>w[0]).slice(0,2).join(''); let h=0; for(const ch of name) h=(h*31+ch.charCodeAt(0))%997;
+  return `<span class="pu-avatar ${cls}" style="background:${AV_COLORS[h%AV_COLORS.length]}" title="${name}">${ini}${st?'<i class="st"></i>':''}</span>`; };
+/* ---------- component catalogue ---------- */
+const P=(n,t,d,x)=>[n,t,d,x];
+const C={};
+C.button={name:'Button',status:'stable',desc:'Triggers an action or event, such as submitting a form, opening a dialog, or saving changes.',
+ thumb:`<button class="pu-btn primary sm">Save changes</button><button class="pu-btn secondary sm">Cancel</button>`,
+ radix:'Slot',rich:true,usage:`<Button onClick={save}>Save changes</Button>`,
+ examples:[
+  {id:'variants',t:'Variants',d:'Use <code>primary</code> for the main action on a screen, <code>secondary</code> for everything else. Keep one primary button per view.',
+   html:`<button class="pu-btn primary">Primary</button><button class="pu-btn secondary">Secondary</button><button class="pu-btn soft">Soft</button><button class="pu-btn ghost">Ghost</button><button class="pu-btn danger">Danger</button><button class="pu-btn link">Link</button>`,
+   code:`import { Button } from "@parseui/react"
+
+export function ButtonVariants() {
+  return (
+    <div className="flex gap-3">
+      <Button variant="primary">Primary</Button>
+      <Button variant="secondary">Secondary</Button>
+      <Button variant="soft">Soft</Button>
+      <Button variant="ghost">Ghost</Button>
+      <Button variant="danger">Danger</Button>
+      <Button variant="link">Link</Button>
+    </div>
+  )
+}`},
+  {id:'sizes',t:'Sizes',d:'Four sizes share the same 4px grid. <code>md</code> is the default for forms and page actions.',
+   html:`<button class="pu-btn primary xs">Extra small</button><button class="pu-btn primary sm">Small</button><button class="pu-btn primary">Medium</button><button class="pu-btn primary lg">Large</button>`,
+   code:`<Button size="xs">Extra small</Button>
+<Button size="sm">Small</Button>
+<Button size="md">Medium</Button>
+<Button size="lg">Large</Button>`},
+  {id:'icons',t:'With icon',d:'Pass any icon to <code>leadingIcon</code> or <code>trailingIcon</code>. Icons inherit size and color from the button.',
+   html:`<button class="pu-btn primary">${I('plus')}New product</button><button class="pu-btn secondary">${I('download')}Export CSV</button><button class="pu-btn secondary">Continue${I('arrowR')}</button>`,
+   code:`import { Button } from "@parseui/react"
+import { Plus, Download, ArrowRight } from "@parseui/icons"
+
+<Button leadingIcon={<Plus />}>New product</Button>
+<Button variant="secondary" leadingIcon={<Download />}>Export CSV</Button>
+<Button variant="secondary" trailingIcon={<ArrowRight />}>Continue</Button>`},
+  {id:'icon-only',t:'Icon only',d:'Icon-only buttons need an <code>aria-label</code>. Pair them with a tooltip so sighted users get the same hint.',
+   html:`<span class="pu-tip"><button class="pu-btn secondary icon" aria-label="Edit">${I('pen')}</button><span class="tip">Edit</span></span><span class="pu-tip"><button class="pu-btn secondary icon" aria-label="Filter">${I('filter')}</button><span class="tip">Filter</span></span><span class="pu-tip"><button class="pu-btn ghost icon" aria-label="More">${I('more')}</button><span class="tip">More actions</span></span><span class="pu-tip"><button class="pu-btn danger icon" aria-label="Delete">${I('trash')}</button><span class="tip">Delete</span></span>`,
+   code:`<Tooltip content="Edit">
+  <Button variant="secondary" iconOnly aria-label="Edit">
+    <Pen />
+  </Button>
+</Tooltip>`},
+  {id:'loading',t:'Loading',d:'While loading, the button keeps its width, disables itself and announces the change to screen readers.',
+   html:`<button class="pu-btn primary" data-demo-load>${I('loader','spin')}Saving</button><button class="pu-btn secondary" data-demo-click>Click to load</button>`,
+   code:`const [saving, setSaving] = React.useState(false)
+
+<Button loading={saving} onClick={() => setSaving(true)}>
+  {saving ? "Saving" : "Save changes"}
+</Button>`},
+  {id:'disabled',t:'Disabled',d:'Prefer explaining why an action is unavailable. When you must disable, keep the label readable.',
+   html:`<button class="pu-btn primary" disabled>Primary</button><button class="pu-btn secondary" disabled>Secondary</button><button class="pu-btn soft" disabled>Soft</button>`,
+   code:`<Button disabled>Primary</Button>
+<Button variant="secondary" disabled>Secondary</Button>`},
+  {id:'group',t:'Button group',d:'Group related actions that switch a view. Use <code>ButtonGroup</code> with <code>value</code> to make it a segmented control.',
+   html:`<div class="pu-group" data-group><button class="pu-btn secondary on">Day</button><button class="pu-btn secondary">Week</button><button class="pu-btn secondary">Month</button><button class="pu-btn secondary">Year</button></div>`,
+   code:`<ButtonGroup value={range} onValueChange={setRange}>
+  <Button value="day">Day</Button>
+  <Button value="week">Week</Button>
+  <Button value="month">Month</Button>
+  <Button value="year">Year</Button>
+</ButtonGroup>`}],
+ props:[P('variant','"primary" | "secondary" | "soft" | "ghost" | "danger" | "link"','"primary"','Visual style of the button.'),P('size','"xs" | "sm" | "md" | "lg"','"md"','Height, padding and font size.'),
+  P('leadingIcon','ReactNode','—','Icon rendered before the label.'),P('trailingIcon','ReactNode','—','Icon rendered after the label.'),P('iconOnly','boolean','false','Square button for a single icon. Requires aria-label.'),
+  P('loading','boolean','false','Shows a spinner, disables the button and sets aria-busy.'),P('fullWidth','boolean','false','Stretches to the width of its container.'),P('asChild','boolean','false','Merges props onto the child element, e.g. a Next.js Link.')]};
+
+C.badge={name:'Badge',status:'stable',desc:'Short labels for status, category or count. Badges are not interactive.',
+ thumb:`<span class="pu-badge success"><i class="dot"></i>Paid</span><span class="pu-badge warning"><i class="dot"></i>Pending</span><span class="pu-badge brand">New</span>`,
+ examples:[{t:'Colors',html:`<span class="pu-badge gray">Gray</span><span class="pu-badge brand">Brand</span><span class="pu-badge success">Success</span><span class="pu-badge warning">Warning</span><span class="pu-badge danger">Danger</span><span class="pu-badge info">Info</span><span class="pu-badge outline">Outline</span><span class="pu-badge solid">Solid</span>`,
+  code:`<Badge color="gray">Gray</Badge>
+<Badge color="brand">Brand</Badge>
+<Badge color="success">Success</Badge>
+<Badge variant="outline">Outline</Badge>`},
+ {t:'With status dot',d:'Order and fulfillment statuses across ParseLab apps use the dot style.',html:`<span class="pu-badge success round"><i class="dot"></i>Fulfilled</span><span class="pu-badge warning round"><i class="dot"></i>Unfulfilled</span><span class="pu-badge danger round"><i class="dot"></i>Refunded</span><span class="pu-badge gray round"><i class="dot"></i>Archived</span>`,
+  code:`<Badge color="success" shape="pill" dot>Fulfilled</Badge>`}],
+ props:[P('color','"gray" | "brand" | "success" | "warning" | "danger" | "info"','"gray"','Semantic color.'),P('variant','"soft" | "outline" | "solid"','"soft"','Fill style.'),P('shape','"rounded" | "pill"','"rounded"','Corner shape.'),P('dot','boolean','false','Leading status dot.')]};
+
+C.input={name:'Input',status:'stable',desc:'A text field with label, hint, validation and optional leading or trailing content.',
+ thumb:`<div class="pu-input sm" style="width:200px">${I('search')}<input placeholder="Search orders" tabindex="-1"></div>`,
+ examples:[{t:'Default',cls:'col',html:`<div class="pu-field"><label class="pu-label">Email</label><div class="pu-input">${I('mail')}<input type="email" placeholder="you@parselab.com"></div><span class="pu-hint">We'll only use this for order notifications.</span></div>`,
+  code:`<Field label="Email" hint="We'll only use this for order notifications.">
+  <Input type="email" leadingIcon={<Mail />} placeholder="you@parselab.com" />
+</Field>`},
+ {t:'Error state',cls:'col',html:`<div class="pu-field"><label class="pu-label">Store URL<span class="req">*</span></label><div class="pu-input err"><span class="addon">https://</span><input value="my store" aria-invalid="true"></div><span class="pu-hint err">Use letters, numbers and hyphens only.</span></div>`,
+  code:`<Field label="Store URL" required error="Use letters, numbers and hyphens only.">
+  <Input prefix="https://" defaultValue="my store" />
+</Field>`},
+ {t:'Sizes and disabled',cls:'col',html:`<div class="pu-input sm" style="max-width:340px"><input placeholder="Small"></div><div class="pu-input" style="max-width:340px"><input placeholder="Medium"></div><div class="pu-input lg" style="max-width:340px"><input placeholder="Large"></div><div class="pu-input disabled" style="max-width:340px">${I('lock')}<input placeholder="Disabled" disabled></div>`,
+  code:`<Input size="sm" placeholder="Small" />
+<Input size="lg" placeholder="Large" />
+<Input disabled placeholder="Disabled" />`}],
+ props:[P('size','"sm" | "md" | "lg"','"md"','Field height.'),P('leadingIcon','ReactNode','—','Icon inside the start of the field.'),P('prefix','string','—','Fixed text addon, e.g. a URL scheme.'),P('error','boolean | string','—','Error state; a string also renders the message.'),P('disabled','boolean','false','Prevents interaction.')]};
+
+C.textarea={name:'Textarea',status:'stable',desc:'Multi-line text input that grows with its content.',thumb:`<div class="pu-textarea" style="width:200px;min-height:70px;font-size:12px;color:var(--text-3)">Write a note…</div>`,
+ examples:[{t:'Default',cls:'col',html:`<div class="pu-field"><label class="pu-label">Order note</label><textarea class="pu-textarea" placeholder="Add a note for the fulfillment team"></textarea><span class="pu-hint">Visible to staff only. 0/240</span></div>`,
+  code:`<Field label="Order note" hint="Visible to staff only.">
+  <Textarea placeholder="Add a note for the fulfillment team" maxLength={240} showCount />
+</Field>`}],
+ props:[P('autoResize','boolean','true','Grow height with content.'),P('showCount','boolean','false','Show character count when maxLength is set.')]};
+
+C.select={name:'Select',status:'stable',desc:'Choose one value from a short list. For long or searchable lists, use Combobox.',thumb:`<div style="width:190px"><div class="pu-select sm" style="display:flex;align-items:center">Last 30 days</div></div>`,
+ examples:[{t:'Default',cls:'col',html:`<div class="pu-field"><label class="pu-label">Currency</label><select class="pu-select"><option>USD — US dollar</option><option>EUR — Euro</option><option>BDT — Bangladeshi taka</option><option>AED — UAE dirham</option></select></div>`,
+  code:`<Select label="Currency" defaultValue="usd">
+  <SelectItem value="usd">USD — US dollar</SelectItem>
+  <SelectItem value="eur">EUR — Euro</SelectItem>
+  <SelectItem value="bdt">BDT — Bangladeshi taka</SelectItem>
+</Select>`}],
+ props:[P('value','string','—','Controlled value.'),P('onValueChange','(value: string) => void','—','Called when the selection changes.'),P('size','"sm" | "md"','"md"','Trigger height.')]};
+
+C.checkbox={name:'Checkbox',status:'stable',desc:'Select one or many options, or toggle a single setting that applies on save.',thumb:`<label class="pu-check"><input type="checkbox" checked tabindex="-1"> Remember me</label>`,
+ examples:[{t:'With description',cls:'col left',html:`<label class="pu-check"><input type="checkbox" checked><span class="t"><b>Email notifications</b><span>Get an email when an order is placed.</span></span></label><label class="pu-check"><input type="checkbox"><span class="t"><b>Weekly summary</b><span>A digest of sales every Monday.</span></span></label><label class="pu-check"><input type="checkbox" disabled><span class="t"><b>SMS alerts</b><span>Available on the Pro plan.</span></span></label>`,
+  code:`<Checkbox
+  defaultChecked
+  label="Email notifications"
+  description="Get an email when an order is placed."
+/>`},{t:'Indeterminate',html:`<label class="pu-check"><input type="checkbox" data-indet> Select all products</label>`,code:`<Checkbox checked="indeterminate" label="Select all products" />`}],
+ props:[P('checked','boolean | "indeterminate"','—','Controlled state.'),P('label','ReactNode','—','Clickable label.'),P('description','ReactNode','—','Secondary text below the label.')]};
+
+C.radio={name:'Radio group',status:'stable',desc:'Choose exactly one option from a visible set.',thumb:`<label class="pu-check"><input type="radio" checked tabindex="-1"> Monthly</label><label class="pu-check"><input type="radio" tabindex="-1"> Yearly</label>`,
+ examples:[{t:'Default',cls:'col left',html:`<label class="pu-check"><input type="radio" name="bill" checked><span class="t"><b>Monthly</b><span>$29 per month</span></span></label><label class="pu-check"><input type="radio" name="bill"><span class="t"><b>Yearly</b><span>$290 per year, two months free</span></span></label>`,
+  code:`<RadioGroup defaultValue="monthly">
+  <Radio value="monthly" label="Monthly" description="$29 per month" />
+  <Radio value="yearly" label="Yearly" description="$290 per year" />
+</RadioGroup>`}],
+ props:[P('value','string','—','Selected value.'),P('orientation','"vertical" | "horizontal"','"vertical"','Layout direction.')]};
+
+C.switch={name:'Switch',status:'stable',desc:'Toggle a setting that takes effect immediately.',thumb:`<label class="pu-switch"><input type="checkbox" checked tabindex="-1"> Live mode</label>`,
+ examples:[{t:'Default',cls:'col left',html:`<label class="pu-switch"><input type="checkbox" checked role="switch"> Show product reviews</label><label class="pu-switch"><input type="checkbox" role="switch"> Enable test mode</label><label class="pu-switch sm"><input type="checkbox" checked role="switch"> Small</label>`,
+  code:`<Switch defaultChecked label="Show product reviews" />
+<Switch size="sm" label="Small" />`}],
+ props:[P('checked','boolean','—','Controlled state.'),P('onCheckedChange','(checked: boolean) => void','—','Change handler.'),P('size','"sm" | "md"','"md"','Track size.')]};
+
+C.slider={name:'Slider',status:'beta',desc:'Pick a value from a continuous or stepped range.',thumb:`<input type="range" class="pu-slider" value="60" style="--v:60%;width:180px" tabindex="-1">`,
+ examples:[{t:'Default',cls:'col',html:`<div class="pu-field"><label class="pu-label">Discount <span style="margin-left:auto;color:var(--text-3)" data-sl-out>40%</span></label><input type="range" class="pu-slider" min="0" max="100" value="40" style="--v:40%" data-slider></div>`,
+  code:`<Slider label="Discount" defaultValue={[40]} max={100} step={5} formatValue={(v) => v + "%"} />`}],
+ props:[P('value','number[]','—','One value, or two for a range.'),P('step','number','1','Increment.'),P('formatValue','(v: number) => string','—','Format the output label.')]};
+
+C.avatar={name:'Avatar',status:'stable',desc:'Represents a person or store with an image, initials, or a fallback.',thumb:`<div class="pu-avatars">${av('Nadia Rahman')}${av('Tanvir Hasan')}${av('Sara Kim')}<span class="pu-avatar more">+4</span></div>`,
+ examples:[{t:'Sizes and status',html:`${av('Nadia Rahman','sm')}${av('Nadia Rahman','',true)}${av('Nadia Rahman','lg',true)}${av('Nadia Rahman','xl')}${av('Lumen Store','lg sq')}`,
+  code:`<Avatar size="sm" name="Nadia Rahman" />
+<Avatar name="Nadia Rahman" status="online" />
+<Avatar size="lg" shape="square" name="Lumen Store" src="/logo.png" />`},
+ {t:'Group',html:`<div class="pu-avatars">${av('Nadia Rahman')}${av('Tanvir Hasan')}${av('Sara Kim')}${av('Ovi Das')}<span class="pu-avatar more">+8</span></div>`,code:`<AvatarGroup max={4}>
+  {team.map((m) => <Avatar key={m.id} name={m.name} src={m.photo} />)}
+</AvatarGroup>`}],
+ props:[P('name','string','—','Used for initials, color and alt text.'),P('src','string','—','Image URL.'),P('size','"sm" | "md" | "lg" | "xl"','"md"','Diameter.'),P('status','"online" | "away" | "offline"','—','Presence indicator.')]};
+
+C.alert={name:'Alert',status:'stable',desc:'Inline message that tells the user something important about the current page.',thumb:`<div class="pu-alert info" style="padding:10px 12px;font-size:12px">${I('info')}<div class="t"><b style="font-size:12.5px">Update available</b>Version 2.4 is ready.</div></div>`,
+ examples:[{t:'Semantic colors',cls:'col',html:`<div class="pu-alert info">${I('info')}<div class="t"><b>Theme app extension available</b>Move your widget into a theme block for faster loading.<div class="acts"><button class="pu-btn link sm">Learn more</button></div></div><button class="x" aria-label="Dismiss">${I('x')}</button></div>
+<div class="pu-alert success">${I('checkC')}<div class="t"><b>App approved</b>Your listing is now live on the Shopify App Store.</div></div>
+<div class="pu-alert warning">${I('alert')}<div class="t"><b>Payment method expires soon</b>Update your card before 12 October to avoid interruption.</div></div>
+<div class="pu-alert danger">${I('xC')}<div class="t"><b>Sync failed</b>312 products could not be imported. Check the file format and try again.</div></div>`,
+  code:`<Alert color="info" title="Theme app extension available" onDismiss={close}>
+  Move your widget into a theme block for faster loading.
+</Alert>
+
+<Alert color="danger" title="Sync failed">
+  312 products could not be imported.
+</Alert>`}],
+ props:[P('color','"info" | "success" | "warning" | "danger"','"info"','Semantic intent and icon.'),P('title','ReactNode','—','Bold first line.'),P('actions','ReactNode','—','Buttons or links below the text.'),P('onDismiss','() => void','—','Shows a close button.')]};
+
+C.card={name:'Card',status:'stable',desc:'Groups related content and actions on a surface.',thumb:`<div class="pu-card" style="width:190px"><div class="pu-card-b" style="padding:12px"><div style="font-size:11px;color:var(--text-3)">Revenue</div><div style="font-weight:600;font-size:18px">$48,290</div></div></div>`,
+ examples:[{t:'With header and footer',html:`<div class="pu-card" style="width:420px;max-width:100%"><div class="pu-card-h"><div><h4>Store details</h4><p>Shown on invoices and customer emails.</p></div></div><div class="pu-card-b" style="display:flex;flex-direction:column;gap:14px"><div class="pu-field" style="max-width:none"><label class="pu-label">Store name</label><div class="pu-input"><input value="Lumen Prints"></div></div><div class="pu-field" style="max-width:none"><label class="pu-label">Support email</label><div class="pu-input"><input value="help@lumenprints.com"></div></div></div><div class="pu-card-f"><button class="pu-btn secondary sm">Cancel</button><button class="pu-btn primary sm">Save</button></div></div>`,
+  code:`<Card>
+  <CardHeader title="Store details" description="Shown on invoices and customer emails." />
+  <CardBody>…</CardBody>
+  <CardFooter>
+    <Button variant="secondary" size="sm">Cancel</Button>
+    <Button size="sm">Save</Button>
+  </CardFooter>
+</Card>`}],
+ props:[P('padding','"none" | "sm" | "md" | "lg"','"md"','Inner spacing of CardBody.'),P('elevated','boolean','false','Adds a larger shadow.')]};
+
+C.tabs={name:'Tabs',status:'stable',desc:'Switch between related views on the same page.',thumb:`<div class="pu-tabs pill"><button class="on">Overview</button><button>Orders</button></div>`,
+ examples:[{t:'Underline',html:`<div style="width:100%;max-width:520px" data-tabs><div class="pu-tabs"><button class="on" data-i="0">Overview</button><button data-i="1">Orders <span class="n">24</span></button><button data-i="2">Customers</button><button data-i="3">Settings</button></div><div class="pu-tabpanel" data-p="0">Sales are up 12% compared with last month.</div><div class="pu-tabpanel hidden" data-p="1">24 orders need fulfillment.</div><div class="pu-tabpanel hidden" data-p="2">1,284 customers in 38 countries.</div><div class="pu-tabpanel hidden" data-p="3">Manage store preferences.</div></div>`,
+  code:`<Tabs defaultValue="overview">
+  <TabsList>
+    <TabsTrigger value="overview">Overview</TabsTrigger>
+    <TabsTrigger value="orders" count={24}>Orders</TabsTrigger>
+  </TabsList>
+  <TabsContent value="overview">…</TabsContent>
+</Tabs>`},{t:'Pill',html:`<div data-tabs><div class="pu-tabs pill"><button class="on" data-i="0">7 days</button><button data-i="1">30 days</button><button data-i="2">90 days</button></div></div>`,code:`<TabsList variant="pill">…</TabsList>`}],
+ props:[P('variant','"underline" | "pill"','"underline"','Visual style of the list.'),P('value','string','—','Active tab.'),P('orientation','"horizontal" | "vertical"','"horizontal"','Arrow-key direction.')]};
+
+C.accordion={name:'Accordion',status:'stable',desc:'Stacked sections that expand to reveal content.',thumb:`<div class="pu-acc" style="width:200px;font-size:12px"><details open><summary style="padding:8px 10px;font-size:12px">Refund policy ${I('chevD')}</summary></details></div>`,
+ examples:[{t:'Default',html:`<div class="pu-acc"><details open><summary>How does billing work? ${I('chevD')}</summary><div class="body">Apps bill through Shopify. Charges appear on your monthly Shopify invoice.</div></details><details><summary>Can I cancel anytime? ${I('chevD')}</summary><div class="body">Yes. Uninstalling the app stops billing immediately.</div></details><details><summary>Do you offer a free trial? ${I('chevD')}</summary><div class="body">Every plan starts with a 14-day trial.</div></details></div>`,
+  code:`<Accordion type="single" collapsible defaultValue="billing">
+  <AccordionItem value="billing" title="How does billing work?">
+    Apps bill through Shopify.
+  </AccordionItem>
+</Accordion>`}],
+ props:[P('type','"single" | "multiple"','"single"','How many items can be open.'),P('collapsible','boolean','true','Allow closing the open item.')]};
+
+C.tooltip={name:'Tooltip',status:'stable',desc:'A short hint shown on hover or keyboard focus.',thumb:`<span class="pu-tip"><button class="pu-btn secondary sm" tabindex="-1">Hover</button><span class="tip" style="opacity:1;transform:translateX(-50%)">Copy link</span></span>`,
+ examples:[{t:'Placement',html:`<span class="pu-tip"><button class="pu-btn secondary">Top</button><span class="tip">Tooltip on top</span></span><span class="pu-tip"><button class="pu-btn secondary">Bottom</button><span class="tip bot">Tooltip on bottom</span></span>`,
+  code:`<Tooltip content="Copy link" side="top">
+  <Button variant="secondary">Top</Button>
+</Tooltip>`}],
+ props:[P('content','ReactNode','—','Tooltip text.'),P('side','"top" | "right" | "bottom" | "left"','"top"','Preferred placement.'),P('delay','number','300','Open delay in ms.')]};
+
+C.modal={name:'Modal',status:'stable',desc:'A focused dialog for confirmations and short tasks. Traps focus and closes with Escape.',thumb:`<div class="pu-card" style="width:190px;padding:12px;box-shadow:var(--sh-lg)"><div class="feat-ic danger" style="width:28px;height:28px">${I('trash')}</div><div style="font-weight:600;font-size:13px;margin-top:8px">Delete product?</div></div>`,
+ examples:[{t:'Confirmation',html:`<button class="pu-btn danger" data-modal="delete">${I('trash')}Delete product</button><button class="pu-btn secondary" data-modal="invite">Invite teammate</button>`,
+  code:`<Modal>
+  <ModalTrigger asChild>
+    <Button variant="danger" leadingIcon={<Trash />}>Delete product</Button>
+  </ModalTrigger>
+  <ModalContent
+    icon={<Trash />}
+    color="danger"
+    title="Delete this product?"
+    description="This removes the product and its 4 variants. This can't be undone."
+  >
+    <ModalClose asChild><Button variant="secondary">Cancel</Button></ModalClose>
+    <Button variant="danger">Delete product</Button>
+  </ModalContent>
+</Modal>`}],
+ props:[P('open','boolean','—','Controlled open state.'),P('size','"sm" | "md" | "lg"','"md"','Max width.'),P('dismissible','boolean','true','Close on overlay click and Escape.')]};
+
+C.toast={name:'Toast',status:'stable',desc:'Brief confirmation of an action, shown at the edge of the screen.',thumb:`<div class="pu-toast" style="width:200px;padding:10px;font-size:12px;box-shadow:var(--sh-md)"><div class="t"><b style="font-size:12.5px">Saved</b>Changes published</div></div>`,
+ examples:[{t:'Trigger',html:`<button class="pu-btn secondary" data-toast="success">Show success</button><button class="pu-btn secondary" data-toast="error">Show error</button><button class="pu-btn secondary" data-toast="info">Show with action</button>`,
+  code:`import { toast } from "@parseui/react"
+
+toast.success("Product saved", { description: "Your changes are live." })
+toast.error("Sync failed", { description: "Check your API key." })
+toast("Order archived", { action: { label: "Undo", onClick: restore } })`}],
+ props:[P('duration','number','4000','Milliseconds before auto-dismiss.'),P('action','{ label, onClick }','—','Inline action button.'),P('position','"bottom-right" | "top-center" | …','"bottom-right"','Set on <Toaster />.')]};
+
+C.progress={name:'Progress',status:'stable',desc:'Shows completion of a task or a quota.',thumb:`<div style="width:180px"><div class="pu-progress"><i style="width:64%"></i></div></div>`,
+ examples:[{t:'Bar and ring',cls:'col',html:`<div class="pu-field"><div style="display:flex;justify-content:space-between;font-size:13.5px"><span class="pu-label">Importing products</span><span style="color:var(--text-3)">64%</span></div><div class="pu-progress"><i style="width:64%"></i></div></div><div style="display:flex;gap:16px"><div class="pu-ring" style="--v:25">25%</div><div class="pu-ring" style="--v:65">65%</div><div class="pu-ring" style="--v:100">100%</div></div>`,
+  code:`<Progress value={64} label="Importing products" showValue />
+<ProgressRing value={65} />`}],
+ props:[P('value','number','0','0 to 100.'),P('size','"sm" | "md"','"md"','Bar thickness.'),P('showValue','boolean','false','Show the percentage.')]};
+
+C.table={name:'Table',status:'beta',desc:'Displays rows of structured data. For sorting, filters and selection use Data table.',thumb:`<div style="width:210px;border:1px solid var(--border);border-radius:8px;background:var(--bg);font-size:11px">${['#1042','#1041','#1040'].map((o,i)=>`<div style="display:flex;justify-content:space-between;padding:6px 8px;border-bottom:1px solid var(--border)"><b style="font-weight:500">${o}</b><span class="pu-badge ${['success','warning','success'][i]}" style="height:17px;font-size:10px">${['Paid','Pending','Paid'][i]}</span></div>`).join('')}</div>`,
+ examples:[{t:'Default',cls:'flush',html:`<div style="padding:24px"><div class="pu-table-wrap"><table class="pu-table"><thead><tr><th>Customer</th><th>Status</th><th>Plan</th><th class="num">MRR</th></tr></thead><tbody>
+${[['Nadia Rahman','nadia@lumen.co','success','Active','Pro','$290'],['Tanvir Hasan','tanvir@kiln.store','warning','Trial','Starter','$0'],['Sara Kim','sara@northprint.com','success','Active','Team','$890'],['Ovi Das','ovi@dhakathreads.com','danger','Past due','Pro','$290']].map(r=>`<tr><td><div class="pu-person">${av(r[0],'sm')}<div><b>${r[0]}</b><small>${r[1]}</small></div></div></td><td><span class="pu-badge ${r[2]} round"><i class="dot"></i>${r[3]}</span></td><td>${r[4]}</td><td class="num"><b>${r[5]}</b></td></tr>`).join('')}</tbody></table></div></div>`,
+  code:`<Table>
+  <TableHeader>
+    <TableRow><TableHead>Customer</TableHead><TableHead>Status</TableHead>…</TableRow>
+  </TableHeader>
+  <TableBody>
+    {rows.map((r) => (
+      <TableRow key={r.id}>
+        <TableCell><Person name={r.name} email={r.email} /></TableCell>
+        <TableCell><Badge color={r.color} dot>{r.status}</Badge></TableCell>
+      </TableRow>
+    ))}
+  </TableBody>
+</Table>`}],
+ props:[P('density','"compact" | "default"','"default"','Row height.'),P('stickyHeader','boolean','false','Keep the header visible on scroll.')]};
+
+C.pagination={name:'Pagination',status:'stable',desc:'Move between pages of a long list.',thumb:`<div class="pu-pag"><button tabindex="-1">1</button><button class="on" tabindex="-1">2</button><button tabindex="-1">3</button></div>`,
+ examples:[{t:'Default',html:`<div class="pu-pag" data-pag><button aria-label="Previous">${I('chevL')}</button><button class="on">1</button><button>2</button><button>3</button><button disabled>…</button><button>12</button><button aria-label="Next">${I('chevR')}</button></div>`,
+  code:`<Pagination page={page} total={12} onPageChange={setPage} />`}],
+ props:[P('page','number','1','Current page.'),P('total','number','—','Total page count.'),P('siblings','number','1','Pages shown each side of current.')]};
+
+C.breadcrumb={name:'Breadcrumb',status:'stable',desc:'Shows where the current page sits in the hierarchy.',thumb:`<div class="pu-crumb" style="font-size:12px">Products ${I('chevR')} <span class="cur">T-shirt</span></div>`,
+ examples:[{t:'Default',html:`<nav class="pu-crumb" aria-label="Breadcrumb"><a href="javascript:void 0">${I('home')}</a>${I('chevR')}<a href="javascript:void 0">Products</a>${I('chevR')}<a href="javascript:void 0">Apparel</a>${I('chevR')}<span class="cur" aria-current="page">Organic cotton tee</span></nav>`,
+  code:`<Breadcrumb>
+  <BreadcrumbItem href="/" icon={<Home />} />
+  <BreadcrumbItem href="/products">Products</BreadcrumbItem>
+  <BreadcrumbItem current>Organic cotton tee</BreadcrumbItem>
+</Breadcrumb>`}],
+ props:[P('separator','ReactNode','<ChevronRight />','Divider between items.'),P('maxItems','number','—','Collapse the middle when exceeded.')]};
+
+C.kbd={name:'Kbd',status:'stable',desc:'Displays a keyboard shortcut.',thumb:`<span class="pu-kbd">⌘</span><span class="pu-kbd">K</span>`,
+ examples:[{t:'Default',html:`<span style="display:flex;gap:4px;align-items:center;font-size:14px;color:var(--text-2)">Open search <span class="pu-kbd">⌘</span><span class="pu-kbd">K</span></span><span style="display:flex;gap:4px;align-items:center;font-size:14px;color:var(--text-2)">Save <span class="pu-kbd">Ctrl</span><span class="pu-kbd">S</span></span>`,code:`<Kbd>⌘</Kbd><Kbd>K</Kbd>`}],
+ props:[P('children','ReactNode','—','Key label.')]};
+
+const PLANNED=[['combobox','Combobox'],['date-picker','Date picker'],['dropdown','Dropdown menu'],['data-table','Data table'],['command','Command menu'],['file-upload','File upload'],['drawer','Drawer']];
+const COMP_ORDER=Object.keys(C).sort((a,b)=>C[a].name.localeCompare(C[b].name));
+/* ---------- navigation model ---------- */
+const NAV=[
+ {g:'Getting started',sec:'docs',items:[['introduction','Introduction','book'],['installation','Installation','terminal'],['theming','Theming','palette'],['cli','CLI','terminal'],['figma','Figma kit','figma']]},
+ {g:'Foundations',sec:'foundations',items:[['colors','Colors','palette'],['typography','Typography','type'],['spacing','Spacing','spacing'],['radius','Radius','square'],['shadows','Shadows','shadow'],['icons','Icons','star']]},
+ {g:'Components',sec:'components',items:[['components','Overview','grid'],...COMP_ORDER.map(k=>[k,C[k].name,'box'])],planned:PLANNED},
+ {g:'Blocks',sec:'blocks',items:[['blocks','All blocks','layers']]},
+ {g:'Examples',sec:'examples',items:[['dashboard','Store dashboard','chart']]}];
+const FLAT=NAV.flatMap(g=>g.items.map(i=>({slug:i[0],name:i[1],icon:i[2],group:g.g,sec:g.sec})));
+
+/* ---------- charts ---------- */
+const REV=[31,34,29,38,41,37,44,48,42,51,49,55,53,58,62,57,61,66,63,70,68,74,71,77,82,79,85,83,88,92];
+const PREV=[28,30,27,31,33,32,35,36,34,38,37,40,39,41,43,42,44,46,45,47,46,49,48,50,52,51,53,52,55,56];
+function lineChart(w=640,h=220){ const min=20,max=100,pad=8,
+  pts=a=>a.map((v,i)=>[pad+i*(w-pad*2)/(a.length-1), h-pad-((v-min)/(max-min))*(h-pad*2)]),
+  d=a=>pts(a).map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  const cur=d(REV), last=pts(REV).at(-1), gid='g'+Math.random().toString(36).slice(2,7);
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" role="img" aria-label="Revenue over the last 30 days, trending up">
+  <defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--p);stop-opacity:.22"/><stop offset="1" style="stop-color:var(--p);stop-opacity:0"/></linearGradient></defs>
+  ${[.25,.5,.75].map(f=>`<line x1="0" x2="${w}" y1="${h*f}" y2="${h*f}" style="stroke:var(--border)" stroke-dasharray="3 4"/>`).join('')}
+  <path d="${d(PREV)}" fill="none" style="stroke:var(--text-3)" stroke-width="1.6" stroke-dasharray="4 4"/>
+  <path d="${cur} L${w-pad} ${h} L${pad} ${h}Z" fill="url(#${gid})"/>
+  <path d="${cur}" fill="none" style="stroke:var(--p)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="${last[0]}" cy="${last[1]}" r="4.5" style="fill:var(--bg);stroke:var(--p)" stroke-width="2.2"/></svg>`; }
+const bars=(a)=>`<svg class="spark" viewBox="0 0 120 36" preserveAspectRatio="none" style="height:36px" aria-hidden="true">${a.map((v,i)=>`<rect x="${i*10+1}" y="${36-v*.36}" width="7" height="${v*.36}" rx="1.5" style="fill:${i===a.length-1?'var(--p)':'var(--p-soft-2)'}"/>`).join('')}</svg>`;
+
+/* ---------- dashboard ---------- */
+function dashboardHTML(){
+  const kpi=(l,v,d,up,a)=>`<div class="pu-card kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="d"><span class="${up?'up':'down'}">${up?'↑':'↓'} ${d}</span> vs last month</div><div style="margin-top:10px">${bars(a)}</div></div>`;
+  const orders=[['#1284','Nadia Rahman','success','Paid','Fulfilled','$128.00','2 min ago'],['#1283','Tanvir Hasan','warning','Pending','Unfulfilled','$64.50','18 min ago'],['#1282','Sara Kim','success','Paid','Fulfilled','$212.40','1 hr ago'],['#1281','Ovi Das','danger','Refunded','Returned','$39.00','3 hr ago'],['#1280','Maya Chen','success','Paid','Unfulfilled','$96.20','5 hr ago'],['#1279','Rafi Ahmed','success','Paid','Fulfilled','$154.75','Yesterday']];
+  return `<div class="dash">
+  <aside class="dash-side">
+    <div class="dash-store"><span class="pu-avatar sq" style="background:var(--p)">LP</span><div><b>Lumen Prints</b><small>lumen.myshopify.com</small></div></div>
+    ${[['home','Home',1],['cart','Orders',0,'12'],['box','Products'],['users','Customers'],['chart','Analytics'],['tag','Discounts']].map(n=>`<div class="dnav ${n[2]?'on':''}">${I(n[0])}${n[1]}${n[3]?`<span class="pu-badge brand round">${n[3]}</span>`:''}</div>`).join('')}
+    <div class="dnav-label">Apps</div>
+    ${[['layers','Printly designer'],['calendar','Bookwise'],['zap','Variantly']].map(n=>`<div class="dnav">${I(n[0])}${n[1]}</div>`).join('')}
+    <div class="dnav-label">Store</div><div class="dnav">${I('sliders')}Settings</div>
+    <div class="dash-up"><b>Storage almost full</b>82% of 5 GB used by design assets.<div class="pu-progress sm" style="margin:10px 0"><i style="width:82%"></i></div><button class="pu-btn soft xs">Upgrade plan</button></div>
+  </aside>
+  <div class="dash-main">
+    <div class="dash-top"><div class="pu-input">${I('search')}<input placeholder="Search orders, products, customers" aria-label="Search"><span class="pu-kbd">/</span></div><div style="margin-left:auto;display:flex;align-items:center;gap:8px"><span class="pu-tip"><button class="pu-btn ghost icon" aria-label="Notifications">${I('bell')}</button><span class="tip bot">Notifications</span></span>${av('Nadia Rahman','sm',true)}</div></div>
+    <div class="dash-body">
+      <div class="dash-head"><div><h3>Good morning, Nadia</h3><p>Here's how Lumen Prints is doing this month.</p></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><select class="pu-select sm" style="width:150px" aria-label="Date range"><option>Last 30 days</option><option>Last 7 days</option><option>This quarter</option></select><button class="pu-btn secondary sm">${I('download')}Export</button><button class="pu-btn primary sm">${I('plus')}Create order</button></div></div>
+      <div class="dash-kpis">${kpi('Total revenue','$48,290','12.4%',1,[40,52,48,61,58,70,66,74,80,92,88,100])}${kpi('Orders','1,284','8.1%',1,[50,45,58,55,62,60,68,64,72,70,78,82])}${kpi('Conversion rate','3.24%','0.4%',0,[70,72,66,68,64,66,60,62,58,61,57,55])}${kpi('Avg. order value','$37.60','3.9%',1,[60,58,62,64,61,66,68,65,70,72,71,76])}</div>
+      <div class="dash-row">
+        <div class="pu-card"><div class="pu-card-h" style="justify-content:space-between;flex-wrap:wrap"><div><h4>Revenue</h4><p>$48,290 this period</p></div><div class="legend"><span><i style="background:var(--p)"></i>This month</span><span><i style="background:var(--text-3)"></i>Last month</span></div></div><div class="pu-card-b">${lineChart()}</div></div>
+        <div class="pu-card"><div class="pu-card-h" style="justify-content:space-between"><div><h4>Top products</h4><p>By units sold</p></div><button class="pu-btn ghost icon sm" aria-label="More">${I('more')}</button></div><div class="pu-card-b bar-list">
+          ${[['Custom hoodie','842',84],['Photo mug','611',61],['Canvas tote','488',49],['Phone case','302',30],['Sticker pack','214',21]].map(r=>`<div><div class="r"><b style="font-weight:500">${r[0]}</b><span>${r[1]}</span></div><div class="pu-progress sm"><i style="width:${r[2]}%"></i></div></div>`).join('')}
+        </div></div>
+      </div>
+      <div class="pu-card"><div class="pu-card-h" style="justify-content:space-between;flex-wrap:wrap;gap:12px"><div><h4>Recent orders</h4><p>6 of 1,284 orders</p></div><div data-tabs><div class="pu-tabs pill"><button class="on" data-i="0">All</button><button data-i="1">Unfulfilled</button><button data-i="2">Refunded</button></div></div></div>
+        <div style="overflow-x:auto"><table class="pu-table"><thead><tr><th><input type="checkbox" class="dash-cb" aria-label="Select all" style="accent-color:var(--p)"></th><th>Order</th><th>Customer</th><th>Payment</th><th>Fulfillment</th><th class="num">Total</th><th>Date</th><th></th></tr></thead><tbody>
+        ${orders.map(o=>`<tr><td><input type="checkbox" style="accent-color:var(--p)" aria-label="Select ${o[0]}"></td><td><b>${o[0]}</b></td><td><div class="pu-person">${av(o[1],'sm')}${o[1]}</div></td><td><span class="pu-badge ${o[2]} round"><i class="dot"></i>${o[3]}</span></td><td><span class="pu-badge ${o[4]==='Fulfilled'?'gray':o[4]==='Returned'?'danger':'warning'}">${o[4]}</span></td><td class="num"><b>${o[5]}</b></td><td>${o[6]}</td><td><button class="pu-btn ghost icon xs" aria-label="Actions">${I('more')}</button></td></tr>`).join('')}
+        </tbody></table></div>
+        <div class="pu-card-f" style="justify-content:space-between;align-items:center"><span style="font-size:13px;color:var(--text-3)">Page 1 of 214</span><div class="pu-pag" data-pag><button aria-label="Previous">${I('chevL')}</button><button class="on">1</button><button>2</button><button>3</button><button aria-label="Next">${I('chevR')}</button></div></div>
+      </div>
+    </div>
+  </div></div>`;
+}
+
+/* ---------- blocks ---------- */
+const BLOCKS=[
+ {id:'sign-in',t:'Sign in',d:'Email and SSO sign-in card for app onboarding.',free:true,html:`<div class="pu-card" style="width:380px;max-width:100%;padding:28px;box-shadow:var(--sh-lg)"><svg class="logo-tile" fill="none" viewBox="0 0 124 124" style="width:44px;height:44px" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><g><rect width="120" height="120" rx="16" fill="white"/><rect width="120" height="120" rx="16" fill="url(#paint0_linear_2_269s)" fill-opacity="0.2"/><rect x="1" y="1" width="118" height="118" rx="15" stroke="#E6E6E6" stroke-width="2"/><path fill-rule="evenodd" clip-rule="evenodd" d="M40.863 72.5991L40.8632 59.378C40.8632 54.1961 42.9241 49.2264 46.5926 45.5623C50.2611 41.8982 55.2367 39.8397 60.4247 39.8397C62.9936 39.8397 65.5373 40.3451 67.9107 41.3269C70.284 42.3088 72.4404 43.748 74.2569 45.5623C76.0733 47.3766 77.5143 49.5305 78.4973 51.901C79.4804 54.2715 79.9863 56.8122 79.9863 59.378C79.9863 61.9438 79.4804 64.4845 78.4973 66.8549C77.5143 69.2254 76.0733 71.3793 74.2569 73.1936C72.4404 75.0079 70.284 76.4471 67.9107 77.429C65.5373 78.4109 62.9936 78.9163 60.4247 78.9163H47.4812V98.4545H60.4247H60.6283C70.9666 98.4008 80.8633 94.2476 88.156 86.9283C95.4486 79.6089 99.5442 69.704 99.5479 59.3779C99.5479 49.0142 95.426 39.0749 88.089 31.7466C80.752 24.4183 70.8009 20.3014 60.4247 20.3014C50.1165 20.3078 40.2273 24.3775 32.9064 31.626C25.5854 38.8744 21.4245 48.7158 21.3278 59.0114L21.3016 59.378V72.4969L21.3014 98.548H40.863V72.5991Z" fill="#696969"/><path d="M51.8391 50.8392C54.1162 48.5622 57.2045 47.283 60.4246 47.283C63.6448 47.283 66.7331 48.5622 69.0101 50.8392C71.2871 53.1162 72.5663 56.2045 72.5663 59.4247C72.5663 62.6448 71.2871 65.7331 69.0101 68.0101C66.7331 70.2872 63.6448 71.5664 60.4246 71.5664H48.2829V59.4247C48.2829 56.2045 49.5621 53.1162 51.8391 50.8392Z" fill="#2488FF"/><path d="M20.1507 20.3014H96.0959" stroke="#2488FF" stroke-width="1.15068"/><path d="M23.6027 98.548H99.5479" stroke="#2488FF" stroke-width="1.15068"/><path d="M99.5479 21.452L99.5479 97.3972" stroke="#2488FF" stroke-width="1.15068"/><path d="M21.3014 21.452L21.3014 97.3972" stroke="#2488FF" stroke-width="1.15068"/><path d="M24.1779 23.1777L18.425 23.1777V17.4248L24.1779 17.4248V23.1777Z" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="24.1781" y="53.0959" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(90 24.1781 53.0959)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="24.1781" y="96.8219" width="5.75343" height="5.75342" transform="rotate(90 24.1781 96.8219)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="66.7534" y="23.1781" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(-180 66.7534 23.1781)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="66.7534" y="101.425" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(-180 66.7534 101.425)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="102.425" y="17.4247" width="5.75343" height="5.75342" transform="rotate(90 102.425 17.4247)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="102.425" y="53.0959" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(90 102.425 53.0959)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="102.425" y="96.8219" width="5.75343" height="5.75342" transform="rotate(90 102.425 96.8219)" fill="white" stroke="#2488FF" stroke-width="1.15068"/></g><defs><linearGradient id="paint0_linear_2_269s" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse"><stop stop-color="white"/><stop offset="1" stop-color="#B8B8B8"/></linearGradient></defs></svg><h4 style="margin:18px 0 4px;font-size:20px;letter-spacing:-.02em">Sign in to your store</h4><p style="margin:0 0 22px;color:var(--text-2);font-size:14px">Welcome back. Enter your details to continue.</p><div style="display:flex;flex-direction:column;gap:14px"><div class="pu-field" style="max-width:none"><label class="pu-label">Email</label><div class="pu-input"><input placeholder="you@company.com"></div></div><div class="pu-field" style="max-width:none"><label class="pu-label">Password <a class="pu-btn link sm" style="margin-left:auto;font-size:13px">Forgot password?</a></label><div class="pu-input"><input type="password" value="••••••••"></div></div><label class="pu-check"><input type="checkbox" checked> Keep me signed in</label><button class="pu-btn primary full">Sign in</button><div class="pu-divider">or</div><button class="pu-btn secondary full">${I('globe')}Continue with Shopify</button></div></div>`,
+  code:`<AuthCard title="Sign in to your store" description="Welcome back.">
+  <Field label="Email"><Input type="email" /></Field>
+  <Field label="Password"><Input type="password" /></Field>
+  <Checkbox label="Keep me signed in" />
+  <Button fullWidth>Sign in</Button>
+  <Divider>or</Divider>
+  <Button variant="secondary" fullWidth>Continue with Shopify</Button>
+</AuthCard>`},
+ {id:'pricing',t:'Pricing plans',d:'Three-tier plan picker used on app listing pages.',html:`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;width:100%;max-width:720px">${[['Starter','$0','For new stores',['1 product template','Community support']],['Growth','$29','For growing brands',['Unlimited templates','Priority support','Analytics'],1],['Scale','$99','For high volume',['Everything in Growth','Custom domain','Dedicated manager']]].map(p=>`<div class="pu-card" style="padding:20px;${p[4]?'border-color:var(--p);box-shadow:0 0 0 3px var(--ring)':''}"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-weight:600">${p[0]}</b>${p[4]?'<span class="pu-badge brand">Popular</span>':''}</div><div style="font-size:30px;font-weight:600;letter-spacing:-.03em;margin:8px 0 0">${p[1]}<small style="font-size:13px;color:var(--text-3);font-weight:400">/mo</small></div><p style="margin:0 0 14px;font-size:13px;color:var(--text-3)">${p[2]}</p><button class="pu-btn ${p[4]?'primary':'secondary'} sm full">Choose ${p[0]}</button><div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;font-size:13px;color:var(--text-2)">${p[3].map(f=>`<span style="display:flex;gap:8px">${I('check')}${f}</span>`).join('')}</div></div>`).join('')}</div>`,
+  code:`<PricingTable plans={plans} highlighted="growth" interval="monthly" />`},
+ {id:'stats',t:'Stats row',d:'Metric cards with trend and sparkline.',free:true,html:`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;width:100%">${[['Visitors','24.8k','14%',1,[30,40,35,50,45,60,70,65,80]],['Sessions','9,412','6%',1,[40,38,45,50,48,55,52,60,64]],['Bounce rate','41%','2%',0,[60,58,62,55,57,50,52,48,45]]].map(k=>`<div class="pu-card kpi"><div class="l">${k[0]}</div><div class="v">${k[1]}</div><div class="d"><span class="${k[3]?'up':'down'}">${k[3]?'↑':'↓'} ${k[2]}</span> this week</div><div style="margin-top:8px">${bars(k[4])}</div></div>`).join('')}</div>`,
+  code:`<StatGrid>
+  <StatCard label="Visitors" value="24.8k" change={14} trend={visitorSeries} />
+</StatGrid>`},
+ {id:'notifications',t:'Notification settings',d:'Settings form with switches and a sticky save bar.',html:`<div class="pu-card" style="width:560px;max-width:100%"><div class="pu-card-h"><div><h4>Notifications</h4><p>Choose what your team hears about.</p></div></div><div class="pu-card-b" style="display:flex;flex-direction:column;gap:0;padding:0">${[['New orders','Email and push for every order',1],['Low stock','When a variant drops below 5 units',1],['App updates','Release notes from ParseLab',0]].map((r,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 18px;${i?'border-top:1px solid var(--border)':''}"><div><b style="font-weight:500;font-size:14px">${r[0]}</b><div style="font-size:13px;color:var(--text-3)">${r[1]}</div></div><label class="pu-switch"><input type="checkbox" ${r[2]?'checked':''} role="switch" aria-label="${r[0]}"></label></div>`).join('')}</div><div class="pu-card-f"><button class="pu-btn secondary sm">Reset</button><button class="pu-btn primary sm">Save changes</button></div></div>`,
+  code:`<SettingsSection title="Notifications" description="Choose what your team hears about.">
+  <SettingsRow title="New orders" description="Email and push for every order">
+    <Switch defaultChecked />
+  </SettingsRow>
+</SettingsSection>`},
+ {id:'empty',t:'Empty state',d:'First-run screen that points to the next action.',free:true,html:`<div class="pu-card" style="width:520px;max-width:100%"><div class="pu-empty"><div class="feat-ic brand">${I('box','ico-lg')}</div><h4>Add your first product</h4><p>Products you create or import will appear here. Start with a template or bring in a CSV.</p><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="pu-btn secondary">${I('upload')}Import CSV</button><button class="pu-btn primary">${I('plus')}Add product</button></div></div></div>`,
+  code:`<EmptyState
+  icon={<Box />}
+  title="Add your first product"
+  description="Products you create or import will appear here."
+  actions={<><Button variant="secondary">Import CSV</Button><Button>Add product</Button></>}
+/>`},
+ {id:'upload',t:'File upload',d:'Drop zone with in-progress file rows.',html:`<div style="width:100%;max-width:440px;display:flex;flex-direction:column;gap:10px"><div class="pu-upload"><div class="feat-ic brand" style="margin:0 auto 10px;width:38px;height:38px">${I('upload')}</div><b>Click to upload</b> or drag and drop<div style="font-size:12.5px;color:var(--text-3);margin-top:4px">SVG, PNG or JPG up to 10 MB</div></div>${[['hoodie-front.png','2.4 MB',100],['mug-wrap.svg','640 KB',58]].map(f=>`<div class="pu-card" style="padding:12px 14px;display:flex;gap:12px;align-items:center"><div class="prod-thumb" style="background:var(--p-soft);color:var(--p-text)">${I('layers')}</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;font-size:13.5px"><b style="font-weight:500">${f[0]}</b><span style="color:var(--text-3)">${f[2]}%</span></div><div style="font-size:12px;color:var(--text-3);margin-bottom:6px">${f[1]}</div><div class="pu-progress sm"><i style="width:${f[2]}%"></i></div></div></div>`).join('')}</div>`,
+  code:`<FileUpload accept={["image/*"]} maxSize={10 * 1024 * 1024} onUpload={upload} />`}];
+/* ---------- shared doc pieces ---------- */
+const demo=(ex,i)=>{ const id=CODES.push(ex.code)-1;
+  return `<div class="demo" data-demo><div class="demo-bar"><div class="seg" role="tablist"><button class="on" data-view="p">Preview</button><button data-view="c">Code</button></div><span class="spacer"></span>
+  <div class="seg" title="Preview theme"><button class="on" data-scope="" aria-label="Page theme">${I('eye')}</button><button data-scope="scope-light" aria-label="Light preview">${I('sun')}</button><button data-scope="scope-dark" aria-label="Dark preview">${I('moon')}</button></div></div>
+  <div class="preview ${ex.cls||''}" data-pv>${ex.html}</div>
+  <div class="codewrap hidden" data-cv><pre class="code">${hl(ex.code)}</pre><button class="copy" data-copy="${id}" aria-label="Copy code">${I('copy')}</button></div></div>`; };
+const propsTable=rows=>`<div class="props-wrap"><table class="props"><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>${rows.map(r=>`<tr><td><code>${r[0]}</code></td><td class="type">${esc(r[1])}</td><td class="type">${esc(r[2])}</td><td>${r[3]}</td></tr>`).join('')}</tbody></table></div>`;
+const pmTabs=(cmd)=>{ const v={pnpm:`pnpm dlx ${cmd}`,npm:`npx ${cmd}`,yarn:`yarn dlx ${cmd}`,bun:`bunx --bun ${cmd}`}; const id=CODES.push(v.pnpm)-1;
+  return `<div class="cblock" data-pm='${JSON.stringify(v).replace(/'/g,"&#39;")}'><div class="cblock-head">${I('terminal')}Terminal<div class="seg">${Object.keys(v).map((k,i)=>`<button class="${i?'':'on'}" data-pmk="${k}">${k}</button>`).join('')}</div></div><div class="codewrap"><pre class="code">${hl(v.pnpm,'bash')}</pre><button class="copy" data-copy="${id}" aria-label="Copy command">${I('copy')}</button></div></div>`; };
+const crumbs=(...a)=>`<div class="eyebrow">${a[0]}</div>`;
+function pager(slug){ const i=FLAT.findIndex(f=>f.slug===slug); const p=FLAT[i-1], n=FLAT[i+1];
+  return `<div class="pager">${p?`<a href="#/docs/${p.slug}">Previous<b>${p.name}</b></a>`:''}${n?`<a class="next" href="#/docs/${n.slug}">Next<b>${n.name}</b></a>`:''}</div>`; }
+const statusTag=s=>s==='beta'?'<span class="pu-badge warning">Beta</span>':'<span class="pu-badge success">Stable</span>';
+
+/* ---------- component page (the template every component follows) ---------- */
+function componentPage(k){
+  const c=C[k], file=k.replace(/[^a-z]/g,'');
+  let h=`${crumbs('Base components',c.name)}<h1>${c.name}</h1><p class="lead">${c.desc}</p>
+  <div class="meta-row">${statusTag(c.status)}<a class="chip-link" href="javascript:void 0">${I('figma')}Figma</a><a class="chip-link" href="javascript:void 0">${I('link')}Source</a>${c.radix?`<a class="chip-link" href="javascript:void 0">${I('layers')}Built on Radix ${c.radix}</a>`:''}</div>
+  ${demo(c.examples[0])}
+  <h2 id="installation">Installation</h2>
+  <div class="demo" data-inst style="border:0;margin:0"><div class="pu-tabs" style="margin-bottom:6px"><button class="on" data-inst-t="cli">CLI</button><button data-inst-t="manual">Manual</button></div>
+   <div data-inst-p="cli">${pmTabs('parseui@latest add '+file)}</div>
+   <div data-inst-p="manual" class="hidden"><div class="steps">
+     <div class="step"><h4>Install the dependencies</h4>${codeBlock('npm install @radix-ui/react-slot class-variance-authority','bash')}</div>
+     <div class="step"><h4>Copy the source into your project</h4><p>Paste into <code>components/ui/${file}.tsx</code>.</p>${codeBlock(k==='button'?BUTTON_SRC:`// components/ui/${file}.tsx\n// Full source is published with v0.2 of @parseui/react`,'tsx')}</div>
+     <div class="step"><h4>Update the import paths</h4><p>Match your project's alias, for example <code>@/components/ui/${file}</code>.</p></div></div></div></div>
+  <h2 id="usage">Usage</h2>${codeBlock(`import { ${c.name.replace(/\s/g,'')} } from "@parseui/react"`,'tsx')}${codeBlock(c.usage||c.examples[0].code.split('\n').filter(l=>!l.startsWith('import')).join('\n').trim(),'tsx')}
+  <h2 id="examples">Examples</h2>`;
+  c.examples.forEach((ex,i)=>{ if(i===0 && !c.rich) return; h+=`<h3 id="ex-${ex.id||i}">${ex.t}</h3>${ex.d?`<p>${ex.d}</p>`:''}${demo(ex)}`; });
+  if(!c.rich && c.examples.length===1) h+=`<p>More examples are added as the component is designed in Figma.</p>`;
+  h+=`<h2 id="api">API reference</h2><h3>${c.name.replace(/\s/g,'')}</h3><p>Also accepts every native HTML attribute of the underlying element.</p>${propsTable(c.props)}`;
+  if(k==='button') h+=`<h2 id="accessibility">Accessibility</h2><ul><li>Renders a native <code>button</code> with <code>type="button"</code> by default, so it never submits a form by accident.</li><li>Focus ring uses a 2px offset in the brand color and meets 3:1 contrast on every surface.</li><li><code>loading</code> sets <code>aria-busy</code> and keeps the accessible name.</li><li>Icon-only buttons warn in development when <code>aria-label</code> is missing.</li></ul>
+    <h2 id="keyboard">Keyboard</h2>${propsTable([['Enter','—','—','Activates the button.'],['Space','—','—','Activates the button.'],['Tab','—','—','Moves focus to the next focusable element.']]).replace('<th>Prop</th><th>Type</th><th>Default</th>','<th>Key</th><th></th><th></th>')}`;
+  return h+pager(k);
+}
+const BUTTON_SRC=`import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "@/lib/utils"
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-1.5 rounded-[--radius] font-medium transition-colors focus-visible:ring-2 disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        primary: "bg-primary text-primary-foreground hover:bg-primary-hover",
+        secondary: "border border-strong bg-background hover:bg-subtle",
+        soft: "bg-primary-soft text-primary-text",
+        ghost: "hover:bg-muted",
+        danger: "bg-danger text-white",
+        link: "text-primary-text underline-offset-4 hover:underline",
+      },
+      size: { xs: "h-7 px-2.5 text-[13px]", sm: "h-8 px-3", md: "h-9 px-3.5", lg: "h-11 px-4.5" },
+    },
+    defaultVariants: { variant: "primary", size: "md" },
+  }
+)
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean
+  loading?: boolean
+  leadingIcon?: React.ReactNode
+  trailingIcon?: React.ReactNode
+}
+
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild, loading, leadingIcon, trailingIcon, children, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button"
+    return (
+      <Comp ref={ref} aria-busy={loading} disabled={loading || props.disabled}
+        className={cn(buttonVariants({ variant, size }), className)} {...props}>
+        {loading ? <Spinner /> : leadingIcon}
+        {children}
+        {trailingIcon}
+      </Comp>
+    )
+  }
+)`;
+
+/* ---------- getting started pages ---------- */
+const PAGES={};
+PAGES.introduction=()=>`${crumbs('Getting started','Introduction')}<h1>Introduction</h1><p class="lead">ParseUI is the design system for ParseLab products. One set of tokens, React components and Figma files, so every app we ship looks and behaves like it came from the same team.</p>
+<div class="callout">${I('info','ico-lg')}<div><b>This is a v0.1 preview.</b> Foundations and the component API are being finalised. Visuals shown here are the working direction, not final designs.</div></div>
+<h2 id="why">Why we're building it</h2><p>ParseLab ships several Shopify apps, each with its own buttons, inputs and tables. Every new screen gets redesigned and rebuilt from scratch, and Built for Shopify reviews keep flagging the same inconsistencies. ParseUI replaces that with parts we design once and reuse everywhere.</p>
+<h2 id="principles">Principles</h2>
+<div class="card-grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">${[['Tokens first','Color, type, radius and shadow are variables. Rebrand a product by changing a handful of values.'],['You own the code','Components copy into your repo through the CLI. Edit them freely without waiting on a package release.'],['Accessible by default','Built on Radix primitives with keyboard support, focus management and WCAG AA contrast.'],['Figma and code match','Every component has a Figma twin with the same names, variants and props.']].map(p=>`<div class="fcard" style="min-height:0"><h3>${p[0]}</h3><p style="font-size:14px;color:var(--text-2)">${p[1]}</p></div>`).join('')}</div>
+<h2 id="whats-inside">What's inside</h2><ul><li><b>Foundations</b> — color, typography, spacing, radius, shadows and an icon set.</li><li><b>Components</b> — ${COMP_ORDER.length} base components today, ${PLANNED.length} more planned.</li><li><b>Blocks</b> — ready-made sections like sign-in, pricing, settings and empty states.</li><li><b>Examples</b> — full screens, starting with a store dashboard.</li></ul>
+<h2 id="stack">Stack</h2><p>React 18+, TypeScript, Tailwind CSS v4 and Radix UI. Works with Next.js, Remix and Vite, and alongside Shopify Polaris inside embedded apps.</p>${pager('introduction')}`;
+
+PAGES.installation=()=>`${crumbs('Getting started','Installation')}<h1>Installation</h1><p class="lead">Add ParseUI to a new or existing React project in a few minutes.</p>
+<h2 id="steps">Set up your project</h2><div class="steps">
+<div class="step"><h4>Initialise ParseUI</h4><p>Creates <code>parseui.json</code>, adds the theme CSS and a <code>cn()</code> helper.</p>${pmTabs('parseui@latest init')}</div>
+<div class="step"><h4>Pick your brand</h4><p>The CLI asks for a base color and radius. You can change them later in <code>theme.css</code>.</p>${codeBlock(`✔ Which brand color? › Parse blue
+✔ Which radius? › 8px
+✔ Where is your global CSS? › app/globals.css
+✔ Configure import alias? › @/components`,'bash')}</div>
+<div class="step"><h4>Add components</h4>${pmTabs('parseui@latest add button input badge')}</div>
+<div class="step"><h4>Use them</h4>${codeBlock(`import { Button } from "@/components/ui/button"
+
+export default function Page() {
+  return <Button>Save changes</Button>
+}`)}</div></div>
+<h2 id="package">Prefer a package?</h2><p>If you'd rather not own the source, install the compiled package. You get updates through npm but can't edit internals.</p>${codeBlock('npm install @parseui/react @parseui/icons','bash')}${pager('installation')}`;
+
+PAGES.theming=()=>`${crumbs('Getting started','Theming')}<h1>Theming</h1><p class="lead">Everything visual is a CSS variable. Change a few tokens and every component follows. Try it: open the customizer in the top bar.</p>
+<h2 id="brand">Brand color</h2><p>Pick a brand to see the whole site recolor. Derived tokens like hover, soft and focus ring are computed from one value.</p><div style="margin:16px 0 8px">${swatches()}</div>
+<h2 id="tokens">Theme tokens</h2>${codeBlock(`:root {
+  --brand: #2488FF;
+  --brand-fg: #ffffff;
+  --radius: 8px;
+
+  --bg: #ffffff;
+  --text: #14141b;
+  --border: #e7e7ec;
+}
+
+.dark {
+  --bg: #0f0f14;
+  --text: #ededf2;
+  --border: #26262f;
+}
+
+/* derived — you rarely touch these */
+:root {
+  --p-hover: color-mix(in oklab, var(--brand) 86%, var(--text));
+  --p-soft: color-mix(in oklab, var(--brand) 11%, var(--bg));
+}`,'css','theme.css')}
+<h2 id="per-product">One theme per product</h2><p>Each ParseLab app keeps its own brand while sharing everything else. Set the brand in the app's root layout:</p>${codeBlock(`<ParseUIProvider brand="#0E9F6E" radius={10} mode="system">
+  <App />
+</ParseUIProvider>`)}
+<h2 id="dark">Dark mode</h2><p>Every component is designed for both modes. Follow the system setting, or force one with <code>mode</code>. Use the sun and moon toggles on any preview to check both.</p>${pager('theming')}`;
+
+PAGES.cli=()=>`${crumbs('Getting started','CLI')}<h1>CLI</h1><p class="lead">The <code>parseui</code> command adds components, blocks and themes to your project.</p>
+<h2 id="commands">Commands</h2>${propsTable([['init','—','—','Set up config, theme CSS and utilities.'],['add &lt;name…&gt;','—','—','Copy one or more components or blocks into your project.'],['diff &lt;name&gt;','—','—','Show what changed upstream since you added a component.'],['theme','—','—','Regenerate theme tokens from a brand color.'],['list','—','—','Print every available component and block.']]).replace('<th>Prop</th><th>Type</th><th>Default</th>','<th>Command</th><th></th><th></th>')}
+<h2 id="examples">Examples</h2>${pmTabs('parseui@latest add button')}${codeBlock(`# add a Pro block (requires a licence key)
+npx parseui@latest add blocks/pricing --key $PARSEUI_KEY
+
+# check for upstream changes
+npx parseui@latest diff button`,'bash')}${pager('cli')}`;
+
+PAGES.figma=()=>`${crumbs('Getting started','Figma kit')}<h1>Figma kit</h1><p class="lead">A Figma library that mirrors the code: same component names, same variants, same tokens as Figma variables.</p>
+<div class="callout">${I('figma','ico-lg')}<div><b>Coming with v0.2.</b> Foundations are being set up as Figma variables first, then components one by one.</div></div>
+<h2 id="structure">File structure</h2><ul><li><b>Foundations</b> — color, type and effect styles as variables with light and dark modes.</li><li><b>Components</b> — one page per component, variants matching the <code>variant</code> and <code>size</code> props.</li><li><b>Blocks</b> — composed sections ready to drop into a flow.</li><li><b>Examples</b> — full screens, starting with the store dashboard.</li></ul>
+<h2 id="code-connect">Code Connect</h2><p>Components are mapped with Figma Code Connect, so developers inspecting a design see the exact ParseUI JSX to use.</p>${codeBlock(`<Button variant="secondary" size="sm" leadingIcon={<Download />}>
+  Export CSV
+</Button>`)}${pager('figma')}`;
+/* ---------- foundations ---------- */
+const STEPS=[50,100,200,300,400,500,600,700,800,900,950];
+function renderRamp(el){ const b=(BRANDS.find(x=>x.id===state.brand)||BRANDS[0]).c||(isDark()?'#EDEDF2':'#14141B');
+  el.innerHTML=STEPS.map(s=>{ const mix=s<500?`color-mix(in oklab, ${b} ${Math.round(100-(500-s)/500*92)}%, white)`:s===500?b:`color-mix(in oklab, ${b} ${Math.round(100-(s-500)/450*70)}%, black)`;
+    return `<button class="swatch-cell" data-copytext="--brand-${s}" style="--c:${mix}"><i style="background:${mix}"></i><b>${s}</b><span>--brand-${s}</span></button>`; }).join(''); }
+const NEUTRAL=['#FAFAFB','#F4F4F6','#E7E7EC','#D6D6DD','#AEAEBA','#8B8B98','#6B6B78','#51515E','#35353F','#1F1F27','#14141B'];
+PAGES.colors=()=>`<style>.swatch-row{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));gap:6px;margin:12px 0 8px}.swatch-cell{border:0;background:none;padding:0;text-align:left;cursor:pointer;font:inherit;align-self:start;min-width:0;color:var(--text)}.swatch-cell i{display:block;height:56px;border-radius:8px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06);margin-bottom:6px}.swatch-cell b{display:block;font-size:12.5px;font-weight:500}.swatch-cell span{display:block;font:11px var(--mono);color:var(--text-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sem{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.sem>div{border:1px solid var(--border);border-radius:12px;overflow:hidden}.sem i{display:block;height:60px}.sem p{margin:0;padding:10px 12px;font-size:13px}.sem p span{display:block;font:11.5px var(--mono);color:var(--text-3)}@media(max-width:700px){.swatch-row{grid-template-columns:repeat(6,1fr)}}</style>
+${crumbs('Foundations','Colors')}<h1>Colors</h1><p class="lead">A brand ramp generated from one value, a neutral scale for surfaces and text, and four semantic colors for status. Click any swatch to copy its token.</p>
+<h2 id="brand">Brand</h2><p>Generated from <code>--brand</code>. Switch brands to see the ramp update.</p><div style="margin:10px 0">${swatches()}</div><div class="swatch-row brand-ramp"></div>
+<h2 id="neutral">Neutral</h2><div class="swatch-row">${NEUTRAL.map((c,i)=>`<button class="swatch-cell" data-copytext="${c}"><i style="background:${c}"></i><b>${STEPS[i]}</b><span>${c}</span></button>`).join('')}</div>
+<h2 id="semantic">Semantic</h2><div class="sem">${[['Success','--success'],['Warning','--warning'],['Danger','--danger'],['Info','--info']].map(s=>`<div><i style="background:var(${s[1]})"></i><p><b style="font-weight:500">${s[0]}</b><span>${s[1]}</span></p></div>`).join('')}</div>
+<h2 id="surface">Surface and text tokens</h2>${propsTable([['--bg','surface','#FFFFFF','Page and card background.'],['--bg-subtle','surface','#F8F8FA','Headers, footers, code blocks.'],['--bg-muted','surface','#F1F1F4','Hover states, tracks.'],['--border','line','#E7E7EC','Default dividers and card borders.'],['--text','text','#14141B','Headings and primary text.'],['--text-2','text','#51515E','Body copy.'],['--text-3','text','#8B8B98','Hints, placeholders, metadata.']])}${pager('colors')}`;
+
+PAGES.typography=()=>`${crumbs('Foundations','Typography')}<h1>Typography</h1><p class="lead">Geist for interface text, Geist Mono for code and numbers that need to align. One family keeps products calm; hierarchy comes from size and weight.</p>
+<h2 id="scale">Type scale</h2><div class="props-wrap"><table class="props">${[['Display xl',48,56,600,'-0.04em'],['Display lg',36,44,600,'-0.03em'],['Heading 1',30,38,600,'-0.025em'],['Heading 2',24,32,600,'-0.02em'],['Heading 3',20,28,600,'-0.015em'],['Body lg',17,26,400,'0'],['Body md',15,24,400,'0'],['Body sm',13.5,20,400,'0'],['Caption',12,16,500,'0']].map(t=>`<tr><td style="width:150px"><b style="color:var(--text);font-weight:500">${t[0]}</b><div class="type">${t[1]}/${t[2]} · ${t[3]}</div></td><td style="font-size:${t[1]}px;line-height:${t[2]}px;font-weight:${t[3]};letter-spacing:${t[4]};color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:420px">Ship products faster</td></tr>`).join('').replace(/ · /g,' / ')}</table></div>
+<h2 id="weights">Weights</h2><div style="display:flex;gap:28px;flex-wrap:wrap;font-size:28px;letter-spacing:-.02em">${[[400,'Regular'],[500,'Medium'],[600,'Semibold'],[700,'Bold']].map(w=>`<div style="font-weight:${w[0]}">Aa<div style="font-size:12.5px;color:var(--text-3);font-weight:400;letter-spacing:0">${w[1]} ${w[0]}</div></div>`).join('')}</div>
+<h2 id="mono">Monospace</h2><p>Use Geist Mono for code, IDs like order numbers, and tabular figures.</p><div style="font:15px var(--mono);padding:16px;border:1px solid var(--border);border-radius:12px;background:var(--code-bg)">#1284 &nbsp; $48,290.00 &nbsp; sk_test_4eC39Hq</div>${pager('typography')}`;
+
+PAGES.spacing=()=>`${crumbs('Foundations','Spacing')}<h1>Spacing</h1><p class="lead">A 4px base grid. Components use the same steps for padding and gaps, so layouts line up without manual nudging.</p>
+<h2 id="scale">Scale</h2><div class="props-wrap"><table class="props"><thead><tr><th>Token</th><th>Value</th><th></th></tr></thead><tbody>${[1,2,3,4,5,6,8,10,12,16,20,24].map(n=>`<tr><td><code>space-${n}</code></td><td class="type">${n*4}px</td><td><i style="display:block;height:12px;width:${n*4}px;background:var(--p);border-radius:3px;opacity:.8"></i></td></tr>`).join('')}</tbody></table></div>${pager('spacing')}`;
+
+PAGES.radius=()=>`${crumbs('Foundations','Radius')}<h1>Radius</h1><p class="lead">One <code>--radius</code> value drives every corner. Larger surfaces scale it up so nested corners stay concentric.</p>
+<h2 id="scale">Scale</h2><div style="display:flex;gap:18px;flex-wrap:wrap;margin:16px 0">${[['sm','var(--r-sm)','Checkbox, xs button'],['md','var(--r)','Buttons, inputs'],['lg','var(--r-lg)','Alerts, menus'],['xl','var(--r-xl)','Cards, modals'],['full','999px','Pills, avatars']].map(r=>`<div style="text-align:center"><div style="width:96px;height:96px;border:1.5px solid var(--p);background:var(--p-soft);border-radius:${r[1]}"></div><b style="display:block;font-size:13.5px;font-weight:500;margin-top:8px">${r[0]}</b><span style="font-size:12px;color:var(--text-3)">${r[2]}</span></div>`).join('')}</div>
+<h2 id="try">Try it</h2><p>Change the base radius and every component on this site updates.</p><div class="opt-row r6" style="max-width:420px">${['0','4','6','8','10','12'].map(r=>`<button class="opt" data-radius="${r}">${r}px</button>`).join('')}</div>${pager('radius')}`;
+
+PAGES.shadows=()=>`${crumbs('Foundations','Shadows')}<h1>Shadows</h1><p class="lead">Five elevations. Low for resting controls, high for things floating above the page.</p>
+<h2 id="scale">Elevation</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:20px;padding:28px;background:var(--bg-subtle);border-radius:16px;border:1px solid var(--border)">${[['xs','Buttons, inputs'],['sm','Cards at rest'],['md','Hovered cards'],['lg','Popovers, toasts'],['xl','Modals']].map(s=>`<div style="height:110px;background:var(--bg);border-radius:12px;box-shadow:var(--sh-${s[0]});padding:14px;display:flex;flex-direction:column;justify-content:flex-end"><b style="font-size:13.5px;font-weight:500">shadow-${s[0]}</b><span style="font-size:12px;color:var(--text-3)">${s[1]}</span></div>`).join('')}</div>${pager('shadows')}`;
+
+PAGES.icons=()=>`${crumbs('Foundations','Icons')}<h1>Icons</h1><p class="lead"><code>@parseui/icons</code> ships a 24px, 1.8px stroke set drawn to sit on the same grid as Geist. Click an icon to copy its import.</p>
+<h2 id="set">Icon set</h2><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px">${Object.keys(ICONS).map(n=>`<button class="swatch-cell" data-copytext="import { ${n[0].toUpperCase()+n.slice(1)} } from &quot;@parseui/icons&quot;" style="border:1px solid var(--border);border-radius:10px;padding:16px 8px 10px;display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--text)">${I(n,'ico-lg')}<span style="font:11.5px var(--mono);color:var(--text-3)">${n}</span></button>`).join('')}</div>${pager('icons')}`;
+
+/* ---------- index pages ---------- */
+PAGES.components=()=>`${crumbs('Components','Overview')}<h1>ParseUI <span class="muted">React components</span></h1><p class="lead">${COMP_ORDER.length} base components, each with a Figma twin, full keyboard support and light and dark themes.</p>
+<div class="card-grid">${COMP_ORDER.map(k=>`<a class="ccard" href="#/docs/${k}"><div class="ccard-thumb">${C[k].thumb}</div><div class="ccard-body"><b>${C[k].name}</b>${C[k].status==='beta'?'<span class="tag">Beta</span>':''}<small>1 component · ${C[k].examples.length} example${C[k].examples.length>1?'s':''}</small></div></a>`).join('')}${PLANNED.map(p=>`<div class="ccard" style="opacity:.6"><div class="ccard-thumb" style="color:var(--text-3);font-size:13px">In design</div><div class="ccard-body"><b>${p[1]}</b><span class="tag">Soon</span></div></div>`).join('')}</div>`;
+
+PAGES.blocks=()=>`${crumbs('Blocks','All blocks')}<h1>Blocks</h1><p class="lead">Sections built from ParseUI components. Copy one into your app and swap in real data. Free blocks ship with the open library; the rest are part of ParseUI Pro.</p>
+${BLOCKS.map(b=>`<h2 id="${b.id}">${b.t} ${b.free?'<span class="pu-badge success" style="vertical-align:3px">Free</span>':'<span class="pu-badge solid" style="vertical-align:3px">Pro</span>'}</h2><p>${b.d}</p>${demo({html:b.html,code:b.code})}`).join('')}${pager('blocks')}`;
+
+PAGES.dashboard=()=>`${crumbs('Examples','Store dashboard')}<h1>Store dashboard</h1><p class="lead">A full admin screen built only from ParseUI parts: sidebar, stat cards, chart, progress list, tabs, table, badges and pagination. Change the brand color and it reskins as one piece.</p>
+<div class="meta-row"><span class="pu-badge solid">Pro template</span><a class="chip-link" href="javascript:void 0">${I('figma')}Figma</a><a class="chip-link" href="javascript:void 0">${I('link')}Open full screen</a></div>
+${demo({cls:'flush',html:dashboardHTML(),code:`import { Sidebar, StatCard, Card, AreaChart, Table, Badge, Pagination } from "@parseui/react"
+
+export default function Dashboard() {
+  return (
+    <AppShell sidebar={<StoreSidebar />} topbar={<Topbar />}>
+      <PageHeader title="Good morning, Nadia" actions={<DashboardActions />} />
+      <StatGrid>{stats.map((s) => <StatCard key={s.label} {...s} />)}</StatGrid>
+      <Grid cols="2fr 1fr">
+        <Card title="Revenue"><AreaChart data={revenue} compare={lastMonth} /></Card>
+        <Card title="Top products"><BarList data={topProducts} /></Card>
+      </Grid>
+      <OrdersTable orders={orders} />
+    </AppShell>
+  )
+}`})}
+<h2 id="uses">Components used</h2><p>${['Card','Badge','Button','Input','Select','Tabs','Table','Progress','Pagination','Avatar','Tooltip','Kbd'].map(n=>`<a class="inline-code" href="#/docs/${n.toLowerCase()}" style="margin:0 4px 6px 0;display:inline-block">${n}</a>`).join('')}</p>${pager('dashboard')}`;
+/* ---------- home ---------- */
+function homePage(){
+  const install='npx parseui@latest init', iid=CODES.push(install)-1;
+  const use=[['Install','Set up tokens and utilities once per project.',`npx parseui@latest init\n\n✔ Brand color › Parse blue\n✔ Radius › 8px`,'bash'],
+             ['Add what you need','Components land in your repo as editable source.',`npx parseui@latest add button\nnpx parseui@latest add table\nnpx parseui@latest add blocks/stats`,'bash'],
+             ['Build','Compose screens with a consistent API.',`import { Button, Badge } from "@/ui"\n\n<Button leadingIcon={<Plus />}>\n  New product\n</Button>`,'tsx']];
+  return `<div class="home">
+  <section class="hero"><div class="wrap hero-grid">
+    <div>
+      <a class="pill-note" href="#/docs/introduction"><span class="pu-badge solid round">New</span>v0.1 preview for ParseLab teams${I('chevR')}</a>
+      <h1>Build every ParseLab app from one kit.</h1>
+      <p class="sub">ParseUI is our design system: tokens, ${COMP_ORDER.length} React components, blocks and full screen examples, with a Figma library that matches the code line for line.</p>
+      <div class="hero-cta"><a class="pu-btn primary lg" href="#/docs/components">Browse components</a><a class="pu-btn secondary lg" href="#/docs/introduction">Read the docs</a></div>
+      <div class="install"><span><span class="dollar">$</span> ${install}</span><button data-copy="${iid}" aria-label="Copy install command">${I('copy')}</button></div>
+      <div class="brand-try">Try a brand ${swatches()}</div>
+    </div>
+    <div class="stage">
+      <div class="pu-card kpi"><div class="l">${I('chart')}Revenue</div><div class="v">$48,290</div><div class="d"><span class="up">↑ 12.4%</span> vs last month</div><div style="margin-top:10px">${bars([40,52,48,61,58,70,66,74,80,92,88,100])}</div></div>
+      <div class="pu-card" style="padding:16px 18px;display:flex;flex-direction:column;gap:12px">
+        <label class="pu-switch" style="justify-content:space-between"><span>Live mode</span><input type="checkbox" checked role="switch"></label>
+        <label class="pu-switch" style="justify-content:space-between"><span>Email receipts</span><input type="checkbox" role="switch"></label>
+        <div class="pu-tabs pill" data-tabs style="width:100%"><button class="on" data-i="0" style="flex:1">Monthly</button><button data-i="1" style="flex:1">Yearly</button></div>
+      </div>
+      <div class="pu-card span2"><div class="pu-card-h" style="justify-content:space-between"><div><h4>Recent orders</h4><p>Synced 2 minutes ago</p></div><button class="pu-btn secondary sm">${I('download')}Export</button></div>
+        ${[['#1284','Nadia Rahman','success','Paid','$128.00'],['#1283','Tanvir Hasan','warning','Pending','$64.50'],['#1282','Sara Kim','success','Paid','$212.40']].map((o,i)=>`<div style="display:flex;align-items:center;gap:12px;padding:11px 18px;${i?'border-top:1px solid var(--border)':''};font-size:14px"><b style="font-weight:500;width:52px">${o[0]}</b><div class="pu-person" style="flex:1">${av(o[1],'sm')}${o[1]}</div><span class="pu-badge ${o[2]} round"><i class="dot"></i>${o[3]}</span><b style="font-weight:500;width:70px;text-align:right;font-variant-numeric:tabular-nums">${o[4]}</b></div>`).join('')}
+      </div>
+      <div class="pu-card span2" style="padding:14px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div class="pu-input sm" style="flex:1;min-width:180px">${I('search')}<input placeholder="Search products" aria-label="Search products"></div>
+        <button class="pu-btn soft sm">${I('filter')}Filter</button><button class="pu-btn primary sm" data-toast="success">${I('plus')}Add product</button>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="sec"><div class="wrap">
+    <div class="sec-h"><div><h2>Foundations that every product shares</h2><p>Color, type, radius and elevation live as tokens. Each app sets its own brand; the rest stays consistent.</p></div><a class="pu-btn secondary" href="#/docs/colors">View foundations</a></div>
+    <div class="found-grid">
+      <a class="fcard" href="#/docs/colors"><div><h3>Color</h3><p>Brand ramp from one value, plus neutral and semantic scales.</p></div><div class="ramp">${STEPS.slice(0,10).map(s=>`<i style="background:${s<500?`color-mix(in oklab, var(--p) ${Math.round(100-(500-s)/500*92)}%, white)`:s===500?'var(--p)':`color-mix(in oklab, var(--p) ${Math.round(100-(s-500)/450*70)}%, black)`}"></i>`).join('')}</div></a>
+      <a class="fcard" href="#/docs/typography"><div><h3>Typography</h3><p>Geist and Geist Mono on a nine-step scale.</p></div><div class="typespec"><span class="Aa">Aa</span><span class="w">Regular 400<br>Medium 500<br>Semibold 600</span></div></a>
+      <a class="fcard" href="#/docs/radius"><div><h3>Radius and elevation</h3><p>One radius value, five shadow levels.</p></div><div class="radii"><i style="border-radius:var(--r-sm);width:28px;height:28px"></i><i style="border-radius:var(--r);width:38px;height:38px"></i><i style="border-radius:var(--r-lg)"></i><i style="border-radius:var(--r-xl);width:56px;height:56px;box-shadow:var(--sh-lg)"></i></div></a>
+    </div>
+  </div></section>
+
+  <section class="sec"><div class="wrap">
+    <div class="sec-h"><div><h2>Base components, documented the same way</h2><p>Preview, code, install command, props and accessibility notes on every page.</p></div><a class="pu-btn secondary" href="#/docs/components">All ${COMP_ORDER.length} components</a></div>
+    <div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))">${['button','input','badge','switch','tabs','avatar','alert','progress'].map(k=>`<a class="ccard" href="#/docs/${k}"><div class="ccard-thumb">${C[k].thumb}</div><div class="ccard-body"><b>${C[k].name}</b><span>${C[k].examples.length} example${C[k].examples.length>1?'s':''}</span></div></a>`).join('')}</div>
+  </div></section>
+
+  <section class="sec"><div class="wrap">
+    <div class="sec-h"><div><h2>From blocks to full admin screens</h2><p>Blocks are sections you drop in. Examples are complete screens, starting with the dashboard most of our apps need.</p></div><a class="pu-btn secondary" href="#/docs/dashboard">Open the dashboard</a></div>
+    <a href="#/docs/dashboard" style="display:block;border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--sh-lg);max-height:520px;position:relative"><div style="pointer-events:none">${dashboardHTML()}</div><div style="position:absolute;inset:auto 0 0 0;height:140px;background:linear-gradient(transparent,var(--bg))"></div></a>
+  </div></section>
+
+  <section class="sec"><div class="wrap">
+    <div class="sec-h"><div><h2>How our developers use it</h2><p>Components copy into the repo, so teams can adjust them without waiting on a release.</p></div></div>
+    <div class="use-grid">${use.map((u,i)=>`<div class="use-card"><div class="h"><span class="n">${i+1}</span><div><h3>${u[0]}</h3><p>${u[1]}</p></div></div><pre class="code">${hl(u[2],u[3])}</pre></div>`).join('')}</div>
+  </div></section>
+
+  <section class="sec"><div class="wrap">
+    <div class="sec-h"><div><h2>Proposed plans for the public release</h2><p>Internal teams get everything. When we open ParseUI to the community, this is one way to package it.</p></div><span class="pu-badge warning">Draft for review</span></div>
+    <div class="plans">
+      ${[['Community','Free','Foundations and every base component, MIT licensed.',['All base components','Theme tokens and CLI','Free blocks','Community support'],'secondary','Get started'],
+         ['Pro','Pricing to be announced','One-time, per developer. For teams shipping real products.',['Everything in Community','All blocks and examples','Full Figma library','Lifetime updates'],'primary','Buy Pro',1],
+         ['Team','Pricing to be announced','One-time, up to 10 seats. For studios and agencies.',['Everything in Pro','Shared licence key','Private Slack channel','Early access to new blocks'],'secondary','Contact us']].map(p=>`<div class="plan ${p[6]?'feat':''}"><div class="ph"><h3>${p[0]}</h3>${p[6]?'<span class="pu-badge brand">Most popular</span>':''}</div><div class="price">${p[1]}${p[1].startsWith('$')?'<small> one-time</small>':''}</div><p class="pd">${p[2]}</p><button class="pu-btn ${p[4]} full">${p[5]}</button><ul>${p[3].map(f=>`<li>${I('check')}${f}</li>`).join('')}</ul></div>`).join('')}
+    </div>
+  </div></section>
+
+  <section class="sec"><div class="wrap">
+    <div class="sec-h"><div><h2>Roadmap</h2><p>Foundations first, then components, blocks and screens, then the public launch.</p></div></div>
+    <div class="road">${[['Phase 1','Now','Foundations and base components','Tokens, Figma variables and the first 20 components.',1],['Phase 2','Next','Blocks','Auth, settings, pricing, empty states and upload flows.'],['Phase 3','Later','Examples','Dashboards, onboarding and settings screens for our apps.'],['Phase 4','Launch','Public release','Docs site, licences and the community edition.']].map(r=>`<div class="${r[4]?'now':''}"><div class="ph">${r[0]}<span class="pu-badge ${r[4]?'solid':'gray'}">${r[1]}</span></div><h3>${r[2]}</h3><p>${r[3]}</p></div>`).join('')}</div>
+  </div></section>
+
+  <footer class="foot"><div class="wrap"><span class="logo" style="font-size:14px"><svg class="logo-full" fill="none" viewBox="0 0 507 120" style="height:20px;width:auto" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><g><rect width="120" height="120" rx="16" fill="white"/><rect width="120" height="120" rx="16" fill="url(#paint0_linear_2_269f)" fill-opacity="0.2"/><rect x="1" y="1" width="118" height="118" rx="15" stroke="#E6E6E6" stroke-width="2"/><path fill-rule="evenodd" clip-rule="evenodd" d="M40.863 72.5991L40.8632 59.378C40.8632 54.1961 42.9241 49.2264 46.5926 45.5623C50.2611 41.8982 55.2367 39.8397 60.4247 39.8397C62.9936 39.8397 65.5373 40.3451 67.9107 41.3269C70.284 42.3088 72.4404 43.748 74.2569 45.5623C76.0733 47.3766 77.5143 49.5305 78.4973 51.901C79.4804 54.2715 79.9863 56.8122 79.9863 59.378C79.9863 61.9438 79.4804 64.4845 78.4973 66.8549C77.5143 69.2254 76.0733 71.3793 74.2569 73.1936C72.4404 75.0079 70.284 76.4471 67.9107 77.429C65.5373 78.4109 62.9936 78.9163 60.4247 78.9163H47.4812V98.4545H60.4247H60.6283C70.9666 98.4008 80.8633 94.2476 88.156 86.9283C95.4486 79.6089 99.5442 69.704 99.5479 59.3779C99.5479 49.0142 95.426 39.0749 88.089 31.7466C80.752 24.4183 70.8009 20.3014 60.4247 20.3014C50.1165 20.3078 40.2273 24.3775 32.9064 31.626C25.5854 38.8744 21.4245 48.7158 21.3278 59.0114L21.3016 59.378V72.4969L21.3014 98.548H40.863V72.5991Z" fill="#696969"/><path d="M51.8391 50.8392C54.1162 48.5622 57.2045 47.283 60.4246 47.283C63.6448 47.283 66.7331 48.5622 69.0101 50.8392C71.2871 53.1162 72.5663 56.2045 72.5663 59.4247C72.5663 62.6448 71.2871 65.7331 69.0101 68.0101C66.7331 70.2872 63.6448 71.5664 60.4246 71.5664H48.2829V59.4247C48.2829 56.2045 49.5621 53.1162 51.8391 50.8392Z" fill="#2488FF"/><path d="M20.1507 20.3014H96.0959" stroke="#2488FF" stroke-width="1.15068"/><path d="M23.6027 98.548H99.5479" stroke="#2488FF" stroke-width="1.15068"/><path d="M99.5479 21.452L99.5479 97.3972" stroke="#2488FF" stroke-width="1.15068"/><path d="M21.3014 21.452L21.3014 97.3972" stroke="#2488FF" stroke-width="1.15068"/><path d="M24.1779 23.1777L18.425 23.1777V17.4248L24.1779 17.4248V23.1777Z" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="24.1781" y="53.0959" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(90 24.1781 53.0959)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="24.1781" y="96.8219" width="5.75343" height="5.75342" transform="rotate(90 24.1781 96.8219)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="66.7534" y="23.1781" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(-180 66.7534 23.1781)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="66.7534" y="101.425" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(-180 66.7534 101.425)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="102.425" y="17.4247" width="5.75343" height="5.75342" transform="rotate(90 102.425 17.4247)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="102.425" y="53.0959" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(90 102.425 53.0959)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="102.425" y="96.8219" width="5.75343" height="5.75342" transform="rotate(90 102.425 96.8219)" fill="white" stroke="#2488FF" stroke-width="1.15068"/></g><path d="M494.52 21.6914H507V97.6574H494.52V21.6914Z" fill="#2488FF"/><path d="M433.652 21.6914V65.7517C433.652 72.9142 435.063 78.3042 437.884 81.9216C440.706 85.4667 445.083 87.2392 451.016 87.2392C457.021 87.2392 461.434 85.4667 464.256 81.9216C467.149 78.3042 468.596 72.9142 468.596 65.7517V21.6914H481.077V65.1005C481.077 75.9528 478.508 84.2006 473.371 89.8438C468.307 95.4869 460.855 98.3085 451.016 98.3085C441.249 98.3085 433.833 95.4869 428.769 89.8438C423.704 84.2006 421.172 75.9528 421.172 65.1005V21.6914H433.652Z" fill="#2488FF"/><path d="M356.459 69.9841C356.459 64.2686 357.58 59.2765 359.823 55.008C362.138 50.6671 365.321 47.339 369.373 45.0239C373.497 42.6364 378.199 41.4426 383.481 41.4426C388.835 41.4426 393.537 42.5278 397.589 44.6983C401.713 46.8688 404.932 49.9436 407.247 53.9227C409.635 57.9019 410.865 62.5684 410.937 67.9222C410.937 69.3692 410.828 70.8523 410.611 72.3716H368.722V73.0228C369.011 77.8701 370.53 81.7046 373.28 84.5262C376.029 87.3478 379.682 88.7586 384.24 88.7586C387.858 88.7586 390.896 87.9266 393.356 86.2625C395.816 84.5262 397.444 82.1025 398.24 78.9915H409.96C408.947 84.6347 406.198 89.265 401.713 92.8824C397.299 96.4999 391.765 98.3086 385.109 98.3086C379.321 98.3086 374.256 97.151 369.915 94.8358C365.647 92.4483 362.319 89.1203 359.931 84.8517C357.616 80.5832 356.459 75.6273 356.459 69.9841ZM398.999 63.7983C398.493 59.7468 396.865 56.5996 394.116 54.3568C391.439 52.0417 388.039 50.8841 383.915 50.8841C380.08 50.8841 376.752 52.0778 373.931 54.4653C371.181 56.7805 369.59 59.8915 369.156 63.7983H398.999Z" class="lw"/><path d="M311.79 79.317C312.007 82.2109 313.346 84.5984 315.806 86.4795C318.338 88.2882 321.594 89.1926 325.573 89.1926C329.118 89.1926 331.976 88.5414 334.146 87.2392C336.389 85.8645 337.51 84.0558 337.51 81.813C337.51 79.932 337.004 78.5212 335.991 77.5806C334.978 76.6401 333.603 75.989 331.867 75.6272C330.203 75.1931 327.598 74.759 324.053 74.325C319.206 73.7462 315.191 72.9865 312.007 72.046C308.896 71.0331 306.364 69.4776 304.411 67.3795C302.53 65.209 301.589 62.3151 301.589 58.6977C301.589 55.2973 302.53 52.2948 304.411 49.6903C306.364 47.0134 309.005 44.9514 312.333 43.5045C315.733 42.0575 319.568 41.334 323.836 41.334C330.854 41.334 336.533 42.8895 340.874 46.0005C345.288 49.1115 347.675 53.4886 348.037 59.1318H336.642C336.353 56.5996 335.087 54.5376 332.844 52.946C330.601 51.2819 327.779 50.4499 324.379 50.4499C320.979 50.4499 318.229 51.1011 316.131 52.4033C314.033 53.7056 312.984 55.4781 312.984 57.721C312.984 59.385 313.49 60.6511 314.503 61.5193C315.589 62.3151 316.927 62.8939 318.519 63.2556C320.11 63.545 322.679 63.9068 326.224 64.3409C330.999 64.8473 335.014 65.6431 338.27 66.7284C341.526 67.7412 344.13 69.4052 346.083 71.7204C348.037 73.9632 349.014 77.038 349.014 80.9448C349.014 84.4176 348.001 87.4924 345.975 90.1693C343.949 92.7738 341.164 94.7996 337.619 96.2466C334.074 97.6212 330.094 98.3085 325.681 98.3085C318.229 98.3085 312.188 96.6445 307.558 93.3164C303 89.9161 300.649 85.2496 300.504 79.317H311.79Z" class="lw"/><path d="M296.607 42.0937V53.0545H291.397C286.55 53.0545 283.041 54.6461 280.871 57.8295C278.7 60.9405 277.615 64.9196 277.615 69.767V97.6574H265.895V42.0937H276.313L277.615 50.4499C279.207 47.8454 281.269 45.8196 283.801 44.3726C286.333 42.8533 289.733 42.0937 294.002 42.0937H296.607Z" class="lw"/><path d="M259.51 87.4563V97.6574H253.324C249.707 97.6574 247.102 96.8978 245.511 95.3785C243.919 93.8591 243.123 91.6525 243.123 88.7586C238.927 95.1252 232.813 98.3086 224.783 98.3086C218.561 98.3086 213.569 96.8616 209.807 93.9677C206.045 91.0737 204.163 87.0946 204.163 82.0302C204.163 76.3146 206.189 71.9375 210.241 68.8989C214.292 65.7879 220.189 64.2324 227.93 64.2324H241.929V60.8682C241.929 57.7572 240.844 55.3335 238.674 53.5972C236.503 51.7885 233.501 50.8841 229.666 50.8841C226.266 50.8841 223.444 51.6438 221.202 53.1631C219.031 54.6101 217.729 56.5635 217.295 59.0233H205.791C206.37 53.4525 208.83 49.1477 213.171 46.1091C217.512 42.9981 223.191 41.4426 230.209 41.4426C237.661 41.4426 243.413 43.179 247.464 46.6517C251.516 50.1244 253.541 55.1165 253.541 61.6279V83.5495C253.541 86.154 254.771 87.4563 257.231 87.4563H259.51ZM241.929 72.9142H227.387C223.77 72.9142 220.984 73.6377 219.031 75.0847C217.078 76.4593 216.101 78.5212 216.101 81.2705C216.101 83.658 217.005 85.5752 218.814 87.0222C220.695 88.4692 223.227 89.1927 226.411 89.1927C231.258 89.1927 235.02 87.8904 237.697 85.2858C240.446 82.6813 241.857 79.2086 241.929 74.8676V72.9142Z" class="lw"/><path d="M174.952 21.6914C180.161 21.6914 184.756 22.7043 188.735 24.73C192.714 26.6835 195.789 29.5051 197.959 33.1948C200.13 36.8123 201.215 41.0446 201.215 45.892C201.215 50.7394 200.13 55.0079 197.959 58.6977C195.789 62.3151 192.714 65.1367 188.735 67.1625C184.756 69.1159 180.161 70.0926 174.952 70.0926H157.48V97.6574H145V21.6914H174.952ZM157.48 59.2403H173.867C178.353 59.2403 181.898 58.0466 184.502 55.6591C187.179 53.1992 188.518 49.9435 188.518 45.892C188.518 41.7681 187.215 38.5124 184.611 36.1249C182.006 33.7374 178.461 32.5437 173.976 32.5437H157.48V59.2403Z" class="lw"/><defs><linearGradient id="paint0_linear_2_269f" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse"><stop stop-color="white"/><stop offset="1" stop-color="#B8B8B8"/></linearGradient></defs></svg><span style="color:var(--text-2);font-weight:500">by ParseLab</span></span><nav><a href="#/docs/introduction">Docs</a><a href="#/docs/components">Components</a><a href="#/docs/blocks">Blocks</a><a href="#/docs/theming">Theming</a></nav><span>Built in Dhaka, used worldwide.</span></div></footer>
+  </div>`;
+}
+/* ---------- app shell ---------- */
+const app=document.getElementById('app'), overlay=document.getElementById('overlay');
+function sidebarHTML(slug){
+  return NAV.map(g=>`<div class="sb-group ${g.g==='Components'?'nested':''}"><div class="sb-title">${g.g}${g.g==='Components'?`<span class="count">${COMP_ORDER.length}</span>`:''}</div>
+   ${g.items.map(i=>{ const c=C[i[0]]; return `<a class="sb-link ${i[0]===slug?'on':''}" href="#/docs/${i[0]}">${i[1]}${c&&c.status==='beta'?'<span class="tag">Beta</span>':''}${i[0]==='blocks'?'<span class="tag pro">Pro</span>':''}${i[0]==='dashboard'?'<span class="tag pro">Pro</span>':''}${i[0]==='components'?'<span class="tag free">Free</span>':''}</a>`; }).join('')}
+   ${(g.planned||[]).map(p=>`<span class="sb-link soon">${p[1]}<span class="tag">Soon</span></span>`).join('')}</div>`).join('');
+}
+function render(){
+  CODES.length=0; const hash=location.hash.replace(/^#/,'')||'/'; const m=hash.match(/^\/docs\/([\w-]+)/);
+  document.querySelectorAll('#topNav a').forEach(a=>a.classList.remove('on'));
+  closeSidebar();
+  if(!m){ app.innerHTML=homePage(); document.title='ParseUI — Design system by ParseLab'; window.scrollTo(0,0); applyTheme(); afterRender(); return; }
+  const slug=m[1], f=FLAT.find(x=>x.slug===slug)||FLAT[0];
+  const body=C[f.slug]?componentPage(f.slug):(PAGES[f.slug]||PAGES.introduction)();
+  const wide=f.slug==='dashboard';
+  app.innerHTML=`<div class="layout ${wide?'no-toc':''}"><aside class="sidebar" id="sidebar">${sidebarHTML(f.slug)}</aside><main class="main"><article class="doc" style="${wide?'max-width:1180px':''}">${body}</article></main>${wide?'':`<aside class="toc" id="toc"></aside>`}</div>`;
+  document.querySelector(`#topNav a[data-sec="${f.sec}"]`)?.classList.add('on');
+  document.title=f.name+' — ParseUI'; window.scrollTo(0,0); buildToc(); applyTheme(); afterRender();
+}
+function afterRender(){
+  document.querySelectorAll('[data-indet]').forEach(el=>el.indeterminate=true);
+  document.querySelectorAll('[data-slider]').forEach(el=>el.dispatchEvent(new Event('input',{bubbles:true})));
+}
+let tocObs;
+function buildToc(){ const toc=document.getElementById('toc'); if(!toc) return; const hs=[...document.querySelectorAll('.doc h2[id], .doc h3[id^="ex-"]')];
+  toc.innerHTML=hs.length?`<div class="toc-title">${I('toc')}On this page</div>${hs.map(h=>`<a href="javascript:void 0" class="${h.tagName==='H3'?'sub':''}" data-to="${h.id}">${h.childNodes[0].textContent.trim()}</a>`).join('')}<div class="toc-card"><b>Help shape ParseUI</b>Spotted something off? Share feedback in the #parseui channel.</div>`:'';
+  tocObs?.disconnect(); tocObs=new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.isIntersecting){ toc.querySelectorAll('a').forEach(a=>a.classList.toggle('on',a.dataset.to===e.target.id)); } }); },{rootMargin:'-80px 0px -70% 0px'});
+  hs.forEach(h=>tocObs.observe(h)); }
+
+/* ---------- toast + modal ---------- */
+function toast(kind,title,desc,action){ const t=document.createElement('div'); t.className='pu-toast'; t.setAttribute('role','status');
+  const ic={success:['checkC','var(--success-soft)','var(--success)'],error:['xC','var(--danger-soft)','var(--danger)'],info:['info','var(--p-soft)','var(--p-text)']}[kind]||['checkC','var(--success-soft)','var(--success)'];
+  t.innerHTML=`<span class="ic" style="background:${ic[1]};color:${ic[2]}">${I(ic[0])}</span><div class="t"><b>${title}</b>${desc||''}${action?`<div style="margin-top:8px"><button class="pu-btn link sm">${action}</button></div>`:''}</div><button class="x" aria-label="Dismiss">${I('x')}</button>`;
+  document.getElementById('toaster').appendChild(t); const kill=()=>t.remove(); t.querySelector('.x').onclick=kill; setTimeout(kill,4200); }
+const MODALS={
+ delete:`<div class="mb"><div class="feat-ic danger">${I('trash','ico-lg')}</div><h4>Delete this product?</h4><p>This removes “Organic cotton tee” and its 4 variants from your store. This can't be undone.</p></div><div class="mf"><button class="pu-btn secondary" data-close>Cancel</button><button class="pu-btn danger" data-close data-after="deleted">Delete product</button></div>`,
+ invite:`<div class="mb"><div class="feat-ic brand">${I('users','ico-lg')}</div><h4>Invite a teammate</h4><p style="margin-bottom:16px">They'll get an email with a link to join your workspace.</p><div class="pu-field" style="max-width:none"><label class="pu-label">Email</label><div class="pu-input">${I('mail')}<input placeholder="name@parselab.com" autofocus></div></div><div class="pu-field" style="max-width:none;margin-top:12px"><label class="pu-label">Role</label><select class="pu-select"><option>Editor</option><option>Viewer</option><option>Admin</option></select></div></div><div class="mf"><button class="pu-btn secondary" data-close>Cancel</button><button class="pu-btn primary" data-close data-after="invited">Send invite</button></div>`};
+let lastFocus;
+function openModal(k){ lastFocus=document.activeElement; overlay.innerHTML=`<div class="pu-modal-back" data-back><div class="pu-modal" role="dialog" aria-modal="true">${MODALS[k]}</div></div>`;
+  setTimeout(()=>overlay.querySelector('.pu-modal button:not([data-close]), .pu-modal input, .pu-modal button')?.focus(),30); }
+function closeOverlay(){ overlay.innerHTML=''; lastFocus?.focus?.(); }
+
+/* ---------- command palette ---------- */
+let cmdSel=0;
+function openCmd(){ overlay.innerHTML=`<div class="cmdk-back" data-back><div class="cmdk" role="dialog" aria-label="Search"><div class="cmdk-in">${I('search','ico-lg')}<input id="cmdIn" placeholder="Search components, foundations, blocks" autocomplete="off"><span class="kbd">Esc</span></div><div class="cmdk-list" id="cmdList"></div><div class="cmdk-foot"><span><span class="kbd">↑</span><span class="kbd">↓</span>Navigate</span><span><span class="kbd">↵</span>Open</span></div></div></div>`;
+  const inp=document.getElementById('cmdIn'); inp.focus(); cmdSel=0; drawCmd(''); inp.oninput=()=>{ cmdSel=0; drawCmd(inp.value); }; }
+function cmdItems(q){ q=q.toLowerCase().trim(); return FLAT.filter(f=>!q||f.name.toLowerCase().includes(q)||f.group.toLowerCase().includes(q)); }
+function drawCmd(q){ const items=cmdItems(q), list=document.getElementById('cmdList'); if(!list) return;
+  if(!items.length){ list.innerHTML=`<div class="cmdk-empty">No results for “${esc(q)}”. Try “button” or “colors”.</div>`; return; }
+  let g='',h='',i=0; items.forEach(it=>{ if(it.group!==g){ g=it.group; h+=`<div class="cmdk-g">${g}</div>`; } h+=`<div class="cmdk-i ${i===cmdSel?'on':''}" data-go="${it.slug}" data-idx="${i}">${I(it.icon||'box')}${it.name}</div>`; i++; });
+  list.innerHTML=h; list.querySelector('.cmdk-i.on')?.scrollIntoView({block:'nearest'}); }
+
+/* ---------- customizer ---------- */
+function openCust(){ overlay.innerHTML=`<div class="drawer-back" data-back style="background:transparent"></div><div class="pop" role="dialog" aria-label="Customize theme"><h4>Customize</h4><p>Preview ParseUI with a different brand. Saved in this browser.</p>
+  <div class="lbl">Brand color</div>${swatches()}
+  <div class="lbl">Radius</div><div class="opt-row r6">${['0','4','6','8','10','12'].map(r=>`<button class="opt" data-radius="${r}">${r}</button>`).join('')}</div>
+  <div class="lbl">Mode</div><div class="opt-row">${[['light','sun','Light'],['dark','moon','Dark'],['system','sliders','System']].map(m=>`<button class="opt" data-mode="${m[0]}">${I(m[1])}${m[2]}</button>`).join('')}</div>
+  <div style="margin-top:16px;display:flex;gap:8px"><button class="pu-btn secondary sm" data-reset style="flex:1">Reset</button><button class="pu-btn primary sm" data-copytheme style="flex:1">${I('copy')}Copy CSS</button></div></div>`; applyTheme(); }
+
+/* ---------- sidebar (mobile) ---------- */
+function closeSidebar(){ document.getElementById('sidebar')?.classList.remove('open'); document.getElementById('sbBack')?.remove(); }
+
+/* ---------- global events ---------- */
+async function copyText(t,label='Copied to clipboard'){ try{ await navigator.clipboard.writeText(t); }catch(e){ const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(_){} ta.remove(); } toast('success',label); }
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button, a, [data-go], [data-back], .swatch-cell'); if(!t) return;
+  if(t.dataset.back!==undefined && e.target===t){ closeOverlay(); return; }
+  if(t.dataset.copy!==undefined){ copyText(CODES[+t.dataset.copy]); const o=t.innerHTML; t.innerHTML=I('check'); setTimeout(()=>t.innerHTML=o,1400); return; }
+  if(t.dataset.copytext){ copyText(t.dataset.copytext.replace(/&quot;/g,'"'),'Copied '+t.dataset.copytext.replace(/&quot;/g,'"').slice(0,40)); return; }
+  if(t.dataset.brand){ state.brand=t.dataset.brand; store.set('brand',state.brand); applyTheme(); return; }
+  if(t.dataset.radius){ state.radius=t.dataset.radius; store.set('radius',state.radius); applyTheme(); return; }
+  if(t.dataset.mode){ state.theme=t.dataset.mode; store.set('theme',state.theme); applyTheme(); return; }
+  if(t.dataset.reset!==undefined){ Object.assign(state,{brand:'parse',radius:'8',theme:'system'}); ['brand','radius','theme'].forEach(k=>store.set(k,state[k])); applyTheme(); return; }
+  if(t.dataset.copytheme!==undefined){ const b=BRANDS.find(x=>x.id===state.brand); copyText(`:root {\n  --brand: ${b.c||'var(--text)'};\n  --brand-fg: ${b.c?'#ffffff':'var(--bg)'};\n  --radius: ${state.radius}px;\n}`,'Theme CSS copied'); return; }
+  if(t.dataset.view){ const d=t.closest('[data-demo]'); t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); d.querySelector('[data-pv]').classList.toggle('hidden',t.dataset.view!=='p'); d.querySelector('[data-cv]').classList.toggle('hidden',t.dataset.view!=='c'); return; }
+  if(t.dataset.scope!==undefined){ const d=t.closest('[data-demo]'); t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); const pv=d.querySelector('[data-pv]'); pv.classList.remove('scope-light','scope-dark'); if(t.dataset.scope) pv.classList.add(t.dataset.scope); return; }
+  if(t.dataset.pmk){ const blk=t.closest('[data-pm]'), v=JSON.parse(blk.dataset.pm); t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); blk.querySelector('pre').innerHTML=hl(v[t.dataset.pmk],'bash'); CODES[+blk.querySelector('.copy').dataset.copy]=v[t.dataset.pmk]; return; }
+  if(t.dataset.instT){ const w=t.closest('[data-inst]'); w.querySelectorAll('[data-inst-t]').forEach(b=>b.classList.toggle('on',b===t)); w.querySelectorAll('[data-inst-p]').forEach(p=>p.classList.toggle('hidden',p.dataset.instP!==t.dataset.instT)); return; }
+  if(t.dataset.i!==undefined && t.closest('[data-tabs]')){ const w=t.closest('[data-tabs]'); t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); w.querySelectorAll('[data-p]').forEach(p=>p.classList.toggle('hidden',p.dataset.p!==t.dataset.i)); return; }
+  if(t.closest('[data-group]')){ t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); return; }
+  if(t.closest('[data-pag]') && !t.getAttribute('aria-label') && !t.disabled){ t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); return; }
+  if(t.dataset.modal){ openModal(t.dataset.modal); return; }
+  if(t.dataset.close!==undefined){ const a=t.dataset.after; closeOverlay(); if(a==='deleted') toast('success','Product deleted','“Organic cotton tee” was removed.','Undo'); if(a==='invited') toast('success','Invite sent','They\'ll get an email shortly.'); return; }
+  if(t.dataset.toast){ const k=t.dataset.toast; if(k==='success') toast('success','Product saved','Your changes are live on the storefront.'); else if(k==='error') toast('error','Sync failed','Check your API key in Settings and try again.'); else toast('info','Order archived','#1284 moved to archive.','Undo'); return; }
+  if(t.dataset.demoClick!==undefined){ const o=t.innerHTML; t.innerHTML=I('loader','spin')+'Loading'; t.disabled=true; t.setAttribute('aria-busy','true'); setTimeout(()=>{ t.innerHTML=o; t.disabled=false; t.removeAttribute('aria-busy'); toast('success','Done','Loading state finished.'); },1600); return; }
+  if(t.dataset.go){ closeOverlay(); location.hash='#/docs/'+t.dataset.go; return; }
+  if(t.dataset.to){ document.getElementById(t.dataset.to)?.scrollIntoView({behavior:'smooth'}); return; }
+  if(t.id==='searchBtn'){ openCmd(); return; }
+  if(t.id==='custBtn'){ overlay.querySelector('.pop')?closeOverlay():openCust(); return; }
+  if(t.id==='themeBtn'){ state.theme=isDark()?'light':'dark'; store.set('theme',state.theme); applyTheme(); return; }
+  if(t.id==='menuBtn'){ const sb=document.getElementById('sidebar'); if(!sb) { location.hash='#/docs/introduction'; return; } sb.classList.add('open'); const b=document.createElement('div'); b.className='drawer-back'; b.id='sbBack'; b.onclick=closeSidebar; document.body.appendChild(b); return; }
+  if(t.matches('a[href^="javascript"]')) e.preventDefault();
+});
+document.addEventListener('input',e=>{ if(e.target.matches('[data-slider], .pu-slider')){ const el=e.target, v=(el.value-el.min)/(el.max-el.min)*100; el.style.setProperty('--v',v+'%'); const o=el.closest('.pu-field')?.querySelector('[data-sl-out]'); if(o) o.textContent=Math.round(el.value)+'%'; } });
+document.addEventListener('keydown',e=>{
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){ e.preventDefault(); overlay.querySelector('.cmdk')?closeOverlay():openCmd(); return; }
+  if(e.key==='Escape'&&overlay.innerHTML){ closeOverlay(); return; }
+  if(e.key==='/'&&!/input|textarea|select/i.test(document.activeElement.tagName)&&!overlay.innerHTML){ e.preventDefault(); openCmd(); return; }
+  const list=document.getElementById('cmdList'); if(list&&['ArrowDown','ArrowUp','Enter'].includes(e.key)){ const items=cmdItems(document.getElementById('cmdIn').value); if(!items.length) return;
+    if(e.key==='Enter'){ const it=items[cmdSel]; closeOverlay(); location.hash='#/docs/'+it.slug; return; }
+    e.preventDefault(); cmdSel=(cmdSel+(e.key==='ArrowDown'?1:-1)+items.length)%items.length; drawCmd(document.getElementById('cmdIn').value); }
+});
+document.addEventListener('mouseover',e=>{ const it=e.target.closest('.cmdk-i'); if(it&&+it.dataset.idx!==cmdSel){ cmdSel=+it.dataset.idx; document.querySelectorAll('.cmdk-i').forEach(x=>x.classList.toggle('on',x===it)); } });
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>state.theme==='system'&&applyTheme());
+window.addEventListener('hashchange',render);
+render();
+</script>
+</body>
+</html>
