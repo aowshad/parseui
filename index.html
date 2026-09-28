@@ -510,6 +510,25 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 .dash-main{ min-width:0; }
 .dash-top{ height:60px; display:flex; align-items:center; gap:12px; padding:0 24px; background:var(--bg); border-bottom:1px solid var(--border); }
 .dash-top .pu-input{ max-width:320px; height:36px; }
+/* ---------- icon library grid ---------- */
+.ig-bar{ display:flex; align-items:center; gap:12px; margin:14px 0 20px; }
+.ig-search{ flex:1; max-width:340px; }
+.ig-count{ margin-left:auto; font:500 12.5px var(--mono); color:var(--text-3); white-space:nowrap; }
+.ig-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(132px,1fr)); gap:18px 14px; }
+.ig-item{ min-width:0; }
+.ig-card{ position:relative; aspect-ratio:1; display:grid; place-items:center; border:1px solid var(--border); border-radius:12px; background:var(--bg); color:var(--text); outline:none; transition:background .15s, border-color .15s; }
+.ig-card > .ico{ width:24px; height:24px; transition:transform .18s ease; }
+.ig-card:hover, .ig-card:focus-visible, .ig-card:has(:focus-visible){ background:var(--bg-subtle); border-color:var(--border-strong); }
+.ig-card:hover > .ico, .ig-card:focus-visible > .ico, .ig-card:has(:focus-visible) > .ico{ transform:translateY(-18px); }
+.ig-card:focus-visible{ outline:2px solid var(--p); outline-offset:2px; }
+.ig-acts{ position:absolute; left:8px; right:8px; bottom:8px; display:flex; flex-direction:column; gap:4px; opacity:0; transform:translateY(4px); pointer-events:none; transition:opacity .15s, transform .15s; }
+.ig-card:hover .ig-acts, .ig-card:focus-visible .ig-acts, .ig-card:has(:focus-visible) .ig-acts{ opacity:1; transform:none; pointer-events:auto; }
+.ig-acts button{ height:26px; border:1px solid var(--border-strong); border-radius:7px; background:var(--bg); color:var(--text); font:500 12px var(--font); cursor:pointer; box-shadow:var(--sh-xs); }
+.ig-acts button:hover{ background:var(--bg-muted); }
+.ig-name{ display:block; margin-top:8px; font:500 12.5px var(--font); color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ig-empty{ padding:40px 0; text-align:center; color:var(--text-3); }
+@media (hover:none){ .ig-card:focus-within{ background:var(--bg-subtle); border-color:var(--border-strong); } .ig-card:focus-within > .ico{ transform:translateY(-14px); } .ig-card:focus-within .ig-acts{ opacity:1; transform:none; pointer-events:auto; } }
+@media (max-width:640px){ .ig-grid{ grid-template-columns:repeat(auto-fill,minmax(96px,1fr)); gap:14px 10px; } .ig-acts{ flex-direction:row; left:6px; right:6px; bottom:6px; } .ig-acts button{ flex:1; height:24px; font-size:11px; } .ig-acts .ig-v{ display:none; } .ig-count{ display:none; } }
 .dash-body{ padding:24px; display:flex; flex-direction:column; gap:16px; }
 .dash-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; }
 .dash-head h3{ margin:0; font-size:22px; letter-spacing:-.02em; font-weight:600; } .dash-head p{ margin:2px 0 0; color:var(--text-3); font-size:14px; }
@@ -1223,8 +1242,18 @@ PAGES.radius=()=>`${crumbs('Foundations','Radius')}<h1>Radius</h1><p class="lead
 PAGES.shadows=()=>`${crumbs('Foundations','Shadows')}<h1>Shadows</h1><p class="lead">Five elevations. Low for resting controls, high for things floating above the page.</p>
 <h2 id="scale">Elevation</h2><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:20px;padding:28px;background:var(--bg-subtle);border-radius:16px;border:1px solid var(--border)">${[['xs','Buttons, inputs'],['sm','Cards at rest'],['md','Hovered cards'],['lg','Popovers, toasts'],['xl','Modals']].map(s=>`<div style="height:110px;background:var(--bg);border-radius:12px;box-shadow:var(--sh-${s[0]});padding:14px;display:flex;flex-direction:column;justify-content:flex-end"><b style="font-size:13.5px;font-weight:500">shadow-${s[0]}</b><span style="font-size:12px;color:var(--text-3)">${s[1]}</span></div>`).join('')}</div>${pager('shadows')}`;
 
-PAGES.icons=()=>`${crumbs('Foundations','Icons')}<h1>Icons</h1><p class="lead"><code>@parseui/icons</code> ships a 24px, 1.8px stroke set drawn to sit on the same grid as Geist. Click an icon to copy its import.</p>
-<h2 id="set">Icon set</h2><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px">${Object.keys(ICONS).map(n=>`<button class="swatch-cell" data-copytext="import { ${n[0].toUpperCase()+n.slice(1)} } from &quot;@parseui/icons&quot;" style="border:1px solid var(--border);border-radius:10px;padding:16px 8px 10px;display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--text)">${I(n,'ico-lg')}<span style="font:11.5px var(--mono);color:var(--text-3)">${n}</span></button>`).join('')}</div>${pager('icons')}`;
+const ICON_NAMES={toc:'list',chevR:'chevron-right',chevD:'chevron-down',chevL:'chevron-left',arrowR:'arrow-right',box:'package',cart:'shopping-cart',chart:'line-chart',alert:'alert-triangle',checkC:'check-circle',xC:'x-circle',more:'more-horizontal',link:'external-link',refresh:'refresh-cw',logout:'log-out',help:'help-circle'};
+const iconName=k=>ICON_NAMES[k]||k;
+const iconComp=k=>iconName(k).split('-').map(w=>w[0].toUpperCase()+w.slice(1)).join('');
+const iconSvg=k=>`<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS[k]}</svg>`;
+const attrEsc=s=>esc(s).replace(/"/g,'&quot;');
+PAGES.icons=()=>{ const keys=Object.keys(ICONS).sort((a,b)=>iconName(a).localeCompare(iconName(b)));
+  return `${crumbs('Foundations','Icons')}<h1>ParseUI <span class="muted">Icons</span></h1><p class="lead"><code>@parseui/icons</code> ships a 24px, 1.8px stroke set drawn to sit on the same grid as Geist. Hover or tap an icon to copy it as SVG or JSX.</p>
+<h2 id="usage">Usage</h2>${codeBlock(`import { Search, ChevronRight } from "@parseui/icons"\n\n<Search />\n<ChevronRight size={20} strokeWidth={1.8} />`,'tsx')}
+<h2 id="set">Icon set</h2>
+<div class="ig-bar"><div class="pu-input ig-search">${I('search')}<input type="search" data-icon-search placeholder="Search icons" aria-label="Search icons" autocomplete="off"></div><span class="ig-count" data-icon-count>${keys.length} icons</span></div>
+<div class="ig-grid">${keys.map(k=>{ const n=iconName(k), c=iconComp(k); return `<div class="ig-item" data-icon-name="${n} ${c.toLowerCase()}"><div class="ig-card" tabindex="0" aria-label="${n} icon">${I(k)}<div class="ig-acts"><button type="button" data-copytext="${attrEsc(iconSvg(k))}" data-copylabel="Copied ${n}.svg"><span class="ig-v">Copy </span>SVG</button><button type="button" data-copytext="${attrEsc('<'+c+' />')}" data-copylabel="Copied ${c} as JSX"><span class="ig-v">Copy </span>JSX</button></div></div><span class="ig-name" title="${n}">${n}</span></div>`; }).join('')}</div>
+<p class="ig-empty" data-icon-empty hidden>No icons match your search.</p>${pager('icons')}`; };
 
 /* ---------- index pages ---------- */
 PAGES.components=()=>`${crumbs('Components','Overview')}<h1>ParseUI <span class="muted">React components</span></h1><p class="lead">${COMP_ORDER.length} base components, each with a Figma twin, full keyboard support and light and dark themes.</p>
@@ -1393,7 +1422,7 @@ document.addEventListener('click',e=>{
   const t=e.target.closest('button, a, [data-go], [data-back], .swatch-cell'); if(!t) return;
   if(t.dataset.back!==undefined && e.target===t){ closeOverlay(); return; }
   if(t.dataset.copy!==undefined){ copyText(CODES[+t.dataset.copy]); const o=t.innerHTML; t.innerHTML=I('check'); setTimeout(()=>t.innerHTML=o,1400); return; }
-  if(t.dataset.copytext){ copyText(t.dataset.copytext.replace(/&quot;/g,'"'),'Copied '+t.dataset.copytext.replace(/&quot;/g,'"').slice(0,40)); return; }
+  if(t.dataset.copytext){ const v=t.dataset.copytext.replace(/&quot;/g,'"'); copyText(v, t.dataset.copylabel||'Copied '+v.slice(0,40)); return; }
   if(t.dataset.brand){ state.brand=t.dataset.brand; store.set('brand',state.brand); applyTheme(); return; }
   if(t.dataset.radius){ state.radius=t.dataset.radius; store.set('radius',state.radius); applyTheme(); return; }
   if(t.dataset.mode){ state.theme=t.dataset.mode; store.set('theme',state.theme); applyTheme(); return; }
@@ -1429,6 +1458,11 @@ document.addEventListener('keydown',e=>{
 });
 document.addEventListener('mouseover',e=>{ const it=e.target.closest('.cmdk-i'); if(it&&+it.dataset.idx!==cmdSel){ cmdSel=+it.dataset.idx; document.querySelectorAll('.cmdk-i').forEach(x=>x.classList.toggle('on',x===it)); } });
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>state.theme==='system'&&applyTheme());
+document.addEventListener('input',e=>{ if(!e.target.matches('[data-icon-search]')) return;
+  const q=e.target.value.trim().toLowerCase(), items=[...document.querySelectorAll('[data-icon-name]')]; let n=0;
+  items.forEach(el=>{ const hit=!q||el.dataset.iconName.includes(q); el.hidden=!hit; if(hit) n++; });
+  document.querySelector('[data-icon-count]').textContent=q?`${n} of ${items.length} icons`:`${items.length} icons`;
+  document.querySelector('[data-icon-empty]').hidden=n>0; });
 window.addEventListener('hashchange',render);
 render();
 </script>
