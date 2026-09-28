@@ -158,7 +158,8 @@ code,kbd,pre{ font-family:var(--mono); }
 .demo{ border:1px solid var(--border); border-radius:12px; overflow:hidden; margin:14px 0 8px; background:var(--bg); }
 .demo-bar{ display:flex; align-items:center; gap:4px; padding:6px; border-bottom:1px solid var(--border); background:var(--bg-subtle); }
 .seg{ display:inline-flex; padding:2px; background:var(--bg-muted); border-radius:8px; gap:2px; }
-.seg button{ border:0; background:none; padding:4px 10px; font-size:13px; font-weight:500; border-radius:6px; color:var(--text-2); cursor:pointer; }
+.seg button{ display:inline-flex; align-items:center; justify-content:center; gap:6px; border:0; background:none; padding:4px 10px; font-size:13px; font-weight:500; border-radius:6px; color:var(--text-2); cursor:pointer; }
+.seg button:has(> .ico:only-child){ width:30px; height:28px; padding:0; }
 .seg button.on{ background:var(--bg); color:var(--text); box-shadow:var(--sh-xs); }
 .demo-bar .spacer{ flex:1; }
 .preview{ position:relative; min-height:200px; padding:44px 28px; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px;
@@ -314,7 +315,7 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 .pu-avatar.more{ background:var(--bg-muted); color:var(--text-2); }
 
 .pu-alert{ display:flex; gap:12px; padding:14px 16px; border-radius:var(--r-lg); border:1px solid var(--border); background:var(--bg); width:100%; max-width:520px; text-align:left; box-shadow:var(--sh-xs); }
-.pu-alert .ico{ margin-top:2px; }
+.pu-alert > .ico{ margin-top:2px; }
 .pu-alert .t{ flex:1; font-size:14px; color:var(--text-2); }
 .pu-alert .t b{ display:block; color:var(--text); font-weight:600; margin-bottom:2px; }
 .pu-alert .acts{ display:flex; gap:12px; margin-top:10px; }
@@ -322,7 +323,7 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 .pu-alert.success{ background:var(--success-soft); border-color:color-mix(in oklab, var(--success) 22%, transparent); } .pu-alert.success>.ico{ color:var(--success); }
 .pu-alert.warning{ background:var(--warning-soft); border-color:color-mix(in oklab, var(--warning) 25%, transparent); } .pu-alert.warning>.ico{ color:var(--warning); }
 .pu-alert.danger{ background:var(--danger-soft); border-color:color-mix(in oklab, var(--danger) 22%, transparent); } .pu-alert.danger>.ico{ color:var(--danger); }
-.pu-alert .x{ background:none; border:0; color:var(--text-3); cursor:pointer; padding:0; height:18px; }
+.pu-alert .x{ display:inline-grid; place-items:center; flex:none; width:18px; height:18px; background:none; border:0; color:var(--text-3); cursor:pointer; padding:0; }
 
 .pu-card{ background:var(--bg); border:1px solid var(--border); border-radius:var(--r-xl); box-shadow:var(--sh-xs); text-align:left; }
 .pu-card-h{ padding:16px 18px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
@@ -380,6 +381,7 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 .pu-pag button.on{ background:var(--p-soft); color:var(--p-text); font-weight:600; }
 
 .pu-crumb{ display:flex; align-items:center; gap:6px; font-size:14px; color:var(--text-3); }
+.pu-crumb a{ display:inline-flex; align-items:center; }
 .pu-crumb a:hover{ color:var(--text); } .pu-crumb .cur{ color:var(--text); font-weight:500; }
 .pu-crumb .ico{ width:14px; height:14px; }
 
@@ -1023,7 +1025,7 @@ const BLOCKS=[
   <Divider>or</Divider>
   <Button variant="secondary" fullWidth>Continue with Shopify</Button>
 </AuthCard>`},
- {id:'pricing',t:'Pricing plans',d:'Three-tier plan picker used on app listing pages.',html:`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;width:100%;max-width:720px">${[['Starter','$0','For new stores',['1 product template','Community support']],['Growth','$29','For growing brands',['Unlimited templates','Priority support','Analytics'],1],['Scale','$99','For high volume',['Everything in Growth','Custom domain','Dedicated manager']]].map(p=>`<div class="pu-card" style="padding:20px;${p[4]?'border-color:var(--p);box-shadow:0 0 0 3px var(--ring)':''}"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-weight:600">${p[0]}</b>${p[4]?'<span class="pu-badge brand">Popular</span>':''}</div><div style="font-size:30px;font-weight:600;letter-spacing:-.03em;margin:8px 0 0">${p[1]}<small style="font-size:13px;color:var(--text-3);font-weight:400">/mo</small></div><p style="margin:0 0 14px;font-size:13px;color:var(--text-3)">${p[2]}</p><button class="pu-btn ${p[4]?'primary':'secondary'} sm full">Choose ${p[0]}</button><div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;font-size:13px;color:var(--text-2)">${p[3].map(f=>`<span style="display:flex;gap:8px">${I('check')}${f}</span>`).join('')}</div></div>`).join('')}</div>`,
+ {id:'pricing',t:'Pricing plans',d:'Three-tier plan picker used on app listing pages.',html:`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;width:100%;max-width:720px">${[['Starter','$0','For new stores',['1 product template','Community support']],['Growth','$29','For growing brands',['Unlimited templates','Priority support','Analytics'],1],['Scale','$99','For high volume',['Everything in Growth','Custom domain','Dedicated manager']]].map(p=>`<div class="pu-card" style="padding:20px;${p[4]?'border-color:var(--p);box-shadow:0 0 0 3px var(--ring)':''}"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-weight:600">${p[0]}</b>${p[4]?'<span class="pu-badge brand">Popular</span>':''}</div><div style="font-size:30px;font-weight:600;letter-spacing:-.03em;margin:8px 0 0">${p[1]}<small style="font-size:13px;color:var(--text-3);font-weight:400">/mo</small></div><p style="margin:0 0 14px;font-size:13px;color:var(--text-3)">${p[2]}</p><button class="pu-btn ${p[4]?'primary':'secondary'} sm full">Choose ${p[0]}</button><div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;font-size:13px;color:var(--text-2)">${p[3].map(f=>`<span style="display:flex;align-items:center;gap:8px">${I('check')}${f}</span>`).join('')}</div></div>`).join('')}</div>`,
   code:`<PricingTable plans={plans} highlighted="growth" interval="monthly" />`},
  {id:'stats',t:'Stats row',d:'Metric cards with trend and sparkline.',free:true,html:`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;width:100%">${[['Visitors','24.8k','14%',1,[30,40,35,50,45,60,70,65,80]],['Sessions','9,412','6%',1,[40,38,45,50,48,55,52,60,64]],['Bounce rate','41%','2%',0,[60,58,62,55,57,50,52,48,45]]].map(k=>`<div class="pu-card kpi"><div class="l">${k[0]}</div><div class="v">${k[1]}</div><div class="d"><span class="${k[3]?'up':'down'}">${k[3]?'↑':'↓'} ${k[2]}</span> this week</div><div style="margin-top:8px">${bars(k[4])}</div></div>`).join('')}</div>`,
   code:`<StatGrid>
