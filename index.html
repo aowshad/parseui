@@ -484,7 +484,37 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 .pu-fileupload-row{ display:flex; align-items:center; flex-wrap:wrap; gap:10px; }
 .pu-fileupload-name{ font-size:14px; color:var(--text-2); overflow-wrap:anywhere; }
 .pu-fileupload-size{ color:var(--text-3); }
-.pu-fileupload-status{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+.pu-fileupload-status, .pu-datatable-status{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+
+/* data table */
+.pu-datatable{ border:1px solid var(--border); border-radius:var(--r-lg); background:var(--bg); text-align:left; }
+.pu-datatable-bar{ display:flex; align-items:center; flex-wrap:wrap; gap:8px; min-height:56px; padding:10px 12px 10px 16px; border-bottom:1px solid var(--border); }
+.pu-datatable-bar.bulk{ background:var(--p-soft); border-radius:calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0; }
+.pu-datatable-bar.bulk b{ margin-right:auto; font-size:14px; font-weight:600; color:var(--p-text); }
+.pu-datatable-title b{ display:block; font-size:15px; font-weight:600; } .pu-datatable-title span{ font-size:12.5px; color:var(--text-3); }
+.pu-datatable-scroll{ max-height:420px; overflow:auto; overscroll-behavior:contain; }
+.pu-datatable-scroll:focus-visible{ outline:2px solid var(--p); outline-offset:-2px; }
+.pu-datatable-table{ min-width:760px; }
+.pu-datatable-table thead th{ position:sticky; top:0; z-index:1; background:var(--bg-subtle); box-shadow:inset 0 -1px 0 var(--border); border-bottom:0; }
+.pu-datatable .pu-datatable-cb{ width:44px; padding-right:0; }
+.pu-datatable .pu-datatable-cb .pu-check input{ margin:0; }
+.pu-datatable-sort{ display:inline-flex; align-items:center; gap:4px; margin:-4px -6px; padding:4px 6px; border:0; border-radius:var(--r-sm); background:none; color:inherit; font:inherit; cursor:pointer; }
+.pu-datatable-sort:hover{ background:var(--bg-muted); color:var(--text); }
+th.num .pu-datatable-sort{ flex-direction:row-reverse; }
+.pu-datatable-arrow{ display:grid; opacity:0; transition:transform .15s, opacity .15s; }
+.pu-datatable-arrow .ico{ width:14px; height:14px; }
+.pu-datatable-sort:hover .pu-datatable-arrow, .pu-datatable-sort:focus-visible .pu-datatable-arrow{ opacity:.5; }
+th.sorted{ color:var(--text); } th.sorted .pu-datatable-arrow{ opacity:1; } th.sorted.asc .pu-datatable-arrow{ transform:rotate(180deg); }
+.pu-datatable-table tbody tr.sel td{ background:var(--p-soft); }
+.pu-datatable-foot{ display:flex; align-items:center; flex-wrap:wrap; gap:10px 16px; padding:10px 12px 10px 16px; border-top:1px solid var(--border); font-size:13.5px; color:var(--text-2); }
+.pu-datatable-size{ display:flex; align-items:center; gap:8px; } .pu-datatable-size .pu-select{ width:auto; }
+.pu-datatable-range{ margin-left:auto; font-variant-numeric:tabular-nums; }
+.pu-datatable-foot .pu-pag button[disabled]{ opacity:.4; cursor:default; }
+.pu-datatable-foot .pu-pag button[disabled]:hover{ background:none; }
+.pu-datatable-skel{ display:inline-block; max-width:100%; height:10px; border-radius:99px; vertical-align:middle; background:linear-gradient(90deg, var(--bg-muted) 25%, var(--bg-inset) 37%, var(--bg-muted) 63%) 0 0/400% 100%; animation:pu-datatable-skel 1.3s ease infinite; }
+@keyframes pu-datatable-skel{ from{ background-position:100% 0; } to{ background-position:0 0; } }
+.pu-datatable .pu-empty{ padding:40px 20px; }
+@media (max-width:640px){ .pu-datatable-range{ margin-left:0; } .pu-datatable-foot .pu-pag{ width:100%; flex-wrap:wrap; } }
 
 /* date picker */
 .pu-datepicker-trigger{ justify-content:flex-start; cursor:pointer; font:400 14px var(--font); color:var(--text); text-align:left; }
@@ -1646,7 +1676,64 @@ C['file-upload']={name:'File upload',importName:'FileUpload',file:'file-upload',
    usage:`<FileUpload accept={["image/*"]} maxSize={10 * 1024 * 1024} onUpload={upload} />`,
    props:[P('accept','string[]','—','Allowed MIME types or extensions, e.g. "image/*" or ".csv". Other files are rejected with a message.'),P('maxSize','number','—','Largest file in bytes. Larger files get a "Too large" error row.'),P('multiple','boolean','false','Allow choosing or dropping several files.'),P('maxFiles','number','—','Stop accepting files after this many.'),P('variant','"dropzone" | "images" | "compact"','"dropzone"','Layout.'),P('onUpload','(file, { onProgress }) => Promise<void>','—','Called for each accepted file. Report progress from 0 to 100.'),P('onReject','(file, reason) => void','—','Called for files that fail the accept or maxSize checks.'),P('onFilesChange','(files: File[]) => void','—','Called when files are added or removed.')],
    keys:[['Enter / Space','On Browse, Add images or Upload file: opens the system file picker.'],['Tab','Moves to each file’s remove button in turn.'],['Enter / Space','On a remove button: removes that file and moves focus to the next file, or back to the browse button.']]};
-const PLANNED=[['data-table','Data table']];
+/* data table columns: [key, header, sortable, numeric] */
+const DT_COLS=[['id','Order',1],['date','Date',1],['customer','Customer',1],['payment','Payment'],['fulfillment','Fulfillment'],['items','Items',0,1],['total','Total',1,1]];
+const dtHead=(sortable,id)=>`<thead><tr>${sortable?`<th class="pu-datatable-cb"><label class="pu-check"><input type="checkbox" data-dt-all aria-label="Select all orders on this page"></label></th>`:''}${DT_COLS.map(c=>`<th scope="col" data-col="${c[0]}"${c[3]?' class="num"':''}>${sortable&&c[2]?`<button type="button" class="pu-datatable-sort" data-dt-sort="${c[0]}">${c[1]}<span class="pu-datatable-arrow" aria-hidden="true">${I('chevD')}</span></button>`:c[1]}</th>`).join('')}</tr></thead>`;
+C['data-table']={name:'Data table',importName:'DataTable',file:'data-table',status:'beta',desc:'A Table with sorting, row selection and bulk actions, pagination, column visibility and loading and empty states. For static rows, use Table.',thumb:`<div style="width:210px;border:1px solid var(--border);border-radius:8px;background:var(--bg);font-size:10.5px;overflow:hidden"><div style="display:flex;gap:6px;padding:5px 8px;background:var(--bg-subtle);border-bottom:1px solid var(--border);color:var(--text-3)"><span style="width:10px;height:10px;border:1px solid var(--border-strong);border-radius:3px"></span><b style="font-weight:500;color:var(--text)">Order ↓</b><span style="margin-left:auto">Total</span></div>${['#1284','#1283','#1282'].map((o,i)=>`<div style="display:flex;gap:6px;align-items:center;padding:5px 8px;border-bottom:1px solid var(--border);${i===1?'background:var(--p-soft)':''}"><span style="width:10px;height:10px;border-radius:3px;${i===1?'background:var(--p)':'border:1px solid var(--border-strong)'}"></span>${o}<span style="margin-left:auto">$${[128,64,212][i]}.00</span></div>`).join('')}</div>`,
+   examples:[
+    {t:'Orders',d:'Sortable headers set aria-sort, rows can be selected for bulk actions, and the page size is adjustable. The Columns control is the Dropdown menu. The header stays put while the table scrolls, and the table scrolls sideways on small screens.',cls:'flush',html:`<div style="padding:20px"><div class="pu-datatable" data-dt data-dd-cols id="dt-orders" data-dt-sort="date" data-dt-dir="desc" data-dt-page="1" data-dt-size="10">
+<div class="pu-datatable-bar" data-dt-tools><div class="pu-datatable-title"><b id="dt-orders-cap">Orders</b><span>${'42'} orders · last 30 days</span></div><div class="pu-dropdown" data-dd style="margin-left:auto"><button type="button" class="pu-btn secondary sm" id="dd-dtc-t" data-dd-t aria-haspopup="menu" aria-expanded="false" aria-controls="dd-dtc-m">${I('sliders')}Columns${I('chevD')}</button><div class="pu-dropdown-menu" role="menu" id="dd-dtc-m" aria-labelledby="dd-dtc-t" data-align="end" hidden><div class="pu-dropdown-label" role="presentation">Show columns</div>${DT_COLS.map((c,i)=>`<button type="button" class="pu-dropdown-item" role="menuitemcheckbox" tabindex="-1" aria-checked="true"${i===0?' aria-disabled="true"':''} data-col="${c[0]}"><span class="pu-dropdown-check">${I('check')}</span>${c[1]}</button>`).join('')}</div></div></div>
+<div class="pu-datatable-bar bulk hidden" data-dt-bulk role="region" aria-label="Bulk actions"><b data-dt-count>0 selected</b><button type="button" class="pu-btn primary sm" data-dt-fulfil>${I('check')}Mark as fulfilled</button><button type="button" class="pu-btn secondary sm" data-dt-export>${I('download')}Export</button><button type="button" class="pu-btn ghost sm" data-dt-clear>Clear selection</button></div>
+<div class="pu-datatable-scroll" tabindex="0" role="region" aria-labelledby="dt-orders-cap"><table class="pu-table pu-datatable-table" aria-labelledby="dt-orders-cap">${dtHead(true)}<tbody></tbody></table></div>
+<div class="pu-datatable-foot"><label class="pu-datatable-size">Rows per page <select class="pu-select sm" data-dt-size-sel><option selected>10</option><option>20</option><option>50</option></select></label><span class="pu-datatable-range" data-dt-range></span><nav class="pu-pag" aria-label="Orders pages" data-dt-pages></nav></div>
+<span class="pu-datatable-status" role="status"></span></div></div>`,
+     code:`const columns = [
+  { key: "id", header: "Order", sortable: true, cell: (o) => <b>#{o.id}</b> },
+  { key: "date", header: "Date", sortable: true, cell: (o) => formatDate(o.date) },
+  { key: "customer", header: "Customer", sortable: true },
+  { key: "payment", header: "Payment", cell: (o) => <Badge color={paymentTone[o.payment]} dot>{o.payment}</Badge> },
+  { key: "fulfillment", header: "Fulfillment", cell: (o) => <Badge color={fulfillmentTone[o.fulfillment]}>{o.fulfillment}</Badge> },
+  { key: "items", header: "Items", align: "end" },
+  { key: "total", header: "Total", sortable: true, align: "end", cell: (o) => formatMoney(o.total) },
+]
+
+<DataTable
+  caption="Orders"
+  data={orders}
+  columns={columns}
+  getRowId={(o) => o.id}
+  defaultSort={{ key: "date", direction: "desc" }}
+  selectable
+  bulkActions={(rows) => (
+    <>
+      <Button size="sm" onClick={() => markFulfilled(rows)}>Mark as fulfilled</Button>
+      <Button size="sm" variant="secondary" onClick={() => exportCsv(rows)}>Export</Button>
+    </>
+  )}
+  pageSizeOptions={[10, 20, 50]}
+  columnVisibility
+  stickyHeader
+/>`},
+    {t:'Loading',d:'Skeleton rows keep the layout steady while data loads. The table sets aria-busy and the result is announced when rows arrive.',cls:'flush',html:`<div style="padding:20px"><div class="pu-datatable" data-dt-load id="dt-load"><div class="pu-datatable-bar"><div class="pu-datatable-title"><b id="dt-load-cap">Orders</b><span data-dt-load-sub>Loading…</span></div><button type="button" class="pu-btn secondary sm" data-dt-replay style="margin-left:auto">${I('refresh')}Reload</button></div><div class="pu-datatable-scroll" tabindex="0" role="region" aria-labelledby="dt-load-cap"><table class="pu-table pu-datatable-table" aria-labelledby="dt-load-cap" aria-busy="true">${dtHead(false)}<tbody></tbody></table></div><span class="pu-datatable-status" role="status"></span></div></div>`,
+     code:`<DataTable caption="Orders" data={orders ?? []} columns={columns} loading={!orders} skeletonRows={5} />`},
+    {t:'Empty',d:'When there is nothing to show, the table keeps its header and explains what to do next.',cls:'flush',html:`<div style="padding:20px"><div class="pu-datatable"><div class="pu-datatable-bar"><div class="pu-datatable-title"><b id="dt-empty-cap">Orders</b><span>0 orders</span></div></div><div class="pu-datatable-scroll" tabindex="0" role="region" aria-labelledby="dt-empty-cap"><table class="pu-table pu-datatable-table" aria-labelledby="dt-empty-cap">${dtHead(false)}<tbody><tr><td colspan="${DT_COLS.length}"><div class="pu-empty"><div class="feat-ic brand">${I('cart','ico-lg')}</div><h4>No orders yet</h4><p>Orders show up here as soon as shoppers check out with a Printly design.</p><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button type="button" class="pu-btn secondary sm" data-dt-say="Store link copied">${I('link')}Copy store link</button><button type="button" class="pu-btn primary sm" data-dt-say="Test order #1001 created">${I('plus')}Create test order</button></div></div></td></tr></tbody></table></div></div></div>`,
+     code:`<DataTable
+  caption="Orders"
+  data={[]}
+  columns={columns}
+  empty={
+    <EmptyState
+      icon={<Cart />}
+      title="No orders yet"
+      description="Orders show up here as soon as shoppers check out with a Printly design."
+      actions={<Button size="sm" onClick={createTestOrder}>Create test order</Button>}
+    />
+  }
+/>`}],
+   usage:`<DataTable data={orders} columns={columns} getRowId={(o) => o.id} selectable />`,
+   props:[P('data','T[]','—','Rows to show.'),P('columns','{ key, header, sortable?, align?, cell? }[]','—','Column definitions. cell renders custom content.'),P('getRowId','(row: T) => string | number','—','Stable id, so selection survives sorting and paging.'),P('defaultSort','{ key: string; direction: "asc" | "desc" }','—','Initial sort. The sorted header gets aria-sort.'),P('selectable','boolean','false','Adds row checkboxes and a select-all for the current page.'),P('bulkActions','(rows: T[]) => ReactNode','—','Replaces the toolbar while rows are selected.'),P('pageSizeOptions','number[]','[10, 20, 50]','Choices for rows per page.'),P('columnVisibility','boolean','false','Adds a Columns menu built on Dropdown menu.'),P('stickyHeader','boolean','false','Keeps the header visible while the body scrolls.'),P('loading','boolean','false','Shows skeleton rows and sets aria-busy.'),P('empty','ReactNode','—','Shown in place of rows when data is empty.'),P('caption','string','—','Accessible name for the table and its scroll region.')],
+   keys:[['Tab','Moves between sort buttons, row checkboxes, bulk actions and pagination.'],['Enter / Space','On a column header: sorts by it, and again to reverse the order.'],['Space','On a row checkbox: selects or clears the row. On the header checkbox: selects or clears the whole page.'],['Enter / Space','On a page button: goes to that page.'],['↑ / ↓ / ← / →','With the table region focused: scrolls it.']]};
+const PLANNED=[];
 const COMP_ORDER=Object.keys(C).sort((a,b)=>C[a].name.localeCompare(C[b].name));
 /* ---------- navigation model ---------- */
 const NAV=[
@@ -2044,7 +2131,7 @@ PAGES.introduction=()=>`${crumbs('Getting started','Introduction')}<h1>Introduct
 <h2 id="why">Why we're building it</h2><p>ParseLab ships several Shopify apps, each with its own buttons, inputs and tables. Every new screen gets redesigned and rebuilt from scratch, and Built for Shopify reviews keep flagging the same inconsistencies. ParseUI replaces that with parts we design once and reuse everywhere.</p>
 <h2 id="principles">Principles</h2>
 <div class="card-grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">${[['Tokens first','Color, type, radius and shadow are variables. Rebrand a product by changing a handful of values.'],['You own the code','Components copy into your repo through the CLI. Edit them freely without waiting on a package release.'],['Accessible by default','Built on Radix primitives with keyboard support, focus management and WCAG AA contrast.'],['Figma and code match','Every component has a Figma twin with the same names, variants and props.']].map(p=>`<div class="fcard" style="min-height:0"><h3>${p[0]}</h3><p style="font-size:14px;color:var(--text-2)">${p[1]}</p></div>`).join('')}</div>
-<h2 id="whats-inside">What's inside</h2><ul><li><b>Foundations</b> — color, typography, spacing, radius, shadows and an icon set.</li><li><b>Components</b> — ${COMP_ORDER.length} base components today, ${PLANNED.length} more planned.</li><li><b>Blocks</b> — ready-made sections like sign-in, pricing, settings and empty states.</li><li><b>Examples</b> — full screens, starting with a store dashboard.</li></ul>
+<h2 id="whats-inside">What's inside</h2><ul><li><b>Foundations</b> — color, typography, spacing, radius, shadows and an icon set.</li><li><b>Components</b> — ${COMP_ORDER.length} base components today${PLANNED.length?`, ${PLANNED.length} more planned`:''}.</li><li><b>Blocks</b> — ready-made sections like sign-in, pricing, settings and empty states.</li><li><b>Examples</b> — full screens, starting with a store dashboard.</li></ul>
 <h2 id="stack">Stack</h2><p>React 18+, TypeScript, Tailwind CSS v4 and Radix UI. Works with Next.js, Remix and Vite, and alongside Shopify Polaris inside embedded apps.</p>${pager('introduction')}`;
 
 PAGES.installation=()=>`${crumbs('Getting started','Installation')}<h1>Installation</h1><p class="lead">Add ParseUI to a new or existing React project in a few minutes.</p>
@@ -2311,7 +2398,7 @@ function afterRender(){
   document.querySelectorAll('[data-indet]').forEach(el=>el.indeterminate=true);
   document.querySelectorAll('[data-slider]').forEach(el=>el.dispatchEvent(new Event('input',{bubbles:true})));
   document.querySelectorAll('[data-dp]').forEach(dpInit);
-  fuInit();
+  fuInit(); dtInit();
 }
 let tocObs;
 function buildToc(){ const toc=document.getElementById('toc'); if(!toc) return; const hs=[...document.querySelectorAll('.doc h2[id], .doc h3[id^="ex-"]')];
@@ -2619,6 +2706,49 @@ document.addEventListener('change',ev=>{ const inp=ev.target; if(!inp.matches?.(
 document.addEventListener('dragleave',ev=>{ const z=ev.target.closest?.('[data-fu-zone]'); if(z&&!z.contains(ev.relatedTarget)) z.classList.remove('drag'); });
 document.addEventListener('drop',ev=>{ const z=ev.target.closest?.('[data-fu-zone]'); if(!z) return; ev.preventDefault(); z.classList.remove('drag'); fuAdd(z.closest('[data-fu]'),ev.dataTransfer?.files||[]); });
 
+/* ---------- data table ---------- */
+const DT_ORDERS=(()=>{ const names=['Nadia Rahman','Tanvir Hasan','Sara Kim','Ovi Das','Maya Chen','Rafi Ahmed','Lena Park','Omar Faruk'], pay=['Paid','Paid','Pending','Paid','Refunded','Paid','Paid','Pending'], ful=['Fulfilled','Unfulfilled','Fulfilled','Unfulfilled','Returned','Fulfilled','Unfulfilled','Fulfilled'];
+  return Array.from({length:42},(_,i)=>{ const items=1+(i*7)%4; return {id:1284-i, date:dpISO(new Date(2026,8,28-Math.floor(i*.7))), customer:names[(i*5)%8], payment:pay[i%8], fulfillment:ful[(i*3)%8], items, total:items*18+(i*37)%60+12}; }); })();
+const DT_TONE={Paid:'success',Pending:'warning',Refunded:'danger',Fulfilled:'gray',Unfulfilled:'warning',Returned:'info'};
+const DT_MONEY=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'});
+const dtSel=root=>new Set(JSON.parse(root.dataset.dtSel||'[]'));
+function dtRows(list,hidden,sel,checkable){ const td=(col,html,cls='')=>`<td data-col="${col}"${cls?` class="${cls}"`:''}${hidden.has(col)?' hidden':''}>${html}</td>`;
+  return list.map(o=>`<tr${sel?.has(o.id)?' class="sel"':''}>${checkable?`<td class="pu-datatable-cb"><label class="pu-check"><input type="checkbox" data-dt-row="${o.id}"${sel.has(o.id)?' checked':''} aria-label="Select order #${o.id}"></label></td>`:''}${td('id',`<b>#${o.id}</b>`)}${td('date',DPF.short.format(dpDate(o.date)))}${td('customer',`<div class="pu-person">${av(o.customer,'sm')}${o.customer}</div>`)}${td('payment',`<span class="pu-badge ${DT_TONE[o.payment]} round"><i class="dot"></i>${o.payment}</span>`)}${td('fulfillment',`<span class="pu-badge ${DT_TONE[o.fulfillment]}">${o.fulfillment}</span>`)}${td('items',o.items,'num')}${td('total',`<b>${DT_MONEY.format(o.total)}</b>`,'num')}</tr>`).join(''); }
+function dtRender(root,say){ const key=root.dataset.dtSort, dir=root.dataset.dtDir==='asc'?1:-1, size=+root.dataset.dtSize, sel=dtSel(root);
+  const sorted=[...DT_ORDERS].sort((a,b)=>(a[key]>b[key]?1:a[key]<b[key]?-1:0)*dir||b.id-a.id), pages=Math.max(1,Math.ceil(sorted.length/size)), page=Math.min(Math.max(1,+root.dataset.dtPage||1),pages);
+  root.dataset.dtPage=page; const slice=sorted.slice((page-1)*size,page*size), hidden=new Set([...root.querySelectorAll('[role="menuitemcheckbox"][aria-checked="false"]')].map(i=>i.dataset.col));
+  root.querySelector('tbody').innerHTML=dtRows(slice,hidden,sel,true);
+  root.querySelectorAll('th[data-col]').forEach(th=>{ const k=th.dataset.col; if(k===key){ th.setAttribute('aria-sort',dir>0?'ascending':'descending'); th.classList.toggle('asc',dir>0); } else th.removeAttribute('aria-sort'); th.classList.toggle('sorted',k===key); });
+  const on=slice.filter(o=>sel.has(o.id)).length, all=root.querySelector('[data-dt-all]'); all.checked=on>0&&on===slice.length; all.indeterminate=on>0&&on<slice.length;
+  root.querySelector('[data-dt-tools]').classList.toggle('hidden',sel.size>0); root.querySelector('[data-dt-bulk]').classList.toggle('hidden',!sel.size); root.querySelector('[data-dt-count]').textContent=`${sel.size} selected`;
+  const from=(page-1)*size+1, to=from+slice.length-1; root.querySelector('[data-dt-range]').textContent=`${from}–${to} of ${sorted.length}`;
+  root.querySelector('[data-dt-pages]').innerHTML=`<button type="button" data-dt-go="${page-1}" aria-label="Previous page"${page===1?' disabled':''}>${I('chevL')}</button>${[...Array(pages)].map((_,i)=>`<button type="button" data-dt-go="${i+1}"${i+1===page?' class="on" aria-current="page"':''} aria-label="Page ${i+1}">${i+1}</button>`).join('')}<button type="button" data-dt-go="${page+1}" aria-label="Next page"${page===pages?' disabled':''}>${I('chevR')}</button>`;
+  if(say) root.querySelector('.pu-datatable-status').textContent=say; }
+function dtLoad(root){ const table=root.querySelector('table'), sub=root.querySelector('[data-dt-load-sub]'); clearTimeout(root._dt);
+  table.setAttribute('aria-busy','true'); sub.textContent='Loading…'; root.querySelector('.pu-datatable-status').textContent='Loading orders.';
+  root.querySelector('tbody').innerHTML=[...Array(5)].map(()=>`<tr aria-hidden="true">${DT_COLS.map((c,i)=>`<td${c[3]?' class="num"':''}><span class="pu-datatable-skel" style="width:${[46,70,110,58,72,20,56][i]}px"></span></td>`).join('')}</tr>`).join('');
+  root._dt=setTimeout(()=>{ if(!root.isConnected) return; table.setAttribute('aria-busy','false'); root.querySelector('tbody').innerHTML=dtRows(DT_ORDERS.slice(0,5),new Set(),null,false); sub.textContent='5 orders'; root.querySelector('.pu-datatable-status').textContent='5 orders loaded.'; },1400); }
+function dtInit(){ document.querySelectorAll('[data-dt]').forEach(r=>{ if(!r.dataset.dtReady){ r.dataset.dtReady=1; dtRender(r); } }); document.querySelectorAll('[data-dt-load]').forEach(r=>{ if(!r.dataset.dtReady){ r.dataset.dtReady=1; dtLoad(r); } }); }
+document.addEventListener('click',ev=>{ const t=ev.target; if(!(t instanceof Element)) return;
+  const say=t.closest('[data-dt-say]'); if(say){ toast('success',say.dataset.dtSay); return; }
+  if(t.closest('[data-dt-replay]')){ dtLoad(t.closest('[data-dt-load]')); return; }
+  const root=t.closest('[data-dt]'); if(!root) return; const label=k=>DT_COLS.find(c=>c[0]===k)[1];
+  // the root also carries data-dt-sort (its state), so match the buttons only
+  const sort=t.closest('button[data-dt-sort]'); if(sort){ const k=sort.dataset.dtSort; if(root.dataset.dtSort===k) root.dataset.dtDir=root.dataset.dtDir==='asc'?'desc':'asc'; else { root.dataset.dtSort=k; root.dataset.dtDir=k==='customer'?'asc':'desc'; }
+    root.dataset.dtPage=1; dtRender(root,`Sorted by ${label(k)}, ${root.dataset.dtDir==='asc'?'ascending':'descending'}.`); return; }
+  const go=t.closest('[data-dt-go]'); if(go&&!go.disabled){ root.dataset.dtPage=go.dataset.dtGo; dtRender(root,`Page ${root.dataset.dtPage}.`); root.querySelector(`[data-dt-go="${root.dataset.dtPage}"][aria-current]`)?.focus(); return; }
+  if(t.closest('[data-dt-fulfil]')||t.closest('[data-dt-export]')||t.closest('[data-dt-clear]')){ const sel=dtSel(root), n=sel.size, noun=n===1?'order':'orders';
+    if(t.closest('[data-dt-fulfil]')){ DT_ORDERS.forEach(o=>{ if(sel.has(o.id)) o.fulfillment='Fulfilled'; }); toast('success',`${n} ${noun} marked as fulfilled`); }
+    else if(t.closest('[data-dt-export]')) toast('success',`Exported ${n} ${noun} as CSV`);
+    root.dataset.dtSel='[]'; dtRender(root,'Selection cleared.'); root.querySelector('[data-dt-all]').focus(); return; }
+  if(t.matches('[role="menuitemcheckbox"][data-col]')) dtRender(root); });
+document.addEventListener('change',ev=>{ const t=ev.target, root=t.closest?.('[data-dt]'); if(!root) return;
+  if(t.matches('[data-dt-size-sel]')){ root.dataset.dtSize=t.value; root.dataset.dtPage=1; dtRender(root,`Showing ${t.value} rows per page.`); return; }
+  const sel=dtSel(root);
+  if(t.matches('[data-dt-all]')) root.querySelectorAll('[data-dt-row]').forEach(c=>t.checked?sel.add(+c.dataset.dtRow):sel.delete(+c.dataset.dtRow));
+  else if(t.matches('[data-dt-row]')) t.checked?sel.add(+t.dataset.dtRow):sel.delete(+t.dataset.dtRow); else return;
+  root.dataset.dtSel=JSON.stringify([...sel]); const f=t.matches('[data-dt-all]')?null:t.dataset.dtRow; dtRender(root,`${sel.size} selected.`);
+  (f?root.querySelector(`[data-dt-row="${f}"]`):root.querySelector('[data-dt-all]'))?.focus(); });
 
 /* ---------- command palette ---------- */
 let cmdSel=0;
