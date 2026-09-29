@@ -576,6 +576,39 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 .blk-task-acts{ display:flex; flex-wrap:wrap; gap:8px; }
 .blk-setup-min{ display:flex; align-items:center; flex-wrap:wrap; gap:10px 16px; padding:14px 18px; font-size:13.5px; color:var(--text-2); }
 .blk-setup-min .pu-btn{ margin-left:auto; }
+.blk-ph{ width:100%; max-width:760px; padding:18px 22px 0; background:var(--bg); border:1px solid var(--border); border-radius:var(--r-xl); box-shadow:var(--sh-xs); text-align:left; }
+.blk-ph-row{ display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:12px 20px; margin:10px 0 16px; }
+.blk-ph .blk-ph-title h3{ margin:0; display:flex; align-items:center; gap:10px; font-size:24px; line-height:1.2; letter-spacing:-.02em; font-weight:600; }
+.blk-ph .blk-ph-title p{ margin:4px 0 0; font-size:14px; color:var(--text-2); }
+.blk-ph-acts{ display:flex; flex-wrap:wrap; gap:8px; }
+.blk-ph .blk-ph-note{ margin:0; padding:12px 0 14px; font-size:13.5px; color:var(--text-3); }
+@media (max-width:640px){ .blk-ph{ padding:16px 16px 0; } .blk-ph-acts{ width:100%; } .blk-ph-acts .pu-btn{ flex:1; } }
+.blk-set{ width:100%; max-width:760px; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.7fr); gap:16px 32px; text-align:left; }
+.blk-set .blk-set-d h4{ margin:4px 0 6px; font-size:15px; font-weight:600; }
+.blk-set .blk-set-d p{ margin:0; font-size:13.5px; color:var(--text-2); }
+.blk-set-f{ display:flex; flex-direction:column; gap:16px; }
+.blk-set-f .pu-field{ max-width:none; }
+.blk-set-sw{ width:100%; justify-content:space-between; gap:16px; padding-top:16px; border-top:1px solid var(--border); }
+.blk-set-sw .t b{ display:block; font-size:14px; font-weight:500; color:var(--text); }
+.blk-set-sw .t small{ display:block; font-size:13px; color:var(--text-3); }
+@media (max-width:640px){ .blk-set{ grid-template-columns:minmax(0,1fr); } }
+.blk-rl{ width:100%; max-width:760px; }
+.blk-rl-bar{ display:flex; align-items:center; flex-wrap:wrap; gap:8px; min-height:57px; padding:12px 14px; border-bottom:1px solid var(--border); }
+.blk-rl-q{ flex:1; min-width:180px; }
+.blk-rl-sort{ width:auto; margin-left:auto; }
+.blk-rl-bulk{ background:var(--p-soft); border-radius:calc(var(--r-xl) - 1px) calc(var(--r-xl) - 1px) 0 0; }
+.blk-rl-bulk b{ margin-right:auto; font-size:14px; font-weight:600; color:var(--p-text); }
+.blk-chip{ display:inline-flex; align-items:center; gap:4px; height:32px; padding:0 4px 0 12px; border:1px solid var(--border-strong); border-radius:999px; background:var(--bg-subtle); font-size:13px; font-weight:500; color:var(--text); white-space:nowrap; }
+.blk-chip button{ width:24px; height:24px; display:grid; place-items:center; border:0; border-radius:50%; background:none; color:var(--text-3); cursor:pointer; }
+.blk-chip button:hover{ background:var(--bg-muted); color:var(--text); }
+.blk-chip .ico{ width:14px; height:14px; }
+.blk-rl .pu-table-wrap{ border:0; border-radius:0 0 var(--r-xl) var(--r-xl); }
+.blk-rl .pu-table .blk-rl-cb{ width:44px; padding-right:0; }
+.blk-rl .blk-rl-cb .pu-check input{ margin:0; }
+.blk-rl .pu-table tbody tr:has(input:checked) td{ background:var(--p-soft); }
+.blk-rl .blk-rl-empty{ padding:28px 14px; text-align:center; color:var(--text-3); }
+.blk-inv{ display:inline-flex; align-items:center; gap:6px; color:var(--text-2); } .blk-inv.low .ico{ color:var(--warning); } .blk-inv.out .ico{ color:var(--danger); }
+@media (max-width:640px){ .blk-rl-q{ flex-basis:100%; } .blk-rl-sort{ flex:1; margin-left:0; } }
 .blk-sr{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 
 /* ============ OVERLAYS ============ */
@@ -1112,6 +1145,81 @@ const BLOCKS=[
   <SetupTask title="Set print areas" action={<Button size="sm">Set print areas</Button>} />
   <SetupTask title="Publish to your store" action={<Button size="sm">Publish</Button>} />
 </SetupGuide>`},
+ {id:'page-header',cat:'App pages',t:'Page header',d:'Top of an index page: breadcrumb, title with count, primary actions and status tabs.',free:true,html:`<div class="blk-ph" data-tabs><nav class="pu-crumb" aria-label="Breadcrumb"><a href="javascript:void 0">Lumen Prints</a>${I('chevR')}<span class="cur" aria-current="page">Products</span></nav><div class="blk-ph-row"><div class="blk-ph-title"><h3>Products <span class="pu-badge gray round">128</span></h3><p>Everything shoppers can personalise with Printly.</p></div><div class="blk-ph-acts"><button type="button" class="pu-btn secondary">${I('download')}Export</button><button type="button" class="pu-btn primary">${I('plus')}Add product</button></div></div><div class="pu-tabs" role="tablist" aria-label="Product status">${['All','Active','Draft','Archived'].map((n,i)=>`<button type="button" role="tab" aria-selected="${i?'false':'true'}" tabindex="${i?-1:0}" class="${i?'':'on'}" data-i="${i}">${n}</button>`).join('')}</div>${[['all','128 products'],['active','96 active products'],['draft','24 draft products'],['archived','8 archived products']].map((p,i)=>`<p class="blk-ph-note${i?' hidden':''}" data-p="${i}">Showing ${p[1]}</p>`).join('')}</div>`,
+  code:`<PageHeader
+  breadcrumbs={[{ label: "Lumen Prints", href: "/" }, { label: "Products" }]}
+  title="Products"
+  count={128}
+  description="Everything shoppers can personalise with Printly."
+  secondaryActions={<Button variant="secondary" leadingIcon={<Download />}>Export</Button>}
+  primaryAction={<Button leadingIcon={<Plus />}>Add product</Button>}
+>
+  <Tabs value={status} onValueChange={setStatus}>
+    <TabsList>
+      <TabsTrigger value="all">All</TabsTrigger>
+      <TabsTrigger value="active">Active</TabsTrigger>
+      <TabsTrigger value="draft">Draft</TabsTrigger>
+      <TabsTrigger value="archived">Archived</TabsTrigger>
+    </TabsList>
+  </Tabs>
+</PageHeader>`},
+ {id:'resource-list',cat:'App pages',t:'Resource list',d:'Filterable, sortable product table with row selection and bulk actions.',html:`<div class="pu-card blk-rl" data-rl><div class="blk-rl-bar" data-rl-tools><div class="pu-input sm blk-rl-q">${I('search')}<input type="search" data-rl-q placeholder="Search products" aria-label="Search products" autocomplete="off"></div><span class="blk-chip" data-rl-chip>Status: Active<button type="button" data-rl-unchip aria-label="Remove filter Status: Active">${I('x')}</button></span><button type="button" class="pu-btn ghost sm">${I('plus')}Add filter</button><select class="pu-select sm blk-rl-sort" data-rl-sort aria-label="Sort products"><option value="name">Name A–Z</option><option value="price-asc">Price: low to high</option><option value="price-desc">Price: high to low</option><option value="inv">Inventory: lowest first</option></select></div><div class="blk-rl-bar blk-rl-bulk hidden" data-rl-bulk role="region" aria-label="Bulk actions"><b data-rl-count>0 selected</b><button type="button" class="pu-btn secondary sm">${I('pen')}Edit</button><button type="button" class="pu-btn secondary sm" data-rl-archive>Archive</button><button type="button" class="pu-btn danger sm" data-rl-delete>${I('trash')}Delete</button></div><span class="blk-sr" aria-live="polite" data-rl-live></span><div class="pu-table-wrap"><table class="pu-table"><thead><tr><th class="blk-rl-cb"><label class="pu-check"><input type="checkbox" data-rl-all aria-label="Select all products"></label></th><th>Product</th><th>Status</th><th>Inventory</th><th class="num">Price</th></tr></thead><tbody>${[['Heavyweight tee','active',142,32,'layers','p'],['Canvas tote','active',88,24,'tag','success'],['Ceramic mug, 11 oz','active',12,18,'box','warning'],['Framed poster, A3','active',36,45,'square','info'],['Organic hoodie','active',0,58,'star','danger'],['Phone case','active',64,22,'grid','p'],['Sticker sheet','draft',500,6,'pen','info'],['Holiday card pack','archived',0,14,'mail','warning']].sort((a,b)=>a[0].localeCompare(b[0])).map(r=>`<tr data-row data-name="${r[0]}" data-status="${r[1]}" data-price="${r[3]}" data-inv="${r[2]}"${r[1]==='active'?'':' class="hidden"'}><td class="blk-rl-cb"><label class="pu-check"><input type="checkbox" aria-label="Select ${r[0]}"></label></td><td><div class="pu-person"><span class="prod-thumb" style="background:var(--${r[5]}-soft);color:var(--${r[5]==='p'?'p-text':r[5]})">${I(r[4])}</span><b>${r[0]}</b></div></td><td>${{active:'<span class="pu-badge success round"><i class="dot"></i>Active</span>',draft:'<span class="pu-badge info round"><i class="dot"></i>Draft</span>',archived:'<span class="pu-badge gray round"><i class="dot"></i>Archived</span>'}[r[1]]}</td><td>${r[2]===0?`<span class="blk-inv out">${I('xC')}Out of stock</span>`:r[2]<20?`<span class="blk-inv low">${I('alert')}Low stock, ${r[2]} left</span>`:`${r[2]} in stock`}</td><td class="num">$${r[3].toFixed(2)}</td></tr>`).join('')}<tr class="hidden" data-rl-empty><td colspan="5" class="blk-rl-empty">No products match your search and filters.</td></tr></tbody></table></div></div>`,
+  code:`<ResourceList
+  resourceName={{ singular: "product", plural: "products" }}
+  items={products}
+  filterControl={
+    <Filters
+      queryValue={query}
+      onQueryChange={setQuery}
+      appliedFilters={[{ key: "status", label: "Status: Active", onRemove: clearStatus }]}
+    />
+  }
+  sortOptions={[
+    { label: "Name A–Z", value: "title asc" },
+    { label: "Price: low to high", value: "price asc" },
+    { label: "Price: high to low", value: "price desc" },
+    { label: "Inventory: lowest first", value: "inventory asc" },
+  ]}
+  bulkActions={[
+    { content: "Edit", onAction: editSelected },
+    { content: "Archive", onAction: archiveSelected },
+    { content: "Delete", destructive: true, onAction: deleteSelected },
+  ]}
+  columns={["Product", "Status", "Inventory", { title: "Price", align: "end" }]}
+  renderRow={(product) => (
+    <ResourceRow id={product.id} media={<Thumbnail src={product.image} alt="" />} title={product.title}>
+      <Badge tone={statusTone[product.status]} dot>{product.status}</Badge>
+      <InventoryCell quantity={product.inventory} lowAt={20} />
+      <Price amount={product.price} currency="USD" />
+    </ResourceRow>
+  )}
+/>`},
+ {id:'settings-section',cat:'App pages',t:'Settings section',d:'Annotated settings layout: what the section is for on the left, the fields on the right.',free:true,html:`<div class="blk-set"><div class="blk-set-d"><h4>Store details</h4><p>Used on packing slips, invoices and the emails Printly sends to shoppers.</p></div><form class="pu-card" data-blk-form="Store details saved"><div class="pu-card-b blk-set-f"><div class="pu-field"><label class="pu-label" for="blk-ss-name">Store name</label><div class="pu-input"><input id="blk-ss-name" value="Lumen Prints" autocomplete="organization"></div></div><div class="pu-field"><label class="pu-label" for="blk-ss-email">Contact email</label><div class="pu-input">${I('mail')}<input id="blk-ss-email" type="email" value="hello@lumenprints.com" autocomplete="email" aria-describedby="blk-ss-email-h"></div><span class="pu-hint" id="blk-ss-email-h">Shoppers reply to this address. It never appears on your storefront.</span></div><div class="pu-field"><label class="pu-label" for="blk-ss-cur">Currency</label><select class="pu-select" id="blk-ss-cur"><option value="USD" selected>USD, US dollar</option><option value="EUR">EUR, Euro</option><option value="GBP">GBP, British pound</option><option value="CAD">CAD, Canadian dollar</option><option value="AUD">AUD, Australian dollar</option></select></div><label class="pu-switch blk-set-sw"><span class="t"><b id="blk-ss-sw-l">Email me when an order needs review</b><small id="blk-ss-sw-h">For example, when artwork fails the print check.</small></span><input type="checkbox" role="switch" checked aria-labelledby="blk-ss-sw-l" aria-describedby="blk-ss-sw-h"></label></div><div class="pu-card-f"><button type="reset" class="pu-btn secondary sm">Cancel</button><button type="submit" class="pu-btn primary sm">Save</button></div></form></div>`,
+  code:`<SettingsSection
+  title="Store details"
+  description="Used on packing slips, invoices and the emails Printly sends to shoppers."
+>
+  <Card as="form" onSubmit={save}>
+    <Field label="Store name">
+      <Input defaultValue="Lumen Prints" />
+    </Field>
+    <Field label="Contact email" hint="Shoppers reply to this address. It never appears on your storefront.">
+      <Input type="email" leadingIcon={<Mail />} defaultValue="hello@lumenprints.com" />
+    </Field>
+    <Field label="Currency">
+      <Select defaultValue="USD" options={currencies} />
+    </Field>
+    <Switch
+      label="Email me when an order needs review"
+      description="For example, when artwork fails the print check."
+      defaultChecked
+    />
+    <CardFooter>
+      <Button variant="secondary" type="reset">Cancel</Button>
+      <Button type="submit">Save</Button>
+    </CardFooter>
+  </Card>
+</SettingsSection>`},
  {id:'stats',cat:'App pages',t:'Stats row',d:'Metric cards with trend and sparkline.',free:true,html:`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;width:100%">${[['Visitors','24.8k','14%',1,[30,40,35,50,45,60,70,65,80]],['Sessions','9,412','6%',1,[40,38,45,50,48,55,52,60,64]],['Bounce rate','41%','2%',0,[60,58,62,55,57,50,52,48,45]]].map(k=>`<div class="pu-card kpi"><div class="l">${k[0]}</div><div class="v">${k[1]}</div><div class="d"><span class="${k[3]?'up':'down'}">${k[3]?'↑':'↓'} ${k[2]}</span> this week</div><div style="margin-top:8px">${bars(k[4])}</div></div>`).join('')}</div>`,
   code:`<StatGrid>
   <StatCard label="Visitors" value="24.8k" change={14} trend={visitorSeries} />
@@ -1491,6 +1599,18 @@ function setupNext(li){ const g=li.closest('[data-setup]'), all=[...g.querySelec
 function setupDone(li){ const g=li.closest('[data-setup]'), n=g.querySelectorAll('.blk-task').length; li.classList.add('done'); li.querySelector('.blk-task-ic').innerHTML=I('checkC')+'<span class="blk-sr">Completed: </span>'; li.querySelector('.blk-task-acts')?.remove();
   const d=g.querySelectorAll('.blk-task.done').length, bar=g.querySelector('[role="progressbar"]'); bar.setAttribute('aria-valuenow',d); bar.querySelector('i').style.width=d/n*100+'%';
   g.querySelector('[data-setup-count]').textContent=d===n?'All tasks complete':`${d} of ${n} tasks complete`; setupNext(li); }
+const rlRows=w=>[...w.querySelectorAll('tr[data-row]')];
+function rlSync(w){ const vis=rlRows(w).filter(r=>!r.classList.contains('hidden')), n=vis.filter(r=>r.querySelector('input').checked).length, all=w.querySelector('[data-rl-all]');
+  all.checked=n>0&&n===vis.length; all.indeterminate=n>0&&n<vis.length; all.disabled=!vis.length;
+  w.querySelector('[data-rl-count]').textContent=`${n} selected`; w.querySelector('[data-rl-live]').textContent=n?`${n} selected`:'';
+  w.querySelector('[data-rl-tools]').classList.toggle('hidden',n>0); w.querySelector('[data-rl-bulk]').classList.toggle('hidden',!n); }
+function rlApply(w){ const q=w.querySelector('[data-rl-q]').value.trim().toLowerCase(), active=!!w.querySelector('[data-rl-chip]'), tb=w.querySelector('tbody'), empty=tb.querySelector('[data-rl-empty]');
+  const cmp={name:(a,b)=>a.dataset.name.localeCompare(b.dataset.name),'price-asc':(a,b)=>a.dataset.price-b.dataset.price,'price-desc':(a,b)=>b.dataset.price-a.dataset.price,inv:(a,b)=>a.dataset.inv-b.dataset.inv}[w.querySelector('[data-rl-sort]').value];
+  let shown=0; rlRows(w).sort(cmp).forEach(r=>{ tb.insertBefore(r,empty); const hit=(!active||r.dataset.status==='active')&&(!q||r.dataset.name.toLowerCase().includes(q)); r.classList.toggle('hidden',!hit); if(hit) shown++; else r.querySelector('input').checked=false; });
+  empty.classList.toggle('hidden',shown>0); rlSync(w); }
+function rlBulk(w,act){ const sel=rlRows(w).filter(r=>r.querySelector('input').checked), n=sel.length;
+  sel.forEach(r=>{ if(act==='delete'){ r.remove(); return; } r.dataset.status='archived'; r.querySelector('.pu-badge').outerHTML='<span class="pu-badge gray round"><i class="dot"></i>Archived</span>'; r.querySelector('input').checked=false; });
+  rlApply(w); const all=w.querySelector('[data-rl-all]'); (all.disabled?w.querySelector('[data-rl-q]'):all).focus(); toast('success',`${n} ${n===1?'product':'products'} ${act==='delete'?'deleted':'archived'}`); }
 function setupHide(g,hide){ g.querySelector('[data-setup-body]').classList.toggle('hidden',hide); g.querySelector('[data-setup-min]').classList.toggle('hidden',!hide); g.querySelector(hide?'[data-setup-show]':'[data-setup-x]').focus(); }
 
 /* ---------- global events ---------- */
@@ -1509,13 +1629,15 @@ document.addEventListener('click',e=>{
   if(t.dataset.scope!==undefined){ const d=t.closest('[data-demo]'); t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); const pv=d.querySelector('[data-pv]'); pv.classList.remove('scope-light','scope-dark'); if(t.dataset.scope) pv.classList.add(t.dataset.scope); return; }
   if(t.dataset.pmk){ const blk=t.closest('[data-pm]'), v=JSON.parse(blk.dataset.pm); t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); blk.querySelector('pre').innerHTML=hl(v[t.dataset.pmk],'bash'); CODES[+blk.querySelector('.copy').dataset.copy]=v[t.dataset.pmk]; return; }
   if(t.dataset.instT){ const w=t.closest('[data-inst]'); w.querySelectorAll('[data-inst-t]').forEach(b=>b.classList.toggle('on',b===t)); w.querySelectorAll('[data-inst-p]').forEach(p=>p.classList.toggle('hidden',p.dataset.instP!==t.dataset.instT)); return; }
-  if(t.dataset.i!==undefined && t.closest('[data-tabs]')){ const w=t.closest('[data-tabs]'); t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); w.querySelectorAll('[data-p]').forEach(p=>p.classList.toggle('hidden',p.dataset.p!==t.dataset.i)); return; }
+  if(t.dataset.i!==undefined && t.closest('[data-tabs]')){ const w=t.closest('[data-tabs]'); t.parentNode.querySelectorAll('button').forEach(b=>{ b.classList.toggle('on',b===t); if(b.getAttribute('role')==='tab'){ b.setAttribute('aria-selected',b===t); b.tabIndex=b===t?0:-1; } }); w.querySelectorAll('[data-p]').forEach(p=>p.classList.toggle('hidden',p.dataset.p!==t.dataset.i)); return; }
   if(t.closest('[data-group]')){ t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); return; }
   if(t.closest('[data-pag]') && !t.getAttribute('aria-label') && !t.disabled){ t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); return; }
   if(t.dataset.taskT!==undefined){ const li=t.closest('.blk-task'); setupOpen(li.closest('[data-setup]'), li.classList.contains('open')?null:li); return; }
   if(t.dataset.taskDo!==undefined){ setupDone(t.closest('.blk-task')); return; }
   if(t.dataset.taskSkip!==undefined){ setupNext(t.closest('.blk-task')); return; }
   if(t.dataset.setupX!==undefined||t.dataset.setupShow!==undefined){ setupHide(t.closest('[data-setup]'), t.dataset.setupX!==undefined); return; }
+  if(t.dataset.rlUnchip!==undefined){ const w=t.closest('[data-rl]'); t.closest('[data-rl-chip]').remove(); rlApply(w); w.querySelector('[data-rl-q]').focus(); return; }
+  if(t.dataset.rlArchive!==undefined||t.dataset.rlDelete!==undefined){ rlBulk(t.closest('[data-rl]'), t.dataset.rlDelete!==undefined?'delete':'archive'); return; }
   if(t.dataset.modal){ openModal(t.dataset.modal); return; }
   if(t.dataset.close!==undefined){ const a=t.dataset.after; closeOverlay(); if(a==='deleted') toast('success','Product deleted','“Organic cotton tee” was removed.','Undo'); if(a==='invited') toast('success','Invite sent','They\'ll get an email shortly.'); return; }
   if(t.dataset.toast){ const k=t.dataset.toast; if(k==='success') toast('success','Product saved','Your changes are live on the storefront.'); else if(k==='error') toast('error','Sync failed','Check your API key in Settings and try again.'); else toast('info','Order archived','#1284 moved to archive.','Undo'); return; }
@@ -1530,6 +1652,7 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('input',e=>{ if(e.target.matches('[data-slider], .pu-slider')){ const el=e.target, v=(el.value-el.min)/(el.max-el.min)*100; el.style.setProperty('--v',v+'%'); const o=el.closest('.pu-field')?.querySelector('[data-sl-out]'); if(o) o.textContent=Math.round(el.value)+'%'; } });
 document.addEventListener('keydown',e=>{
+  if((e.key==='ArrowRight'||e.key==='ArrowLeft')&&e.target.matches('[role="tab"]')){ const tabs=[...e.target.parentNode.querySelectorAll('[role="tab"]')], n=tabs[(tabs.indexOf(e.target)+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length]; e.preventDefault(); n.focus(); n.click(); return; }
   if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){ e.preventDefault(); overlay.querySelector('.cmdk')?closeOverlay():openCmd(); return; }
   if(e.key==='Escape'&&overlay.innerHTML){ closeOverlay(); return; }
   if(e.key==='/'&&!/input|textarea|select/i.test(document.activeElement.tagName)&&!overlay.innerHTML){ e.preventDefault(); openCmd(); return; }
@@ -1544,6 +1667,12 @@ document.addEventListener('input',e=>{ if(!e.target.matches('[data-icon-search]'
   items.forEach(el=>{ const hit=!q||el.dataset.iconName.includes(q); el.hidden=!hit; if(hit) n++; });
   document.querySelector('[data-icon-count]').textContent=q?`${n} of ${items.length} icons`:`${items.length} icons`;
   document.querySelector('[data-icon-empty]').hidden=n>0; });
+document.addEventListener('change',e=>{ const w=e.target.closest('[data-rl]'); if(!w) return;
+  if(e.target.matches('[data-rl-sort]')){ rlApply(w); return; }
+  if(e.target.matches('[data-rl-all]')) rlRows(w).forEach(r=>{ if(!r.classList.contains('hidden')) r.querySelector('input').checked=e.target.checked; });
+  if(e.target.type==='checkbox') rlSync(w); });
+document.addEventListener('input',e=>{ if(e.target.matches('[data-rl-q]')) rlApply(e.target.closest('[data-rl]')); });
+document.addEventListener('submit',e=>{ const f=e.target.closest('[data-blk-form]'); if(!f) return; e.preventDefault(); toast('success',f.dataset.blkForm); });
 window.addEventListener('hashchange',render);
 render();
 </script>

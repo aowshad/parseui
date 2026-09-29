@@ -14,7 +14,7 @@
 
 - **Foundations:** colors (brand ramp, neutrals, semantic), typography, spacing, radius, shadows, icons
 - **22 base components**, each with preview/code, light/dark preview, install steps, usage, examples and an API table
-- **8 blocks**, grouped by category: sign in, welcome screen, setup guide (Onboarding); stats row, notification settings, empty state, file upload (App pages); pricing (Billing)
+- **11 blocks**, grouped by category: sign in, welcome screen, setup guide (Onboarding); page header, resource list, settings section, stats row, notification settings, empty state, file upload (App pages); pricing (Billing)
 - **Store dashboard example** built only from ParseUI parts
 - **Live customizer** (palette icon in the top bar): change brand color, radius and theme, and the whole site reskins
 - **⌘K / `/` search**, keyboard support, responsive layout, reduced-motion support
