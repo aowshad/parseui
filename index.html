@@ -449,6 +449,43 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 .pu-combobox-empty{ padding:12px 10px; font-size:13.5px; color:var(--text-3); }
 .pu-combobox-status, .pu-command-status{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 
+/* file upload */
+.pu-fileupload{ width:100%; max-width:480px; display:flex; flex-direction:column; gap:10px; text-align:left; }
+.pu-fileupload-zone{ padding:24px 20px; border:1.5px dashed var(--border-strong); border-radius:var(--r-lg); background:var(--bg); text-align:center; color:var(--text-2); font-size:14px; cursor:pointer; transition:border-color .15s, background-color .15s; }
+.pu-fileupload-zone:hover{ border-color:color-mix(in oklab, var(--border-strong) 60%, var(--text-3)); }
+.pu-fileupload-zone.drag, .pu-fileupload-grid.drag{ border-color:var(--p); background:var(--p-soft); }
+.pu-fileupload-zone-ic{ width:40px; height:40px; margin:0 auto 10px; display:grid; place-items:center; border-radius:50%; background:var(--p-soft); color:var(--p-text); }
+.pu-fileupload .pu-fileupload-zone p{ margin:0; font-size:14px; color:var(--text-2); }
+.pu-fileupload .pu-fileupload-hint{ margin:4px 0 0; font-size:12.5px; color:var(--text-3); }
+.pu-fileupload .pu-fileupload-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; }
+.pu-fileupload .pu-fileupload-list:empty{ display:none; }
+.pu-fileupload .pu-fileupload-item{ display:flex; align-items:center; gap:12px; margin:0; padding:10px 8px 10px 12px; border:1px solid var(--border); border-radius:var(--r-lg); background:var(--bg); box-shadow:var(--sh-xs); }
+.pu-fileupload-ic{ width:34px; height:34px; flex:none; display:grid; place-items:center; border-radius:var(--r); background:var(--p-soft); color:var(--p-text); }
+.pu-fileupload-item.error{ border-color:color-mix(in oklab, var(--danger) 35%, var(--border)); }
+.pu-fileupload-item.error .pu-fileupload-ic{ background:var(--danger-soft); color:var(--danger); }
+.pu-fileupload-main{ flex:1; min-width:0; }
+.pu-fileupload-top{ display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:13.5px; }
+.pu-fileupload-top b{ min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500; }
+.pu-fileupload-pct{ flex:none; color:var(--text-3); font-variant-numeric:tabular-nums; }
+.pu-fileupload-item.done .pu-fileupload-pct .ico{ color:var(--success); }
+.pu-fileupload-meta{ margin-bottom:4px; font-size:12.5px; color:var(--text-3); }
+.pu-fileupload-item.done .pu-fileupload-meta, .pu-fileupload-item.error .pu-fileupload-meta{ margin-bottom:0; }
+.pu-fileupload-err{ color:color-mix(in oklab, var(--danger) 80%, var(--text)); font-weight:500; }
+.pu-fileupload-grid{ display:flex; flex-wrap:wrap; gap:10px; padding:10px; border:1.5px dashed var(--border-strong); border-radius:var(--r-lg); background:var(--bg); }
+.pu-fileupload .pu-fileupload-tiles{ display:contents; list-style:none; margin:0; padding:0; }
+.pu-fileupload .pu-fileupload-tile{ position:relative; width:104px; margin:0; }
+.pu-fileupload-tile img{ display:block; width:104px; height:104px; object-fit:cover; border-radius:var(--r); background:var(--bg-muted); box-shadow:inset 0 0 0 1px var(--border); }
+.pu-fileupload-cap{ display:block; margin-top:4px; font-size:12px; color:var(--text-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.pu-fileupload-tile-rm{ position:absolute; top:6px; right:6px; width:26px; height:26px; display:grid; place-items:center; padding:0; border:1px solid var(--border); border-radius:50%; background:var(--bg); color:var(--text); box-shadow:var(--sh-sm); cursor:pointer; }
+.pu-fileupload-tile-rm .ico{ width:14px; height:14px; }
+.pu-fileupload-add{ width:104px; height:104px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:0; border:1px solid var(--border); border-radius:var(--r); background:var(--bg-subtle); color:var(--text-2); font:500 12.5px var(--font); cursor:pointer; }
+.pu-fileupload-add:hover{ background:var(--bg-muted); color:var(--text); }
+.pu-fileupload.compact{ max-width:none; gap:6px; }
+.pu-fileupload-row{ display:flex; align-items:center; flex-wrap:wrap; gap:10px; }
+.pu-fileupload-name{ font-size:14px; color:var(--text-2); overflow-wrap:anywhere; }
+.pu-fileupload-size{ color:var(--text-3); }
+.pu-fileupload-status{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+
 /* date picker */
 .pu-datepicker-trigger{ justify-content:flex-start; cursor:pointer; font:400 14px var(--font); color:var(--text); text-align:left; }
 .pu-datepicker-trigger:focus-visible{ outline:none; }
@@ -1579,7 +1616,37 @@ C['date-picker']={name:'Date picker',importName:'DatePicker',file:'date-picker',
    usage:`<DatePicker label="Publish date" value={date} onValueChange={setDate} />`,
    props:[P('value','Date | [Date, Date]','—','Selected date, or [start, end] in range mode.'),P('onValueChange','(value) => void','—','Called when a date is chosen, or when a range is applied.'),P('mode','"single" | "range"','"single"','Pick one date or a start and end date.'),P('min','Date','—','Earliest selectable date. Earlier days are aria-disabled.'),P('max','Date','—','Latest selectable date.'),P('disabled','(date: Date) => boolean','—','Disable individual days, e.g. weekends.'),P('weekStartsOn','0 | 1 | 2 | 3 | 4 | 5 | 6','0','First day of the week. 0 is Sunday.'),P('numberOfMonths','1 | 2','1','Months shown side by side. Two months become one on narrow screens.'),P('presets','{ label: string; range: () => [Date, Date] }[]','—','Quick ranges shown beside the calendar in range mode.'),P('locale','string','the browser locale','Passed to Intl.DateTimeFormat for month, weekday and date labels.'),P('inline','boolean','false','Render the calendar without a popover.')],
    keys:[['Enter / Space','On the trigger: opens the calendar on the selected date, or today.'],['← / →','Moves to the previous or next day.'],['↑ / ↓','Moves to the same day in the previous or next week.'],['PageUp / PageDown','Moves to the same day in the previous or next month.'],['Shift+PageUp / Shift+PageDown','Moves to the same day in the previous or next year.'],['Home / End','Moves to the first or last day of the week.'],['Enter / Space','Chooses the focused day. Disabled days can be focused but not chosen.'],['Escape','Closes the calendar and returns focus to the trigger.'],['Tab','Moves between the month buttons, the calendar, presets and actions.']]};
-const PLANNED=[['data-table','Data table'],['file-upload','File upload']];
+C['file-upload']={name:'File upload',importName:'FileUpload',file:'file-upload',status:'beta',desc:'Choose or drop files, with type and size checks and per-file progress. A real file input sits behind an accessible button.',thumb:`<div style="width:200px;display:flex;flex-direction:column;gap:6px;font-size:11.5px"><div style="border:1.5px dashed var(--border-strong);border-radius:8px;padding:10px;text-align:center;color:var(--text-2);background:var(--bg)">${I('upload')}<div><b style="color:var(--p-text)">Browse</b> or drop files</div></div><div class="pu-card" style="padding:6px 8px;display:flex;gap:6px;align-items:center"><span style="flex:1">mug-wrap.svg</span><span style="color:var(--text-3)">64%</span></div></div>`,
+   examples:[
+    {t:'Dropzone',d:'Click Browse or drop files. Each file shows its size and progress, and can be removed. Files over the limit get an error row instead of uploading. Results are announced to screen readers.',cls:'col',html:`<div class="pu-fileupload" data-fu data-fu-mode="list" data-fu-multiple data-fu-max="10485760" data-fu-accept="image/png,image/jpeg,image/svg+xml,application/pdf,.png,.jpg,.jpeg,.svg,.pdf" id="fu-drop"><input type="file" class="pu-fileupload-input" multiple accept="image/png,image/jpeg,image/svg+xml,application/pdf,.png,.jpg,.jpeg,.svg,.pdf" tabindex="-1" aria-hidden="true" hidden><div class="pu-fileupload-zone" data-fu-zone><span class="pu-fileupload-zone-ic">${I('upload','ico-lg')}</span><p><button type="button" class="pu-btn link" data-fu-browse>Browse files</button> or drag them here</p><p class="pu-fileupload-hint">PNG, JPG, SVG or PDF, up to 10 MB each</p></div><ul class="pu-fileupload-list" aria-label="Uploads"><li class="pu-fileupload-item done"><span class="pu-fileupload-ic">${I('layers')}</span><div class="pu-fileupload-main"><div class="pu-fileupload-top"><b>hoodie-front.png</b><span class="pu-fileupload-pct">${I('checkC')}</span></div><div class="pu-fileupload-meta">2.4 MB · Uploaded</div></div><button type="button" class="pu-btn ghost icon sm" data-fu-rm aria-label="Remove hoodie-front.png">${I('trash')}</button></li><li class="pu-fileupload-item" data-fu-sim="48" data-fu-name="mug-wrap.svg" data-fu-bytes="655360"><span class="pu-fileupload-ic">${I('layers')}</span><div class="pu-fileupload-main"><div class="pu-fileupload-top"><b>mug-wrap.svg</b><span class="pu-fileupload-pct">48%</span></div><div class="pu-fileupload-meta">640 KB · Uploading</div><div class="pu-progress sm" role="progressbar" aria-label="Uploading mug-wrap.svg" aria-valuemin="0" aria-valuemax="100" aria-valuenow="48"><i style="width:48%"></i></div></div><button type="button" class="pu-btn ghost icon sm" data-fu-rm aria-label="Remove mug-wrap.svg">${I('trash')}</button></li><li class="pu-fileupload-item error"><span class="pu-fileupload-ic">${I('alert')}</span><div class="pu-fileupload-main"><div class="pu-fileupload-top"><b>poster-print.tiff</b></div><div class="pu-fileupload-meta">24.8 MB · <span class="pu-fileupload-err">Too large, max 10 MB</span></div></div><button type="button" class="pu-btn ghost icon sm" data-fu-rm aria-label="Remove poster-print.tiff">${I('x')}</button></li></ul><span class="pu-fileupload-status" role="status"></span></div>`,
+     code:`<FileUpload
+  multiple
+  accept={["image/png", "image/jpeg", "image/svg+xml", "application/pdf"]}
+  maxSize={10 * 1024 * 1024}
+  onUpload={(file, { onProgress }) => uploadToPrintly(file, onProgress)}
+  onReject={(file, reason) => console.warn(file.name, reason)}
+/>`},
+    {t:'Image upload',d:'Chosen images preview as thumbnails straight from the file with URL.createObjectURL. The URL is revoked when the image is removed, or when you leave the page.',cls:'col',html:`<div class="pu-fileupload" data-fu data-fu-mode="images" data-fu-multiple data-fu-max="10485760" data-fu-accept="image/*" id="fu-img"><input type="file" class="pu-fileupload-input" multiple accept="image/*" tabindex="-1" aria-hidden="true" hidden><div class="pu-fileupload-grid" data-fu-zone><ul class="pu-fileupload-tiles" aria-label="Images"></ul><button type="button" class="pu-fileupload-add" data-fu-browse>${I('plus','ico-lg')}<span>Add images</span></button></div><p class="pu-fileupload-hint">Drop images onto the grid, or use Add images. Up to 10 MB each.</p><ul class="pu-fileupload-list" aria-label="Rejected files"></ul><span class="pu-fileupload-status" role="status"></span></div>`,
+     code:`<FileUpload
+  variant="images"
+  multiple
+  accept={["image/*"]}
+  maxSize={10 * 1024 * 1024}
+  value={images}
+  onFilesChange={setImages}
+/>`},
+    {t:'Compact',d:'A single Upload file button that shows the chosen file name, for forms with one attachment.',html:`<div class="pu-fileupload compact" data-fu data-fu-mode="compact" data-fu-max="5242880" data-fu-accept=".csv,text/csv" id="fu-csv"><input type="file" class="pu-fileupload-input" accept=".csv,text/csv" tabindex="-1" aria-hidden="true" hidden><span class="pu-label" id="fu-csv-l">Import products</span><div class="pu-fileupload-row"><button type="button" class="pu-btn secondary" data-fu-browse aria-describedby="fu-csv-l fu-csv-name">${I('upload')}Upload file</button><span class="pu-fileupload-name" id="fu-csv-name">No file chosen</span><button type="button" class="pu-btn ghost icon sm" data-fu-rm aria-label="Remove chosen file" hidden>${I('x')}</button></div><span class="pu-hint">CSV, up to 5 MB.</span><span class="pu-fileupload-status" role="status"></span></div>`,
+     code:`<FileUpload
+  variant="compact"
+  label="Import products"
+  accept={[".csv", "text/csv"]}
+  maxSize={5 * 1024 * 1024}
+  onFilesChange={([file]) => setCsv(file)}
+/>`}],
+   usage:`<FileUpload accept={["image/*"]} maxSize={10 * 1024 * 1024} onUpload={upload} />`,
+   props:[P('accept','string[]','—','Allowed MIME types or extensions, e.g. "image/*" or ".csv". Other files are rejected with a message.'),P('maxSize','number','—','Largest file in bytes. Larger files get a "Too large" error row.'),P('multiple','boolean','false','Allow choosing or dropping several files.'),P('maxFiles','number','—','Stop accepting files after this many.'),P('variant','"dropzone" | "images" | "compact"','"dropzone"','Layout.'),P('onUpload','(file, { onProgress }) => Promise<void>','—','Called for each accepted file. Report progress from 0 to 100.'),P('onReject','(file, reason) => void','—','Called for files that fail the accept or maxSize checks.'),P('onFilesChange','(files: File[]) => void','—','Called when files are added or removed.')],
+   keys:[['Enter / Space','On Browse, Add images or Upload file: opens the system file picker.'],['Tab','Moves to each file’s remove button in turn.'],['Enter / Space','On a remove button: removes that file and moves focus to the next file, or back to the browse button.']]};
+const PLANNED=[['data-table','Data table']];
 const COMP_ORDER=Object.keys(C).sort((a,b)=>C[a].name.localeCompare(C[b].name));
 /* ---------- navigation model ---------- */
 const NAV=[
@@ -2244,6 +2311,7 @@ function afterRender(){
   document.querySelectorAll('[data-indet]').forEach(el=>el.indeterminate=true);
   document.querySelectorAll('[data-slider]').forEach(el=>el.dispatchEvent(new Event('input',{bubbles:true})));
   document.querySelectorAll('[data-dp]').forEach(dpInit);
+  fuInit();
 }
 let tocObs;
 function buildToc(){ const toc=document.getElementById('toc'); if(!toc) return; const hs=[...document.querySelectorAll('.doc h2[id], .doc h3[id^="ex-"]')];
@@ -2510,6 +2578,47 @@ document.addEventListener('click',ev=>{ const t=ev.target; if(!(t instanceof Ele
     dpFocus(root,b,false); dpSummary(root); root.querySelector('.pu-datepicker-status').textContent=`${pre.textContent}: ${dpRangeText(a,b)}.`; return; }
   if(t.closest('[data-dp-apply]')){ const a=root.dataset.dpStart, b=root.dataset.dpEnd; if(!(a&&b)) return; root.dataset.dpPrev=JSON.stringify([a,b]); root.dataset.dpPresetDone=root.dataset.dpPresetCur; dpTrigger(root); root.querySelector('.pu-datepicker-status').textContent=`Showing ${dpRangeText(a,b)}.`; dpHide(true); return; }
   if(t.closest('[data-dp-cancel]')) dpHide(true); });
+
+/* ---------- file upload ---------- */
+// uploads are simulated; object URLs for previews are revoked on remove and when their page is left
+const fuSize=b=>b<1024?`${b} B`:b<1048576?`${Math.round(b/1024)} KB`:`${(b/1048576).toFixed(1).replace(/\.0$/,'')} MB`;
+const fuURLs=new Set();
+const fuAccepts=(accept,f)=>!accept||accept.split(',').map(a=>a.trim().toLowerCase()).some(a=>a.startsWith('.')?f.name.toLowerCase().endsWith(a):a.endsWith('/*')?f.type.startsWith(a.slice(0,-1)):f.type===a);
+const fuCheck=(root,f)=>!fuAccepts(root.dataset.fuAccept,f)?'File type not allowed':f.size>(+root.dataset.fuMax||Infinity)?`Too large, max ${fuSize(+root.dataset.fuMax)}`:'';
+const fuItem=(name,bytes,err)=>`<li class="pu-fileupload-item${err?' error':''}"><span class="pu-fileupload-ic">${I(err?'alert':'layers')}</span><div class="pu-fileupload-main"><div class="pu-fileupload-top"><b>${esc(name)}</b>${err?'':'<span class="pu-fileupload-pct">0%</span>'}</div><div class="pu-fileupload-meta">${fuSize(bytes)} · ${err?`<span class="pu-fileupload-err">${esc(err)}</span>`:'Uploading'}</div>${err?'':`<div class="pu-progress sm" role="progressbar" aria-label="Uploading ${attrEsc(name)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i style="width:0"></i></div>`}</div><button type="button" class="pu-btn ghost icon sm" data-fu-rm aria-label="Remove ${attrEsc(name)}">${I(err?'x':'trash')}</button></li>`;
+function fuProgress(li,name,bytes,p=0){ const step=()=>{ if(!li.isConnected) return; p=Math.min(100,p+10+Math.random()*16);
+    li.querySelector('.pu-progress i').style.width=p+'%'; li.querySelector('.pu-progress').setAttribute('aria-valuenow',Math.round(p)); li.querySelector('.pu-fileupload-pct').textContent=Math.round(p)+'%';
+    if(p<100){ li._fu=setTimeout(step,260); return; }
+    li.classList.add('done'); li.querySelector('.pu-progress').remove(); li.querySelector('.pu-fileupload-pct').innerHTML=I('checkC'); li.querySelector('.pu-fileupload-meta').textContent=`${fuSize(bytes)} · Uploaded`;
+    li.closest('[data-fu]').querySelector('.pu-fileupload-status').textContent=`${name} uploaded.`; };
+  li._fu=setTimeout(step,260); }
+function fuAdd(root,list){ let files=[...list]; if(!files.length) return; if(!root.hasAttribute('data-fu-multiple')) files=files.slice(0,1);
+  const mode=root.dataset.fuMode, said=[];
+  for(const f of files){ const err=fuCheck(root,f); said.push(err?`${f.name}: ${err}`:`${f.name} added`);
+    if(mode==='compact'){ const n=root.querySelector('.pu-fileupload-name'), rm=root.querySelector('[data-fu-rm]');
+      n.innerHTML=err?`<span class="pu-fileupload-err">${esc(f.name)}: ${esc(err)}</span>`:`${esc(f.name)} <span class="pu-fileupload-size">${fuSize(f.size)}</span>`; rm.hidden=false; continue; }
+    if(mode==='images'&&!err){ const url=URL.createObjectURL(f); fuURLs.add(url);
+      root.querySelector('.pu-fileupload-tiles').insertAdjacentHTML('beforeend',`<li class="pu-fileupload-tile"><img src="${url}" alt="${attrEsc(f.name)}"><span class="pu-fileupload-cap">${esc(f.name)}</span><button type="button" class="pu-fileupload-tile-rm" data-fu-rm aria-label="Remove ${attrEsc(f.name)}">${I('x')}</button></li>`); continue; }
+    root.querySelector('.pu-fileupload-list').insertAdjacentHTML('beforeend',fuItem(f.name,f.size,err));
+    if(!err) fuProgress(root.querySelector('.pu-fileupload-list').lastElementChild,f.name,f.size); }
+  root.querySelector('.pu-fileupload-status').textContent=said.join('. ')+'.'; }
+function fuRemove(root,btn){ const st=root.querySelector('.pu-fileupload-status');
+  if(root.dataset.fuMode==='compact'){ root.querySelector('.pu-fileupload-name').textContent='No file chosen'; btn.hidden=true; st.textContent='File removed.'; root.querySelector('[data-fu-browse]').focus(); return; }
+  const item=btn.closest('li'), name=item.querySelector('img')?.alt||item.querySelector('b')?.textContent||'File';
+  const img=item.querySelector('img'); if(img){ URL.revokeObjectURL(img.src); fuURLs.delete(img.src); }
+  clearTimeout(item._fu); const next=(item.nextElementSibling||item.previousElementSibling)?.querySelector('[data-fu-rm]'); item.remove();
+  st.textContent=`${name} removed.`; (next||root.querySelector('[data-fu-browse]')).focus(); }
+function fuInit(){ // resume the sample upload, and revoke preview URLs whose images are gone
+  document.querySelectorAll('[data-fu-sim]').forEach(li=>{ const p=+li.dataset.fuSim; li.removeAttribute('data-fu-sim'); fuProgress(li,li.dataset.fuName,+li.dataset.fuBytes,p); });
+  for(const u of fuURLs) if(!document.querySelector(`img[src="${u}"]`)){ URL.revokeObjectURL(u); fuURLs.delete(u); } }
+document.addEventListener('click',ev=>{ const t=ev.target; if(!(t instanceof Element)) return; const root=t.closest('[data-fu]'); if(!root) return;
+  const rm=t.closest('[data-fu-rm]'); if(rm){ fuRemove(root,rm); return; }
+  if(t.closest('[data-fu-browse]')||(t.closest('[data-fu-zone]')&&!t.closest('button,a,li'))) root.querySelector('.pu-fileupload-input').click(); });
+document.addEventListener('change',ev=>{ const inp=ev.target; if(!inp.matches?.('.pu-fileupload-input')) return; fuAdd(inp.closest('[data-fu]'),inp.files); inp.value=''; });
+['dragenter','dragover'].forEach(type=>document.addEventListener(type,ev=>{ const z=ev.target.closest?.('[data-fu-zone]'); if(!z) return; ev.preventDefault(); if(ev.dataTransfer) ev.dataTransfer.dropEffect='copy'; z.classList.add('drag'); }));
+document.addEventListener('dragleave',ev=>{ const z=ev.target.closest?.('[data-fu-zone]'); if(z&&!z.contains(ev.relatedTarget)) z.classList.remove('drag'); });
+document.addEventListener('drop',ev=>{ const z=ev.target.closest?.('[data-fu-zone]'); if(!z) return; ev.preventDefault(); z.classList.remove('drag'); fuAdd(z.closest('[data-fu]'),ev.dataTransfer?.files||[]); });
+
 
 /* ---------- command palette ---------- */
 let cmdSel=0;
