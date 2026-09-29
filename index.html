@@ -576,6 +576,13 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 .blk-task-acts{ display:flex; flex-wrap:wrap; gap:8px; }
 .blk-setup-min{ display:flex; align-items:center; flex-wrap:wrap; gap:10px 16px; padding:14px 18px; font-size:13.5px; color:var(--text-2); }
 .blk-setup-min .pu-btn{ margin-left:auto; }
+.blk-ph{ width:100%; max-width:760px; padding:18px 22px 0; background:var(--bg); border:1px solid var(--border); border-radius:var(--r-xl); box-shadow:var(--sh-xs); text-align:left; }
+.blk-ph-row{ display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:12px 20px; margin:10px 0 16px; }
+.blk-ph .blk-ph-title h3{ margin:0; display:flex; align-items:center; gap:10px; font-size:24px; line-height:1.2; letter-spacing:-.02em; font-weight:600; }
+.blk-ph .blk-ph-title p{ margin:4px 0 0; font-size:14px; color:var(--text-2); }
+.blk-ph-acts{ display:flex; flex-wrap:wrap; gap:8px; }
+.blk-ph .blk-ph-note{ margin:0; padding:12px 0 14px; font-size:13.5px; color:var(--text-3); }
+@media (max-width:640px){ .blk-ph{ padding:16px 16px 0; } .blk-ph-acts{ width:100%; } .blk-ph-acts .pu-btn{ flex:1; } }
 .blk-sr{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 
 /* ============ OVERLAYS ============ */
@@ -1112,6 +1119,24 @@ const BLOCKS=[
   <SetupTask title="Set print areas" action={<Button size="sm">Set print areas</Button>} />
   <SetupTask title="Publish to your store" action={<Button size="sm">Publish</Button>} />
 </SetupGuide>`},
+ {id:'page-header',cat:'App pages',t:'Page header',d:'Top of an index page: breadcrumb, title with count, primary actions and status tabs.',free:true,html:`<div class="blk-ph" data-tabs><nav class="pu-crumb" aria-label="Breadcrumb"><a href="javascript:void 0">Lumen Prints</a>${I('chevR')}<span class="cur" aria-current="page">Products</span></nav><div class="blk-ph-row"><div class="blk-ph-title"><h3>Products <span class="pu-badge gray round">128</span></h3><p>Everything shoppers can personalise with Printly.</p></div><div class="blk-ph-acts"><button type="button" class="pu-btn secondary">${I('download')}Export</button><button type="button" class="pu-btn primary">${I('plus')}Add product</button></div></div><div class="pu-tabs" role="tablist" aria-label="Product status">${['All','Active','Draft','Archived'].map((n,i)=>`<button type="button" role="tab" aria-selected="${i?'false':'true'}" tabindex="${i?-1:0}" class="${i?'':'on'}" data-i="${i}">${n}</button>`).join('')}</div>${[['all','128 products'],['active','96 active products'],['draft','24 draft products'],['archived','8 archived products']].map((p,i)=>`<p class="blk-ph-note${i?' hidden':''}" data-p="${i}">Showing ${p[1]}</p>`).join('')}</div>`,
+  code:`<PageHeader
+  breadcrumbs={[{ label: "Lumen Prints", href: "/" }, { label: "Products" }]}
+  title="Products"
+  count={128}
+  description="Everything shoppers can personalise with Printly."
+  secondaryActions={<Button variant="secondary" leadingIcon={<Download />}>Export</Button>}
+  primaryAction={<Button leadingIcon={<Plus />}>Add product</Button>}
+>
+  <Tabs value={status} onValueChange={setStatus}>
+    <TabsList>
+      <TabsTrigger value="all">All</TabsTrigger>
+      <TabsTrigger value="active">Active</TabsTrigger>
+      <TabsTrigger value="draft">Draft</TabsTrigger>
+      <TabsTrigger value="archived">Archived</TabsTrigger>
+    </TabsList>
+  </Tabs>
+</PageHeader>`},
  {id:'stats',cat:'App pages',t:'Stats row',d:'Metric cards with trend and sparkline.',free:true,html:`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;width:100%">${[['Visitors','24.8k','14%',1,[30,40,35,50,45,60,70,65,80]],['Sessions','9,412','6%',1,[40,38,45,50,48,55,52,60,64]],['Bounce rate','41%','2%',0,[60,58,62,55,57,50,52,48,45]]].map(k=>`<div class="pu-card kpi"><div class="l">${k[0]}</div><div class="v">${k[1]}</div><div class="d"><span class="${k[3]?'up':'down'}">${k[3]?'↑':'↓'} ${k[2]}</span> this week</div><div style="margin-top:8px">${bars(k[4])}</div></div>`).join('')}</div>`,
   code:`<StatGrid>
   <StatCard label="Visitors" value="24.8k" change={14} trend={visitorSeries} />
@@ -1509,7 +1534,7 @@ document.addEventListener('click',e=>{
   if(t.dataset.scope!==undefined){ const d=t.closest('[data-demo]'); t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); const pv=d.querySelector('[data-pv]'); pv.classList.remove('scope-light','scope-dark'); if(t.dataset.scope) pv.classList.add(t.dataset.scope); return; }
   if(t.dataset.pmk){ const blk=t.closest('[data-pm]'), v=JSON.parse(blk.dataset.pm); t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); blk.querySelector('pre').innerHTML=hl(v[t.dataset.pmk],'bash'); CODES[+blk.querySelector('.copy').dataset.copy]=v[t.dataset.pmk]; return; }
   if(t.dataset.instT){ const w=t.closest('[data-inst]'); w.querySelectorAll('[data-inst-t]').forEach(b=>b.classList.toggle('on',b===t)); w.querySelectorAll('[data-inst-p]').forEach(p=>p.classList.toggle('hidden',p.dataset.instP!==t.dataset.instT)); return; }
-  if(t.dataset.i!==undefined && t.closest('[data-tabs]')){ const w=t.closest('[data-tabs]'); t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); w.querySelectorAll('[data-p]').forEach(p=>p.classList.toggle('hidden',p.dataset.p!==t.dataset.i)); return; }
+  if(t.dataset.i!==undefined && t.closest('[data-tabs]')){ const w=t.closest('[data-tabs]'); t.parentNode.querySelectorAll('button').forEach(b=>{ b.classList.toggle('on',b===t); if(b.getAttribute('role')==='tab'){ b.setAttribute('aria-selected',b===t); b.tabIndex=b===t?0:-1; } }); w.querySelectorAll('[data-p]').forEach(p=>p.classList.toggle('hidden',p.dataset.p!==t.dataset.i)); return; }
   if(t.closest('[data-group]')){ t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); return; }
   if(t.closest('[data-pag]') && !t.getAttribute('aria-label') && !t.disabled){ t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); return; }
   if(t.dataset.taskT!==undefined){ const li=t.closest('.blk-task'); setupOpen(li.closest('[data-setup]'), li.classList.contains('open')?null:li); return; }
@@ -1530,6 +1555,7 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('input',e=>{ if(e.target.matches('[data-slider], .pu-slider')){ const el=e.target, v=(el.value-el.min)/(el.max-el.min)*100; el.style.setProperty('--v',v+'%'); const o=el.closest('.pu-field')?.querySelector('[data-sl-out]'); if(o) o.textContent=Math.round(el.value)+'%'; } });
 document.addEventListener('keydown',e=>{
+  if((e.key==='ArrowRight'||e.key==='ArrowLeft')&&e.target.matches('[role="tab"]')){ const tabs=[...e.target.parentNode.querySelectorAll('[role="tab"]')], n=tabs[(tabs.indexOf(e.target)+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length]; e.preventDefault(); n.focus(); n.click(); return; }
   if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){ e.preventDefault(); overlay.querySelector('.cmdk')?closeOverlay():openCmd(); return; }
   if(e.key==='Escape'&&overlay.innerHTML){ closeOverlay(); return; }
   if(e.key==='/'&&!/input|textarea|select/i.test(document.activeElement.tagName)&&!overlay.innerHTML){ e.preventDefault(); openCmd(); return; }
