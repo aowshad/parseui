@@ -583,6 +583,15 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 .blk-ph-acts{ display:flex; flex-wrap:wrap; gap:8px; }
 .blk-ph .blk-ph-note{ margin:0; padding:12px 0 14px; font-size:13.5px; color:var(--text-3); }
 @media (max-width:640px){ .blk-ph{ padding:16px 16px 0; } .blk-ph-acts{ width:100%; } .blk-ph-acts .pu-btn{ flex:1; } }
+.blk-set{ width:100%; max-width:760px; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.7fr); gap:16px 32px; text-align:left; }
+.blk-set .blk-set-d h4{ margin:4px 0 6px; font-size:15px; font-weight:600; }
+.blk-set .blk-set-d p{ margin:0; font-size:13.5px; color:var(--text-2); }
+.blk-set-f{ display:flex; flex-direction:column; gap:16px; }
+.blk-set-f .pu-field{ max-width:none; }
+.blk-set-sw{ width:100%; justify-content:space-between; gap:16px; padding-top:16px; border-top:1px solid var(--border); }
+.blk-set-sw .t b{ display:block; font-size:14px; font-weight:500; color:var(--text); }
+.blk-set-sw .t small{ display:block; font-size:13px; color:var(--text-3); }
+@media (max-width:640px){ .blk-set{ grid-template-columns:minmax(0,1fr); } }
 .blk-sr{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 
 /* ============ OVERLAYS ============ */
@@ -1137,6 +1146,32 @@ const BLOCKS=[
     </TabsList>
   </Tabs>
 </PageHeader>`},
+ {id:'settings-section',cat:'App pages',t:'Settings section',d:'Annotated settings layout: what the section is for on the left, the fields on the right.',free:true,html:`<div class="blk-set"><div class="blk-set-d"><h4>Store details</h4><p>Used on packing slips, invoices and the emails Printly sends to shoppers.</p></div><form class="pu-card" data-blk-form="Store details saved"><div class="pu-card-b blk-set-f"><div class="pu-field"><label class="pu-label" for="blk-ss-name">Store name</label><div class="pu-input"><input id="blk-ss-name" value="Lumen Prints" autocomplete="organization"></div></div><div class="pu-field"><label class="pu-label" for="blk-ss-email">Contact email</label><div class="pu-input">${I('mail')}<input id="blk-ss-email" type="email" value="hello@lumenprints.com" autocomplete="email" aria-describedby="blk-ss-email-h"></div><span class="pu-hint" id="blk-ss-email-h">Shoppers reply to this address. It never appears on your storefront.</span></div><div class="pu-field"><label class="pu-label" for="blk-ss-cur">Currency</label><select class="pu-select" id="blk-ss-cur"><option value="USD" selected>USD, US dollar</option><option value="EUR">EUR, Euro</option><option value="GBP">GBP, British pound</option><option value="CAD">CAD, Canadian dollar</option><option value="AUD">AUD, Australian dollar</option></select></div><label class="pu-switch blk-set-sw"><span class="t"><b id="blk-ss-sw-l">Email me when an order needs review</b><small id="blk-ss-sw-h">For example, when artwork fails the print check.</small></span><input type="checkbox" role="switch" checked aria-labelledby="blk-ss-sw-l" aria-describedby="blk-ss-sw-h"></label></div><div class="pu-card-f"><button type="reset" class="pu-btn secondary sm">Cancel</button><button type="submit" class="pu-btn primary sm">Save</button></div></form></div>`,
+  code:`<SettingsSection
+  title="Store details"
+  description="Used on packing slips, invoices and the emails Printly sends to shoppers."
+>
+  <Card as="form" onSubmit={save}>
+    <Field label="Store name">
+      <Input defaultValue="Lumen Prints" />
+    </Field>
+    <Field label="Contact email" hint="Shoppers reply to this address. It never appears on your storefront.">
+      <Input type="email" leadingIcon={<Mail />} defaultValue="hello@lumenprints.com" />
+    </Field>
+    <Field label="Currency">
+      <Select defaultValue="USD" options={currencies} />
+    </Field>
+    <Switch
+      label="Email me when an order needs review"
+      description="For example, when artwork fails the print check."
+      defaultChecked
+    />
+    <CardFooter>
+      <Button variant="secondary" type="reset">Cancel</Button>
+      <Button type="submit">Save</Button>
+    </CardFooter>
+  </Card>
+</SettingsSection>`},
  {id:'stats',cat:'App pages',t:'Stats row',d:'Metric cards with trend and sparkline.',free:true,html:`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;width:100%">${[['Visitors','24.8k','14%',1,[30,40,35,50,45,60,70,65,80]],['Sessions','9,412','6%',1,[40,38,45,50,48,55,52,60,64]],['Bounce rate','41%','2%',0,[60,58,62,55,57,50,52,48,45]]].map(k=>`<div class="pu-card kpi"><div class="l">${k[0]}</div><div class="v">${k[1]}</div><div class="d"><span class="${k[3]?'up':'down'}">${k[3]?'↑':'↓'} ${k[2]}</span> this week</div><div style="margin-top:8px">${bars(k[4])}</div></div>`).join('')}</div>`,
   code:`<StatGrid>
   <StatCard label="Visitors" value="24.8k" change={14} trend={visitorSeries} />
@@ -1570,6 +1605,7 @@ document.addEventListener('input',e=>{ if(!e.target.matches('[data-icon-search]'
   items.forEach(el=>{ const hit=!q||el.dataset.iconName.includes(q); el.hidden=!hit; if(hit) n++; });
   document.querySelector('[data-icon-count]').textContent=q?`${n} of ${items.length} icons`:`${items.length} icons`;
   document.querySelector('[data-icon-empty]').hidden=n>0; });
+document.addEventListener('submit',e=>{ const f=e.target.closest('[data-blk-form]'); if(!f) return; e.preventDefault(); toast('success',f.dataset.blkForm); });
 window.addEventListener('hashchange',render);
 render();
 </script>
