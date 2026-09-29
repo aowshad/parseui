@@ -1996,6 +1996,23 @@ function openModal(k){ lastFocus=document.activeElement; overlay.innerHTML=`<div
 let overlayCleanup=null; // set by overlays that add global listeners or lock page scroll
 function closeOverlay(){ overlay.innerHTML=''; overlayCleanup?.(); overlayCleanup=null; lastFocus?.focus?.(); }
 
+/* ---------- modal overlays (drawer, command dialog) ---------- */
+// scope class of the preview a trigger sits in, so overlays follow the per-preview theme toggle
+const pvScope=el=>{ const pv=el?.closest?.('[data-pv]'); return pv?.classList.contains('scope-dark')?'scope-dark':pv?.classList.contains('scope-light')?'scope-light':''; };
+// locks page scroll, traps Tab inside the panel and keeps page shortcuts off; closeOverlay() undoes all of it
+function modalOpen(panel,trigger,focusEl=panel){ const root=document.documentElement, gutter=innerWidth-root.clientWidth;
+  root.style.overflow='hidden'; if(gutter) root.style.paddingRight=gutter+'px';
+  trigger?.setAttribute('aria-expanded','true');
+  // capture phase: runs before the page's own shortcuts, which stay off while the dialog is open
+  const trap=e=>{ if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){ e.preventDefault(); e.stopPropagation(); return; }
+    if(e.key!=='Tab') return; const f=[...panel.querySelectorAll('button,a[href],input,select,textarea,[tabindex]:not([tabindex="-1"])')].filter(x=>!x.disabled&&x.offsetParent!==null);
+    if(!f.length){ e.preventDefault(); return; } const a=document.activeElement;
+    if(e.shiftKey&&(a===f[0]||a===panel||!panel.contains(a))){ e.preventDefault(); f[f.length-1].focus(); }
+    else if(!e.shiftKey&&(a===f[f.length-1]||!panel.contains(a))){ e.preventDefault(); f[0].focus(); } };
+  addEventListener('keydown',trap,true);
+  overlayCleanup=()=>{ removeEventListener('keydown',trap,true); root.style.overflow=''; root.style.paddingRight=''; trigger?.setAttribute('aria-expanded','false'); };
+  focusEl.focus(); }
+
 /* ---------- drawer ---------- */
 const drawerHead=(k,title,sub,extra='')=>`<div class="pu-drawer-h"><div><h2 id="drawer-${k}-t">${title}</h2>${sub?`<p>${sub}</p>`:''}</div>${extra}<button type="button" class="pu-btn ghost icon sm" data-close aria-label="Close">${I('x')}</button></div>`;
 const DRAWERS={
@@ -2023,40 +2040,36 @@ const DRAWERS={
   <div class="pu-drawer-b"><fieldset><legend class="blk-sr">Print method</legend>${[['Direct to garment','Full color, best for photos and gradients.',1],['Screen print','Bold spot colors, cheapest from 24 units.',0],['Embroidery','Stitched logos on caps and hoodies.',0]].map(r=>`<label class="pu-check pu-drawer-opt"><input type="radio" name="dr-method"${r[2]?' checked':''}><span class="t"><b>${r[0]}</b><span>${r[1]}</span></span></label>`).join('')}</fieldset></div>
   <div class="pu-drawer-f"><button type="button" class="pu-btn secondary" data-close>Cancel</button><button type="button" class="pu-btn primary" data-close data-after-toast="Print method updated">Use this method</button></div>`}};
 function openDrawer(k,trigger){ if(overlay.innerHTML) closeOverlay(); lastFocus=trigger;
-  const d=DRAWERS[k], pv=trigger.closest('[data-pv]'), scope=pv?.classList.contains('scope-dark')?'scope-dark':pv?.classList.contains('scope-light')?'scope-light':'';
+  const d=DRAWERS[k], scope=pvScope(trigger);
   overlay.innerHTML=`<div class="pu-drawer-back ${scope}" data-back><div class="pu-drawer ${d.side}" role="dialog" aria-modal="true" aria-labelledby="drawer-${k}-t" tabindex="-1">${d.html()}</div></div>`;
-  const panel=overlay.querySelector('.pu-drawer'), root=document.documentElement, gutter=innerWidth-root.clientWidth;
-  root.style.overflow='hidden'; if(gutter) root.style.paddingRight=gutter+'px';
-  trigger.setAttribute('aria-expanded','true');
-  // capture phase: runs before the page's own shortcuts, which stay off while the dialog is open
-  const trap=e=>{ if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){ e.preventDefault(); e.stopPropagation(); return; }
-    if(e.key!=='Tab') return; const f=[...panel.querySelectorAll('button,a[href],input,select,textarea,[tabindex]:not([tabindex="-1"])')].filter(x=>!x.disabled&&x.offsetParent!==null);
-    if(!f.length){ e.preventDefault(); return; } const a=document.activeElement;
-    if(e.shiftKey&&(a===f[0]||a===panel||!panel.contains(a))){ e.preventDefault(); f[f.length-1].focus(); }
-    else if(!e.shiftKey&&(a===f[f.length-1]||!panel.contains(a))){ e.preventDefault(); f[0].focus(); } };
-  addEventListener('keydown',trap,true);
-  overlayCleanup=()=>{ removeEventListener('keydown',trap,true); root.style.overflow=''; root.style.paddingRight=''; trigger.setAttribute('aria-expanded','false'); };
-  panel.focus(); }
+  modalOpen(overlay.querySelector('.pu-drawer'),trigger); }
 document.addEventListener('submit',e=>{ const f=e.target.closest('[data-drawer-form]'); if(!f) return; e.preventDefault();
   const n=[...f.elements].filter(x=>(x.type==='checkbox'&&x.checked)||(x.tagName==='SELECT'&&x.selectedIndex!==[...x.options].findIndex(o=>o.defaultSelected))||(x.matches('input:not([type=checkbox])')&&x.value.trim())).length;
   const badge=lastFocus?.querySelector?.('.pu-badge'); if(badge) badge.textContent=n; closeOverlay(); toast('success','Filters applied',`${n} ${n===1?'filter':'filters'} active.`); });
+
+/* ---------- popovers (dropdown menu, combobox, date picker) ---------- */
+// fixed to the anchor so demo frames never clip it; flips up or sideways at the viewport edges and scrolls inside itself
+function popPlace(anchor,pop,align='start',matchWidth=false){ const r=anchor.getBoundingClientRect(), gap=6, pad=8, vw=document.documentElement.clientWidth, vh=innerHeight;
+  if(matchWidth) pop.style.width=Math.min(r.width,vw-pad*2)+'px';
+  pop.style.maxHeight=''; const mw=pop.offsetWidth, mh=pop.scrollHeight, below=vh-r.bottom-gap-pad, above=r.top-gap-pad, up=mh>below&&above>below, h=Math.min(mh,up?above:below);
+  pop.style.maxHeight=h+'px'; pop.style.top=(up?r.top-gap-h:r.bottom+gap)+'px'; pop.classList.toggle('up',up);
+  let left=align==='end'?r.right-mw:r.left;
+  if(align==='end'&&left<pad) left=r.left; else if(align!=='end'&&left+mw>vw-pad) left=r.right-mw;
+  pop.style.left=Math.max(pad,Math.min(left,vw-mw-pad))+'px'; }
+// global listeners that only exist while a popover is open; returns the function that removes them
+function popWatch(root,pop,place,close){ const onDown=e=>{ if(!root.contains(e.target)) close(); }, onMove=e=>{ if(!(e.target instanceof Node&&pop.contains(e.target))) place(); };
+  document.addEventListener('pointerdown',onDown,true); addEventListener('scroll',onMove,true); addEventListener('resize',onMove);
+  return ()=>{ document.removeEventListener('pointerdown',onDown,true); removeEventListener('scroll',onMove,true); removeEventListener('resize',onMove); }; }
 
 /* ---------- dropdown menu ---------- */
 // one menu is open at a time; its outside-press, scroll and resize listeners exist only while it is open
 let ddOpen=null;
 const ddItems=m=>[...m.querySelectorAll('[role^="menuitem"]:not([aria-disabled="true"])')];
-function ddPlace(){ if(!ddOpen) return; const {trigger:t,menu:m}=ddOpen, r=t.getBoundingClientRect(), gap=6, pad=8, vw=document.documentElement.clientWidth, vh=innerHeight;
-  m.style.maxHeight=''; const mw=m.offsetWidth, mh=m.scrollHeight, below=vh-r.bottom-gap-pad, above=r.top-gap-pad, up=mh>below&&above>below, h=Math.min(mh,up?above:below);
-  m.style.maxHeight=h+'px'; m.style.top=(up?r.top-gap-h:r.bottom+gap)+'px'; m.classList.toggle('up',up);
-  let left=m.dataset.align==='end'?r.right-mw:r.left;
-  if(m.dataset.align==='end'&&left<pad) left=r.left; else if(m.dataset.align!=='end'&&left+mw>vw-pad) left=r.right-mw;
-  m.style.left=Math.max(pad,Math.min(left,vw-mw-pad))+'px'; }
+function ddPlace(){ if(ddOpen) popPlace(ddOpen.trigger,ddOpen.menu,ddOpen.menu.dataset.align); }
 function ddShow(root,focus='first'){ ddHide(false); const t=root.querySelector('[data-dd-t]'), m=root.querySelector('[role="menu"]');
-  const onDown=e=>{ if(!root.contains(e.target)) ddHide(false); }, onMove=e=>{ if(!(e.target instanceof Node&&m.contains(e.target))) ddPlace(); };
-  document.addEventListener('pointerdown',onDown,true); addEventListener('scroll',onMove,true); addEventListener('resize',onMove);
-  ddOpen={root,trigger:t,menu:m,off(){ document.removeEventListener('pointerdown',onDown,true); removeEventListener('scroll',onMove,true); removeEventListener('resize',onMove); }};
+  ddOpen={root,trigger:t,menu:m,off:popWatch(root,m,ddPlace,()=>ddHide(false))};
   m.hidden=false; t.setAttribute('aria-expanded','true'); ddPlace(); const it=ddItems(m); (focus==='last'?it[it.length-1]:it[0])?.focus(); }
-function ddHide(refocus=true){ if(!ddOpen) return; const {trigger:t,menu:m}=ddOpen; ddOpen.off(); ddOpen=null; m.hidden=true; t.setAttribute('aria-expanded','false'); if(refocus) t.focus(); }
+function ddHide(refocus=true){ if(!ddOpen) return; const {trigger:t,menu:m,off}=ddOpen; ddOpen=null; off(); m.hidden=true; t.setAttribute('aria-expanded','false'); if(refocus) t.focus(); }
 function ddActivate(it){ if(it.getAttribute('aria-disabled')==='true') return;
   if(it.getAttribute('role')==='menuitemcheckbox'){ const on=it.getAttribute('aria-checked')!=='true'; it.setAttribute('aria-checked',on); if(it.dataset.col) it.closest('[data-dd-cols]')?.querySelectorAll(`td[data-col="${it.dataset.col}"],th[data-col="${it.dataset.col}"]`).forEach(c=>c.hidden=!on); return; }
   const say=it.dataset.say, modal=it.dataset.ddModal; ddHide(true); if(modal) openModal(modal); else if(say) toast('success',say); }
