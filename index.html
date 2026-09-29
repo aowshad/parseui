@@ -619,6 +619,17 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 .blk-meter .blk-meter-n{ display:flex; align-items:center; gap:6px; margin:8px 0 0; font-size:13px; color:var(--text-3); }
 .blk-meter.warn .pu-progress i{ background:var(--warning); }
 .blk-meter.warn .blk-meter-n{ color:var(--text-2); } .blk-meter.warn .blk-meter-n .ico{ color:var(--warning); }
+.blk-review{ width:400px; max-width:100%; padding:24px; }
+.blk-review-s{ text-align:center; }
+.blk-review .feat-ic{ margin:4px auto 16px; }
+.blk-review h4{ margin:0 0 6px; font-size:17px; font-weight:600; outline-offset:4px; }
+.blk-review .blk-review-s p{ margin:0 0 20px; font-size:14px; color:var(--text-2); }
+.blk-review [data-rv="thanks"] p{ margin-bottom:4px; }
+.blk-review-opts{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.blk-review form h4{ margin-bottom:14px; }
+.blk-review form .pu-field{ max-width:none; }
+.blk-review-f{ display:flex; justify-content:flex-end; gap:8px; margin-top:14px; }
+@media (max-width:640px){ .blk-review-opts{ grid-template-columns:1fr; } }
 .blk-sr{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 
 /* ============ OVERLAYS ============ */
@@ -1266,7 +1277,16 @@ const BLOCKS=[
 >
   <UsageMeter label="Orders" used={1840} limit={2500} />
   <UsageMeter label="Designs" used={38} limit={50} warnAt={0.75} />
-</PlanCard>`}];
+</PlanCard>`},
+ {id:'review-request',cat:'Engagement',t:'Review request',d:'Asks for a review and offers private feedback as an equal choice. Both options are always shown: Shopify’s App Store rules forbid review gating.',free:true,html:`<div class="pu-card blk-review" data-review><div class="blk-review-s" data-rv="ask"><div class="feat-ic brand">${I('star','ico-lg')}</div><h4>Enjoying Printly?</h4><p>A short review helps other merchants find us. If something isn’t working, tell us and we’ll fix it.</p><div class="blk-review-opts"><a class="pu-btn secondary" href="javascript:void 0">Leave a review${I('link')}<span class="blk-sr"> (opens the Shopify App Store)</span></a><button type="button" class="pu-btn secondary" data-rv-go="feedback">Share feedback</button></div></div><form class="hidden" data-rv="feedback" data-rv-form><h4>Share feedback</h4><div class="pu-field"><label class="pu-label" for="blk-rv-msg">What could be better?</label><textarea class="pu-textarea" id="blk-rv-msg" name="message" required placeholder="The print preview is slow on large designs…"></textarea><span class="pu-hint">Sara from the Printly team reads every message.</span></div><div class="blk-review-f"><button type="button" class="pu-btn ghost sm" data-rv-go="ask">Back</button><button type="submit" class="pu-btn primary sm">Send</button></div></form><div class="blk-review-s hidden" data-rv="thanks"><div class="feat-ic success">${I('checkC','ico-lg')}</div><h4 tabindex="-1">Thanks for the feedback</h4><p>We’ll reply by email if we need more detail.</p></div></div>`,
+  code:`// Both options are always shown. Shopify's App Store rules
+// don't allow asking only happy merchants for a review.
+<ReviewRequest
+  title="Enjoying Printly?"
+  description="A short review helps other merchants find us."
+  reviewUrl="https://apps.shopify.com/printly#modal-show=WriteReview"
+  onFeedback={(message) => sendFeedback({ message, shop: shop.domain })}
+/>`}];
 /* ---------- shared doc pieces ---------- */
 const demo=(ex,i)=>{ const id=CODES.push(ex.code)-1;
   return `<div class="demo" data-demo><div class="demo-bar"><div class="seg" role="tablist"><button class="on" data-view="p">Preview</button><button data-view="c">Code</button></div><span class="spacer"></span>
@@ -1637,6 +1657,7 @@ function rlApply(w){ const q=w.querySelector('[data-rl-q]').value.trim().toLower
 function rlBulk(w,act){ const sel=rlRows(w).filter(r=>r.querySelector('input').checked), n=sel.length;
   sel.forEach(r=>{ if(act==='delete'){ r.remove(); return; } r.dataset.status='archived'; r.querySelector('.pu-badge').outerHTML='<span class="pu-badge gray round"><i class="dot"></i>Archived</span>'; r.querySelector('input').checked=false; });
   rlApply(w); const all=w.querySelector('[data-rl-all]'); (all.disabled?w.querySelector('[data-rl-q]'):all).focus(); toast('success',`${n} ${n===1?'product':'products'} ${act==='delete'?'deleted':'archived'}`); }
+function rvShow(w,s){ w.querySelectorAll('[data-rv]').forEach(p=>p.classList.toggle('hidden',p.dataset.rv!==s)); w.querySelector(s==='feedback'?'textarea':s==='ask'?'[data-rv-go="feedback"]':'[data-rv="thanks"] h4').focus(); }
 function setupHide(g,hide){ g.querySelector('[data-setup-body]').classList.toggle('hidden',hide); g.querySelector('[data-setup-min]').classList.toggle('hidden',!hide); g.querySelector(hide?'[data-setup-show]':'[data-setup-x]').focus(); }
 
 /* ---------- global events ---------- */
@@ -1664,6 +1685,7 @@ document.addEventListener('click',e=>{
   if(t.dataset.setupX!==undefined||t.dataset.setupShow!==undefined){ setupHide(t.closest('[data-setup]'), t.dataset.setupX!==undefined); return; }
   if(t.dataset.rlUnchip!==undefined){ const w=t.closest('[data-rl]'); t.closest('[data-rl-chip]').remove(); rlApply(w); w.querySelector('[data-rl-q]').focus(); return; }
   if(t.dataset.rlArchive!==undefined||t.dataset.rlDelete!==undefined){ rlBulk(t.closest('[data-rl]'), t.dataset.rlDelete!==undefined?'delete':'archive'); return; }
+  if(t.dataset.rvGo){ rvShow(t.closest('[data-review]'), t.dataset.rvGo); return; }
   if(t.dataset.modal){ openModal(t.dataset.modal); return; }
   if(t.dataset.close!==undefined){ const a=t.dataset.after; closeOverlay(); if(a==='deleted') toast('success','Product deleted','“Organic cotton tee” was removed.','Undo'); if(a==='invited') toast('success','Invite sent','They\'ll get an email shortly.'); return; }
   if(t.dataset.toast){ const k=t.dataset.toast; if(k==='success') toast('success','Product saved','Your changes are live on the storefront.'); else if(k==='error') toast('error','Sync failed','Check your API key in Settings and try again.'); else toast('info','Order archived','#1284 moved to archive.','Undo'); return; }
@@ -1698,7 +1720,8 @@ document.addEventListener('change',e=>{ const w=e.target.closest('[data-rl]'); i
   if(e.target.matches('[data-rl-all]')) rlRows(w).forEach(r=>{ if(!r.classList.contains('hidden')) r.querySelector('input').checked=e.target.checked; });
   if(e.target.type==='checkbox') rlSync(w); });
 document.addEventListener('input',e=>{ if(e.target.matches('[data-rl-q]')) rlApply(e.target.closest('[data-rl]')); });
-document.addEventListener('submit',e=>{ const f=e.target.closest('[data-blk-form]'); if(!f) return; e.preventDefault(); toast('success',f.dataset.blkForm); });
+document.addEventListener('submit',e=>{ if(e.target.matches('[data-rv-form]')){ e.preventDefault(); rvShow(e.target.closest('[data-review]'),'thanks'); return; }
+  const f=e.target.closest('[data-blk-form]'); if(!f) return; e.preventDefault(); toast('success',f.dataset.blkForm); });
 window.addEventListener('hashchange',render);
 render();
 </script>
