@@ -418,6 +418,67 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 .pu-divider{ display:flex; align-items:center; gap:12px; color:var(--text-3); font-size:13px; } .pu-divider::before,.pu-divider::after{ content:""; flex:1; height:1px; background:var(--border); }
 .pu-upload{ border:1.5px dashed var(--border-strong); border-radius:var(--r-lg); padding:24px; text-align:center; font-size:14px; color:var(--text-2); width:100%; max-width:420px; background:var(--bg); }
 .pu-upload b{ color:var(--p-text); font-weight:600; }
+
+/* drawer */
+.pu-drawer-back{ position:fixed; inset:0; z-index:80; background:rgba(12,12,18,.45); animation:fade .18s; }
+.pu-drawer{ position:fixed; top:0; right:0; bottom:0; width:min(440px,100vw); display:flex; flex-direction:column; background:var(--bg); color:var(--text); border-left:1px solid var(--border); box-shadow:var(--sh-xl); text-align:left; outline:none; animation:pu-drawer-r .28s cubic-bezier(.2,.9,.3,1); }
+.pu-drawer.bottom{ top:auto; left:0; width:auto; max-height:min(85vh,640px); border-left:0; border-top:1px solid var(--border); border-radius:var(--r-xl) var(--r-xl) 0 0; padding-bottom:env(safe-area-inset-bottom,0px); animation-name:pu-drawer-b; }
+.pu-drawer.bottom::before{ content:""; flex:none; align-self:center; width:40px; height:4px; margin:10px 0 0; border-radius:99px; background:var(--border-strong); }
+@keyframes pu-drawer-r{ from{ transform:translateX(100%); } }
+@keyframes pu-drawer-b{ from{ transform:translateY(100%); } }
+.pu-drawer-h{ flex:none; display:flex; align-items:flex-start; gap:10px; padding:18px 16px 16px 20px; border-bottom:1px solid var(--border); }
+.pu-drawer-h > div{ flex:1; min-width:0; }
+.pu-drawer-h h2{ margin:0; font-size:17px; font-weight:600; letter-spacing:-.01em; }
+.pu-drawer-h p{ margin:2px 0 0; font-size:13px; color:var(--text-3); }
+.pu-drawer-h .pu-badge{ margin-top:4px; }
+.pu-drawer-form{ flex:1; min-height:0; display:flex; flex-direction:column; }
+.pu-drawer-b{ flex:1; min-height:0; overflow-y:auto; overscroll-behavior:contain; padding:18px 20px 22px; display:flex; flex-direction:column; gap:20px; }
+.pu-drawer-b h3{ margin:0 0 10px; font-size:12.5px; font-weight:600; color:var(--text-3); }
+.pu-drawer-b p{ margin:0; font-size:14px; color:var(--text-2); }
+.pu-drawer-b .pu-field{ max-width:none; }
+.pu-drawer fieldset{ margin:0; padding:0; border:0; display:flex; flex-direction:column; gap:10px; min-width:0; }
+.pu-drawer legend{ padding:0; margin-bottom:10px; font-size:13.5px; font-weight:500; }
+.pu-drawer-row{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.pu-drawer-items{ list-style:none; margin:0 0 14px; padding:0; display:flex; flex-direction:column; gap:12px; }
+.pu-drawer-items li{ display:flex; align-items:center; gap:12px; font-size:14px; }
+.pu-drawer-items li > div{ flex:1; min-width:0; } .pu-drawer-items b{ display:block; font-weight:500; } .pu-drawer-items small{ display:block; font-size:12.5px; color:var(--text-3); }
+.pu-drawer-items .q{ color:var(--text-2); font-variant-numeric:tabular-nums; } .pu-drawer-items .num{ width:64px; text-align:right; font-variant-numeric:tabular-nums; }
+.pu-drawer-sum{ margin:0; padding-top:12px; border-top:1px solid var(--border); display:grid; grid-template-columns:1fr auto; gap:6px 12px; font-size:14px; color:var(--text-2); }
+.pu-drawer-sum dd{ margin:0; text-align:right; font-variant-numeric:tabular-nums; } .pu-drawer-sum .t{ color:var(--text); font-weight:600; }
+.pu-drawer-opt{ padding:12px 14px; border:1px solid var(--border); border-radius:var(--r-lg); }
+.pu-drawer-opt:has(input:checked){ border-color:var(--p); box-shadow:0 0 0 1px var(--p); }
+.pu-drawer-f{ flex:none; display:flex; justify-content:flex-end; gap:8px; padding:12px 20px; border-top:1px solid var(--border); background:var(--bg-subtle); }
+@media (max-width:640px){
+  .pu-drawer.right{ top:auto; left:0; width:auto; max-height:85vh; border-left:0; border-top:1px solid var(--border); border-radius:var(--r-xl) var(--r-xl) 0 0; padding-bottom:env(safe-area-inset-bottom,0px); animation-name:pu-drawer-b; }
+  .pu-drawer.right::before{ content:""; flex:none; align-self:center; width:40px; height:4px; margin:10px 0 0; border-radius:99px; background:var(--border-strong); }
+  .pu-drawer-f .pu-btn{ flex:1; }
+}
+
+/* dropdown menu */
+.pu-dropdown{ position:relative; display:inline-flex; }
+.pu-dropdown-menu{ position:fixed; z-index:75; min-width:210px; max-width:calc(100vw - 16px); overflow-y:auto; overscroll-behavior:contain; padding:4px; background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--sh-lg); text-align:left; animation:pu-dropdown-in .14s ease-out; }
+.pu-dropdown-menu[hidden]{ display:none; }
+.pu-dropdown-menu.up{ animation-name:pu-dropdown-up; }
+@keyframes pu-dropdown-in{ from{ opacity:0; transform:translateY(-4px); } }
+@keyframes pu-dropdown-up{ from{ opacity:0; transform:translateY(4px); } }
+.pu-dropdown-item{ width:100%; display:flex; align-items:center; gap:10px; padding:7px 10px; border:0; border-radius:var(--r-sm); background:none; color:var(--text); font:400 14px/1.35 var(--font); text-align:left; white-space:nowrap; cursor:pointer; }
+.pu-dropdown-item .ico{ color:var(--text-3); }
+.pu-dropdown-item:hover, .pu-dropdown-item:focus{ background:var(--bg-muted); outline:none; }
+.pu-dropdown-item:focus-visible{ box-shadow:inset 0 0 0 2px var(--p); }
+/* same derivation as --p-text: danger text readable on both the menu and its highlight */
+.pu-dropdown-item.danger, .pu-dropdown-item.danger .ico{ color:color-mix(in oklab, var(--danger) 80%, var(--text)); }
+.pu-dropdown-item.danger:hover, .pu-dropdown-item.danger:focus{ background:var(--danger-soft); }
+.pu-dropdown-item[aria-disabled="true"]{ color:var(--text-3); cursor:default; }
+.pu-dropdown-item[aria-disabled="true"]:hover{ background:none; }
+.pu-dropdown-check{ width:16px; height:16px; flex:none; display:grid; place-items:center; }
+.pu-dropdown-check .ico{ color:var(--p-text); }
+.pu-dropdown-item[aria-checked="false"] .pu-dropdown-check .ico{ visibility:hidden; }
+.pu-dropdown-k{ margin-left:auto; padding-left:20px; font:500 12px var(--mono); color:var(--text-3); }
+.pu-dropdown-sep{ height:1px; margin:4px -4px; background:var(--border); }
+.pu-dropdown-label{ padding:8px 10px 4px; font-size:12px; font-weight:500; color:var(--text-3); }
+.pu-dropdown-head{ padding:8px 10px; }
+.pu-dropdown-head b{ display:block; font-size:14px; font-weight:600; } .pu-dropdown-head span{ display:block; font-size:12.5px; color:var(--text-3); }
+.pu-dropdown-avatar{ display:inline-grid; padding:0; border:0; border-radius:50%; background:none; cursor:pointer; }
 /* ============ LANDING ============ */
 .home{ overflow:hidden; }
 .wrap{ max-width:1200px; margin:0 auto; padding:0 28px; }
@@ -906,7 +967,8 @@ import { Plus, Download, ArrowRight } from "@parseui/icons"
 </ButtonGroup>`}],
  props:[P('variant','"primary" | "secondary" | "soft" | "ghost" | "danger" | "link"','"primary"','Visual style of the button.'),P('size','"xs" | "sm" | "md" | "lg"','"md"','Height, padding and font size.'),
   P('leadingIcon','ReactNode','—','Icon rendered before the label.'),P('trailingIcon','ReactNode','—','Icon rendered after the label.'),P('iconOnly','boolean','false','Square button for a single icon. Requires aria-label.'),
-  P('loading','boolean','false','Shows a spinner, disables the button and sets aria-busy.'),P('fullWidth','boolean','false','Stretches to the width of its container.'),P('asChild','boolean','false','Merges props onto the child element, e.g. a Next.js Link.')]};
+  P('loading','boolean','false','Shows a spinner, disables the button and sets aria-busy.'),P('fullWidth','boolean','false','Stretches to the width of its container.'),P('asChild','boolean','false','Merges props onto the child element, e.g. a Next.js Link.')],
+   keys:[['Enter / Space','Activates the button.'],['Tab','Moves focus to the next focusable element.'],['Shift+Tab','Moves focus to the previous focusable element.']]};
 
 C.badge={name:'Badge',status:'stable',desc:'Short labels for status, category or count. Badges are not interactive.',
  thumb:`<span class="pu-badge success"><i class="dot"></i>Paid</span><span class="pu-badge warning"><i class="dot"></i>Pending</span><span class="pu-badge brand">New</span>`,
@@ -960,7 +1022,7 @@ C.checkbox={name:'Checkbox',status:'stable',desc:'Select one or many options, or
 />`},{t:'Indeterminate',html:`<label class="pu-check"><input type="checkbox" data-indet> Select all products</label>`,code:`<Checkbox checked="indeterminate" label="Select all products" />`}],
  props:[P('checked','boolean | "indeterminate"','—','Controlled state.'),P('label','ReactNode','—','Clickable label.'),P('description','ReactNode','—','Secondary text below the label.')]};
 
-C.radio={name:'Radio group',status:'stable',desc:'Choose exactly one option from a visible set.',thumb:`<label class="pu-check"><input type="radio" checked tabindex="-1"> Monthly</label><label class="pu-check"><input type="radio" tabindex="-1"> Yearly</label>`,
+C.radio={name:'Radio group',importName:'RadioGroup',status:'stable',desc:'Choose exactly one option from a visible set.',thumb:`<label class="pu-check"><input type="radio" checked tabindex="-1"> Monthly</label><label class="pu-check"><input type="radio" tabindex="-1"> Yearly</label>`,
  examples:[{t:'Default',cls:'col left',html:`<label class="pu-check"><input type="radio" name="bill" checked><span class="t"><b>Monthly</b><span>$29 per month</span></span></label><label class="pu-check"><input type="radio" name="bill"><span class="t"><b>Yearly</b><span>$290 per year, two months free</span></span></label>`,
   code:`<RadioGroup defaultValue="monthly">
   <Radio value="monthly" label="Monthly" description="$29 per month" />
@@ -1111,7 +1173,145 @@ C.kbd={name:'Kbd',status:'stable',desc:'Displays a keyboard shortcut.',thumb:`<s
  examples:[{t:'Default',html:`<span style="display:flex;gap:4px;align-items:center;font-size:14px;color:var(--text-2)">Open search <span class="pu-kbd">⌘</span><span class="pu-kbd">K</span></span><span style="display:flex;gap:4px;align-items:center;font-size:14px;color:var(--text-2)">Save <span class="pu-kbd">Ctrl</span><span class="pu-kbd">S</span></span>`,code:`<Kbd>⌘</Kbd><Kbd>K</Kbd>`}],
  props:[P('children','ReactNode','—','Key label.')]};
 
-const PLANNED=[['combobox','Combobox'],['date-picker','Date picker'],['dropdown','Dropdown menu'],['data-table','Data table'],['command','Command menu'],['file-upload','File upload'],['drawer','Drawer']];
+C.dropdown={name:'Dropdown menu',importName:'DropdownMenu',file:'dropdown-menu',status:'beta',radix:'Dropdown Menu',desc:'A list of actions that opens from a button. For choosing a value in a form, use Select.',thumb:`<div class="pu-card" style="width:170px;padding:4px;box-shadow:var(--sh-lg);font-size:12.5px">${[['pen','Edit'],['copy','Duplicate'],['trash','Delete']].map((r,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:6px;${i===1?'background:var(--bg-muted)':''}${i===2?';color:var(--danger)':''}">${I(r[0])}${r[1]}</div>`).join('')}</div>`,
+   examples:[
+    {t:'Row actions',d:'A "…" button at the end of a row. Destructive items sit below a separator and ask for confirmation.',html:`<div class="pu-card" style="width:100%;max-width:440px;padding:12px 14px;display:flex;align-items:center;gap:12px"><span class="prod-thumb" style="background:var(--p-soft);color:var(--p-text)">${I('layers')}</span><div style="flex:1;min-width:0"><b style="font-weight:500;font-size:14px">Organic cotton tee</b><div style="font-size:13px;color:var(--text-3)">4 variants · $32.00</div></div><span class="pu-badge success round"><i class="dot"></i>Active</span>
+<div class="pu-dropdown" data-dd><button type="button" class="pu-btn ghost icon sm" id="dd-row-t" data-dd-t aria-haspopup="menu" aria-expanded="false" aria-controls="dd-row-m" aria-label="Actions for Organic cotton tee">${I('more')}</button><div class="pu-dropdown-menu" role="menu" id="dd-row-m" aria-labelledby="dd-row-t" data-align="end" hidden>${[['pen','Edit','Opened the product editor'],['copy','Duplicate','Duplicated as “Organic cotton tee (copy)”'],['box','Archive','Archived Organic cotton tee']].map(r=>`<button type="button" class="pu-dropdown-item" role="menuitem" tabindex="-1" data-say="${r[2]}">${I(r[0])}${r[1]}</button>`).join('')}<div class="pu-dropdown-sep" role="separator"></div><button type="button" class="pu-dropdown-item danger" role="menuitem" tabindex="-1" data-dd-modal="delete">${I('trash')}Delete</button></div></div></div>`,
+     code:`<DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <Button variant="ghost" size="sm" icon aria-label="Actions for Organic cotton tee">
+      <MoreHorizontal />
+    </Button>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent align="end">
+    <DropdownMenuItem icon={<Pen />} onSelect={openEditor}>Edit</DropdownMenuItem>
+    <DropdownMenuItem icon={<Copy />} onSelect={duplicate}>Duplicate</DropdownMenuItem>
+    <DropdownMenuItem icon={<Box />} onSelect={archive}>Archive</DropdownMenuItem>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem icon={<Trash />} variant="danger" onSelect={confirmDelete}>
+      Delete
+    </DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>`},
+    {t:'Checkbox items',d:'Checkbox items toggle without closing the menu, so several columns can change in one go. Product is required and stays on.',cls:'col',html:`<div data-dd-cols style="width:100%;max-width:560px;display:flex;flex-direction:column;gap:10px"><div class="pu-dropdown" data-dd style="align-self:flex-end"><button type="button" class="pu-btn secondary sm" id="dd-col-t" data-dd-t aria-haspopup="menu" aria-expanded="false" aria-controls="dd-col-m">${I('sliders')}Columns${I('chevD')}</button><div class="pu-dropdown-menu" role="menu" id="dd-col-m" aria-labelledby="dd-col-t" data-align="end" hidden><div class="pu-dropdown-label" role="presentation">Show columns</div>${[['product','Product',1,1],['status','Status',1],['inventory','Inventory',1],['price','Price',1],['vendor','Vendor',0],['sku','SKU',0]].map(c=>`<button type="button" class="pu-dropdown-item" role="menuitemcheckbox" tabindex="-1" aria-checked="${c[2]?'true':'false'}"${c[3]?' aria-disabled="true"':''} data-col="${c[0]}"><span class="pu-dropdown-check">${I('check')}</span>${c[1]}</button>`).join('')}</div></div>
+<div class="pu-table-wrap"><table class="pu-table"><thead><tr><th data-col="product">Product</th><th data-col="status">Status</th><th data-col="inventory">Inventory</th><th data-col="price" class="num">Price</th><th data-col="vendor" hidden>Vendor</th><th data-col="sku" hidden>SKU</th></tr></thead><tbody>${[['Heavyweight tee','success','Active','142 in stock','$32.00','Lumen Prints','LP-TEE-01'],['Canvas tote','success','Active','88 in stock','$24.00','Lumen Prints','LP-TOT-02'],['Sticker sheet','info','Draft','500 in stock','$6.00','Paper Co.','PC-STK-10']].map(r=>`<tr><td data-col="product"><b>${r[0]}</b></td><td data-col="status"><span class="pu-badge ${r[1]} round"><i class="dot"></i>${r[2]}</span></td><td data-col="inventory">${r[3]}</td><td data-col="price" class="num">${r[4]}</td><td data-col="vendor" hidden>${r[5]}</td><td data-col="sku" hidden>${r[6]}</td></tr>`).join('')}</tbody></table></div></div>`,
+     code:`const [columns, setColumns] = React.useState({ status: true, inventory: true, price: true, vendor: false, sku: false })
+
+<DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <Button variant="secondary" size="sm" leadingIcon={<Sliders />}>Columns</Button>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent align="end">
+    <DropdownMenuLabel>Show columns</DropdownMenuLabel>
+    <DropdownMenuCheckboxItem checked disabled>Product</DropdownMenuCheckboxItem>
+    {Object.entries(columns).map(([key, on]) => (
+      <DropdownMenuCheckboxItem
+        key={key}
+        checked={on}
+        onCheckedChange={(v) => setColumns((c) => ({ ...c, [key]: v }))}
+      >
+        {labels[key]}
+      </DropdownMenuCheckboxItem>
+    ))}
+  </DropdownMenuContent>
+</DropdownMenu>`},
+    {t:'Account menu',d:'An avatar trigger with a header for the signed-in person, icons and shortcut hints. The header labels the menu for screen readers.',html:`<div class="pu-card" style="width:100%;max-width:440px;height:56px;padding:0 10px 0 16px;display:flex;align-items:center;gap:10px"><b style="font-weight:600;font-size:14px">Printly</b><span style="font-size:13px;color:var(--text-3)">Lumen Prints</span>
+<div class="pu-dropdown" data-dd style="margin-left:auto"><button type="button" class="pu-dropdown-avatar" id="dd-acct-t" data-dd-t aria-haspopup="menu" aria-expanded="false" aria-controls="dd-acct-m" aria-label="Account menu for Nadia Rahman">${av('Nadia Rahman','sm')}</button><div class="pu-dropdown-menu" role="menu" id="dd-acct-m" aria-labelledby="dd-acct-h" data-align="end" hidden><div class="pu-dropdown-head" role="presentation" id="dd-acct-h"><b>Nadia Rahman</b><span>nadia@lumenprints.com</span></div><div class="pu-dropdown-sep" role="separator"></div>${[['users','Profile','⇧⌘P','Shift+Meta+P','Opened your profile'],['tag','Billing','','','Opened billing'],['sliders','Settings','⌘,','Meta+,','Opened settings'],['grid','Keyboard shortcuts','?','?','Showing keyboard shortcuts']].map(r=>`<button type="button" class="pu-dropdown-item" role="menuitem" tabindex="-1" data-say="${r[4]}"${r[3]?` aria-keyshortcuts="${r[3]}"`:''}>${I(r[0])}${r[1]}${r[2]?`<span class="pu-dropdown-k" aria-hidden="true">${r[2]}</span>`:''}</button>`).join('')}<div class="pu-dropdown-sep" role="separator"></div><button type="button" class="pu-dropdown-item" role="menuitem" tabindex="-1" data-say="Signed out of Printly" aria-keyshortcuts="Shift+Meta+Q">${I('logout')}Sign out<span class="pu-dropdown-k" aria-hidden="true">⇧⌘Q</span></button></div></div></div>`,
+     code:`<DropdownMenu>
+  <DropdownMenuTrigger aria-label="Account menu for Nadia Rahman">
+    <Avatar name="Nadia Rahman" size="sm" />
+  </DropdownMenuTrigger>
+  <DropdownMenuContent align="end">
+    <DropdownMenuHeader title="Nadia Rahman" description="nadia@lumenprints.com" />
+    <DropdownMenuSeparator />
+    <DropdownMenuItem icon={<Users />} shortcut="⇧⌘P">Profile</DropdownMenuItem>
+    <DropdownMenuItem icon={<Tag />}>Billing</DropdownMenuItem>
+    <DropdownMenuItem icon={<Sliders />} shortcut="⌘,">Settings</DropdownMenuItem>
+    <DropdownMenuItem icon={<Grid />} shortcut="?">Keyboard shortcuts</DropdownMenuItem>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem icon={<LogOut />} shortcut="⇧⌘Q" onSelect={signOut}>Sign out</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>`}],
+   usage:`<DropdownMenu>
+  <DropdownMenuTrigger asChild><Button variant="secondary">Options</Button></DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuItem onSelect={edit}>Edit</DropdownMenuItem>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem variant="danger" onSelect={remove}>Delete</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>`,
+   props:[P('open','boolean','—','Controlled open state.'),P('onOpenChange','(open: boolean) => void','—','Called when the menu opens or closes.'),P('align','"start" | "end"','"start"','Edge of the trigger the menu lines up with. Flips when there is no room.'),P('side','"bottom" | "top"','"bottom"','Preferred side. Flips up automatically near the bottom of the viewport.'),P('loop','boolean','true','Arrow keys wrap from the last item to the first.'),P('DropdownMenuItem.onSelect','(event: Event) => void','—','Runs when the item is chosen. Call event.preventDefault() to keep the menu open.'),P('DropdownMenuItem.variant','"default" | "danger"','"default"','Danger colors the item for destructive actions.'),P('DropdownMenuItem.shortcut','string','—','Shortcut hint shown on the right. Also set as aria-keyshortcuts.'),P('DropdownMenuItem.disabled','boolean','false','Skipped by arrow keys and typeahead.'),P('DropdownMenuCheckboxItem.checked','boolean','false','Checked state. Toggling keeps the menu open.')],
+   keys:[['Enter / Space / ↓','On the trigger: opens the menu and focuses the first item.'],['↑','On the trigger: opens the menu and focuses the last item.'],['↓ / ↑','Moves to the next or previous item, wrapping at the ends.'],['Home / End','Moves to the first or last item.'],['A–Z','Moves to the next item that starts with that letter.'],['Enter / Space','Runs the item. Checkbox items toggle and the menu stays open.'],['Escape','Closes the menu and returns focus to the trigger.'],['Tab','Closes the menu and moves focus on.']]};
+C.drawer={name:'Drawer',importName:'Drawer',status:'beta',radix:'Dialog',desc:'A panel that slides over the page for details or a short task, without leaving the current screen. On phones it becomes a bottom sheet.',thumb:`<div style="position:relative;width:210px;height:96px;border:1px solid var(--border);border-radius:8px;background:var(--bg-muted);overflow:hidden"><div style="position:absolute;inset:0 0 0 auto;width:96px;background:var(--bg);border-left:1px solid var(--border);box-shadow:var(--sh-lg);padding:10px"><div style="height:8px;width:60%;border-radius:4px;background:var(--text);opacity:.8"></div><div style="height:6px;width:80%;border-radius:3px;background:var(--border-strong);margin-top:10px"></div><div style="height:6px;width:70%;border-radius:3px;background:var(--border-strong);margin-top:6px"></div><div style="position:absolute;left:10px;right:10px;bottom:10px;height:16px;border-radius:5px;background:var(--p)"></div></div></div>`,
+   examples:[
+    {t:'Order details',d:'Slides in from the right with the order summary, line items and footer actions. Focus moves into the drawer and stays there until it closes.',html:`<button type="button" class="pu-btn secondary" data-drawer="order" aria-haspopup="dialog" aria-expanded="false">${I('box')}View order #1284</button>`,
+     code:`<Drawer>
+  <DrawerTrigger asChild>
+    <Button variant="secondary" leadingIcon={<Box />}>View order #1284</Button>
+  </DrawerTrigger>
+  <DrawerContent
+    title="Order #1284"
+    description="Placed Sep 28, 2026 at 2:14 PM"
+    badge={<Badge color="success" dot>Paid</Badge>}
+    footer={
+      <>
+        <DrawerClose asChild><Button variant="secondary">Close</Button></DrawerClose>
+        <Button onClick={markFulfilled}>Mark as fulfilled</Button>
+      </>
+    }
+  >
+    <DrawerSection title="Customer"><Person name="Nadia Rahman" email="nadia@lumenprints.com" /></DrawerSection>
+    <DrawerSection title="Shipping">{order.shippingAddress}</DrawerSection>
+    <DrawerSection title="Items"><LineItems items={order.lineItems} totals={order.totals} /></DrawerSection>
+  </DrawerContent>
+</Drawer>`},
+    {t:'Filters',d:'A form in a drawer. The body scrolls and Reset and Apply stay pinned in the footer. Nothing changes until you apply.',html:`<button type="button" class="pu-btn secondary" data-drawer="filters" aria-haspopup="dialog" aria-expanded="false">${I('filter')}Filters<span class="pu-badge brand round">2</span></button>`,
+     code:`<Drawer>
+  <DrawerTrigger asChild>
+    <Button variant="secondary" leadingIcon={<Filter />}>
+      Filters <Badge color="brand">{activeCount}</Badge>
+    </Button>
+  </DrawerTrigger>
+  <DrawerContent
+    title="Filter orders"
+    as="form"
+    onSubmit={applyFilters}
+    footer={
+      <>
+        <Button variant="secondary" type="reset">Reset</Button>
+        <Button type="submit">Apply filters</Button>
+      </>
+    }
+  >
+    <CheckboxGroup legend="Payment status" options={paymentStatuses} defaultValue={["paid", "pending"]} />
+    <Select label="Fulfillment" options={fulfillment} />
+    <Select label="Date" options={dateRanges} defaultValue="30d" />
+    <Input label="Customer tag" placeholder="e.g. wholesale" />
+    <Switch label="Only orders with custom artwork" />
+  </DrawerContent>
+</Drawer>`},
+    {t:'Bottom sheet',d:'side="bottom" slides up from the bottom edge. Every Drawer does this automatically at 640px and narrower, so right-side drawers become sheets on phones.',html:`<button type="button" class="pu-btn secondary" data-drawer="sheet" aria-haspopup="dialog" aria-expanded="false">${I('layers')}Choose print method</button>`,
+     code:`<Drawer side="bottom">
+  <DrawerTrigger asChild>
+    <Button variant="secondary" leadingIcon={<Layers />}>Choose print method</Button>
+  </DrawerTrigger>
+  <DrawerContent
+    title="Print method"
+    description="Used for this product's print files."
+    footer={<Button onClick={save}>Use this method</Button>}
+  >
+    <RadioGroup options={printMethods} defaultValue="dtg" />
+  </DrawerContent>
+</Drawer>`}],
+   usage:`<Drawer>
+  <DrawerTrigger asChild><Button>Open</Button></DrawerTrigger>
+  <DrawerContent title="Order #1284" footer={<Button>Save</Button>}>
+    …
+  </DrawerContent>
+</Drawer>`,
+   props:[P('open','boolean','—','Controlled open state.'),P('onOpenChange','(open: boolean) => void','—','Called when the drawer opens or closes.'),P('side','"right" | "left" | "bottom"','"right"','Edge the drawer slides from. At 640px and narrower, right and left drawers become bottom sheets.'),P('title','string','—','Required. Labels the dialog through aria-labelledby.'),P('description','string','—','Shown under the title.'),P('footer','ReactNode','—','Actions pinned to the bottom while the body scrolls.'),P('dismissible','boolean','true','Close on Escape and overlay click.'),P('initialFocus','RefObject<HTMLElement>','the panel','Element that receives focus on open. The panel itself by default, so screen readers announce the title first.')],
+   keys:[['Enter / Space','On the trigger: opens the drawer and moves focus into it.'],['Tab / Shift+Tab','Moves between controls inside the drawer. Focus wraps and never reaches the page behind.'],['Escape','Closes the drawer and returns focus to the trigger.']]};
+const PLANNED=[['combobox','Combobox'],['date-picker','Date picker'],['data-table','Data table'],['command','Command menu'],['file-upload','File upload']];
 const COMP_ORDER=Object.keys(C).sort((a,b)=>C[a].name.localeCompare(C[b].name));
 /* ---------- navigation model ---------- */
 const NAV=[
@@ -1425,6 +1625,8 @@ const demo=(ex,i)=>{ const id=CODES.push(ex.code)-1;
   <div class="preview ${ex.cls||''}" data-pv>${ex.html}</div>
   <div class="codewrap hidden" data-cv><pre class="code">${hl(ex.code)}</pre><button class="copy" data-copy="${id}" aria-label="Copy code">${I('copy')}</button></div></div>`; };
 const propsTable=rows=>`<div class="props-wrap"><table class="props"><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>${rows.map(r=>`<tr><td><code>${r[0]}</code></td><td class="type">${esc(r[1])}</td><td class="type">${esc(r[2])}</td><td>${r[3]}</td></tr>`).join('')}</tbody></table></div>`;
+// keys: [['Enter / Space', 'Opens the menu'], ...]; " / " separates alternatives, "+" joins a chord
+const keysTable=rows=>`<div class="props-wrap"><table class="props"><thead><tr><th>Key</th><th>Action</th></tr></thead><tbody>${rows.map(r=>`<tr><td style="white-space:nowrap">${r[0].split(' / ').map(alt=>alt.split('+').map(k=>`<kbd class="pu-kbd">${esc(k)}</kbd>`).join('+')).join(' <span style="color:var(--text-3)">or</span> ')}</td><td>${r[1]}</td></tr>`).join('')}</tbody></table></div>`;
 const pmTabs=(cmd)=>{ const v={pnpm:`pnpm dlx ${cmd}`,npm:`npx ${cmd}`,yarn:`yarn dlx ${cmd}`,bun:`bunx --bun ${cmd}`}; const id=CODES.push(v.pnpm)-1;
   return `<div class="cblock" data-pm='${JSON.stringify(v).replace(/'/g,"&#39;")}'><div class="cblock-head">${I('terminal')}Terminal<div class="seg">${Object.keys(v).map((k,i)=>`<button class="${i?'':'on'}" data-pmk="${k}">${k}</button>`).join('')}</div></div><div class="codewrap"><pre class="code">${hl(v.pnpm,'bash')}</pre><button class="copy" data-copy="${id}" aria-label="Copy command">${I('copy')}</button></div></div>`; };
 const crumbs=(...a)=>`<div class="eyebrow">${a[0]}</div>`;
@@ -1434,7 +1636,7 @@ const statusTag=s=>s==='beta'?'<span class="pu-badge warning">Beta</span>':'<spa
 
 /* ---------- component page (the template every component follows) ---------- */
 function componentPage(k){
-  const c=C[k], file=k.replace(/[^a-z]/g,'');
+  const c=C[k], file=c.file||k.replace(/[^a-z]/g,''), imp=c.importName||c.name.replace(/\s/g,'');
   let h=`${crumbs('Base components',c.name)}<h1>${c.name}</h1><p class="lead">${c.desc}</p>
   <div class="meta-row">${statusTag(c.status)}<a class="chip-link" href="javascript:void 0">${I('figma')}Figma</a><a class="chip-link" href="javascript:void 0">${I('link')}Source</a>${c.radix?`<a class="chip-link" href="javascript:void 0">${I('layers')}Built on Radix ${c.radix}</a>`:''}</div>
   ${demo(c.examples[0])}
@@ -1445,13 +1647,13 @@ function componentPage(k){
      <div class="step"><h4>Install the dependencies</h4>${codeBlock('npm install @radix-ui/react-slot class-variance-authority','bash')}</div>
      <div class="step"><h4>Copy the source into your project</h4><p>Paste into <code>components/ui/${file}.tsx</code>.</p>${codeBlock(k==='button'?BUTTON_SRC:`// components/ui/${file}.tsx\n// Full source is published with v0.2 of @parseui/react`,'tsx')}</div>
      <div class="step"><h4>Update the import paths</h4><p>Match your project's alias, for example <code>@/components/ui/${file}</code>.</p></div></div></div></div>
-  <h2 id="usage">Usage</h2>${codeBlock(`import { ${c.name.replace(/\s/g,'')} } from "@parseui/react"`,'tsx')}${codeBlock(c.usage||c.examples[0].code.split('\n').filter(l=>!l.startsWith('import')).join('\n').trim(),'tsx')}
+  <h2 id="usage">Usage</h2>${codeBlock(`import { ${imp} } from "@parseui/react"`,'tsx')}${codeBlock(c.usage||c.examples[0].code.split('\n').filter(l=>!l.startsWith('import')).join('\n').trim(),'tsx')}
   <h2 id="examples">Examples</h2>`;
   c.examples.forEach((ex,i)=>{ if(i===0 && !c.rich) return; h+=`<h3 id="ex-${ex.id||i}">${ex.t}</h3>${ex.d?`<p>${ex.d}</p>`:''}${demo(ex)}`; });
   if(!c.rich && c.examples.length===1) h+=`<p>More examples are added as the component is designed in Figma.</p>`;
-  h+=`<h2 id="api">API reference</h2><h3>${c.name.replace(/\s/g,'')}</h3><p>Also accepts every native HTML attribute of the underlying element.</p>${propsTable(c.props)}`;
-  if(k==='button') h+=`<h2 id="accessibility">Accessibility</h2><ul><li>Renders a native <code>button</code> with <code>type="button"</code> by default, so it never submits a form by accident.</li><li>Focus ring uses a 2px offset in the brand color and meets 3:1 contrast on every surface.</li><li><code>loading</code> sets <code>aria-busy</code> and keeps the accessible name.</li><li>Icon-only buttons warn in development when <code>aria-label</code> is missing.</li></ul>
-    <h2 id="keyboard">Keyboard</h2>${propsTable([['Enter','—','—','Activates the button.'],['Space','—','—','Activates the button.'],['Tab','—','—','Moves focus to the next focusable element.']]).replace('<th>Prop</th><th>Type</th><th>Default</th>','<th>Key</th><th></th><th></th>')}`;
+  h+=`<h2 id="api">API reference</h2><h3>${imp}</h3><p>Also accepts every native HTML attribute of the underlying element.</p>${propsTable(c.props)}`;
+  if(k==='button') h+=`<h2 id="accessibility">Accessibility</h2><ul><li>Renders a native <code>button</code> with <code>type="button"</code> by default, so it never submits a form by accident.</li><li>Focus ring uses a 2px offset in the brand color and meets 3:1 contrast on every surface.</li><li><code>loading</code> sets <code>aria-busy</code> and keeps the accessible name.</li><li>Icon-only buttons warn in development when <code>aria-label</code> is missing.</li></ul>`;
+  if(c.keys) h+=`<h2 id="keyboard">Keyboard</h2>${keysTable(c.keys)}`;
   return h+pager(k);
 }
 const BUTTON_SRC=`import * as React from "react"
@@ -1745,7 +1947,7 @@ function homePage(){
 
   <section class="sec"><div class="wrap">
     <div class="sec-h"><div><h2>Roadmap</h2><p>Foundations first, then components, blocks and screens, then the public launch.</p></div></div>
-    <div class="road">${[['Phase 1','Now','Foundations and base components','Tokens, Figma variables and the first 20 components.',1],['Phase 2','Next','Blocks','Auth, settings, pricing, empty states and upload flows.'],['Phase 3','Later','Examples','Dashboards, onboarding and settings screens for our apps.'],['Phase 4','Launch','Public release','Docs site, licences and the community edition.']].map(r=>`<div class="${r[4]?'now':''}"><div class="ph">${r[0]}<span class="pu-badge ${r[4]?'solid':'gray'}">${r[1]}</span></div><h3>${r[2]}</h3><p>${r[3]}</p></div>`).join('')}</div>
+    <div class="road">${[['Phase 1','Now','Foundations and base components',`Tokens, Figma variables and the first ${COMP_ORDER.length} components.`,1],['Phase 2','Next','Blocks','Auth, settings, pricing, empty states and upload flows.'],['Phase 3','Later','Examples','Dashboards, onboarding and settings screens for our apps.'],['Phase 4','Launch','Public release','Docs site, licences and the community edition.']].map(r=>`<div class="${r[4]?'now':''}"><div class="ph">${r[0]}<span class="pu-badge ${r[4]?'solid':'gray'}">${r[1]}</span></div><h3>${r[2]}</h3><p>${r[3]}</p></div>`).join('')}</div>
   </div></section>
 
   <footer class="foot"><div class="wrap"><span class="logo" style="font-size:14px"><svg class="logo-full" fill="none" viewBox="0 0 507 120" style="height:20px;width:auto" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><g><rect width="120" height="120" rx="16" fill="white"/><rect width="120" height="120" rx="16" fill="url(#paint0_linear_2_269f)" fill-opacity="0.2"/><rect x="1" y="1" width="118" height="118" rx="15" stroke="#E6E6E6" stroke-width="2"/><path fill-rule="evenodd" clip-rule="evenodd" d="M40.863 72.5991L40.8632 59.378C40.8632 54.1961 42.9241 49.2264 46.5926 45.5623C50.2611 41.8982 55.2367 39.8397 60.4247 39.8397C62.9936 39.8397 65.5373 40.3451 67.9107 41.3269C70.284 42.3088 72.4404 43.748 74.2569 45.5623C76.0733 47.3766 77.5143 49.5305 78.4973 51.901C79.4804 54.2715 79.9863 56.8122 79.9863 59.378C79.9863 61.9438 79.4804 64.4845 78.4973 66.8549C77.5143 69.2254 76.0733 71.3793 74.2569 73.1936C72.4404 75.0079 70.284 76.4471 67.9107 77.429C65.5373 78.4109 62.9936 78.9163 60.4247 78.9163H47.4812V98.4545H60.4247H60.6283C70.9666 98.4008 80.8633 94.2476 88.156 86.9283C95.4486 79.6089 99.5442 69.704 99.5479 59.3779C99.5479 49.0142 95.426 39.0749 88.089 31.7466C80.752 24.4183 70.8009 20.3014 60.4247 20.3014C50.1165 20.3078 40.2273 24.3775 32.9064 31.626C25.5854 38.8744 21.4245 48.7158 21.3278 59.0114L21.3016 59.378V72.4969L21.3014 98.548H40.863V72.5991Z" fill="#696969"/><path d="M51.8391 50.8392C54.1162 48.5622 57.2045 47.283 60.4246 47.283C63.6448 47.283 66.7331 48.5622 69.0101 50.8392C71.2871 53.1162 72.5663 56.2045 72.5663 59.4247C72.5663 62.6448 71.2871 65.7331 69.0101 68.0101C66.7331 70.2872 63.6448 71.5664 60.4246 71.5664H48.2829V59.4247C48.2829 56.2045 49.5621 53.1162 51.8391 50.8392Z" fill="#2488FF"/><path d="M20.1507 20.3014H96.0959" stroke="#2488FF" stroke-width="1.15068"/><path d="M23.6027 98.548H99.5479" stroke="#2488FF" stroke-width="1.15068"/><path d="M99.5479 21.452L99.5479 97.3972" stroke="#2488FF" stroke-width="1.15068"/><path d="M21.3014 21.452L21.3014 97.3972" stroke="#2488FF" stroke-width="1.15068"/><path d="M24.1779 23.1777L18.425 23.1777V17.4248L24.1779 17.4248V23.1777Z" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="24.1781" y="53.0959" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(90 24.1781 53.0959)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="24.1781" y="96.8219" width="5.75343" height="5.75342" transform="rotate(90 24.1781 96.8219)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="66.7534" y="23.1781" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(-180 66.7534 23.1781)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="66.7534" y="101.425" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(-180 66.7534 101.425)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="102.425" y="17.4247" width="5.75343" height="5.75342" transform="rotate(90 102.425 17.4247)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="102.425" y="53.0959" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(90 102.425 53.0959)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="102.425" y="96.8219" width="5.75343" height="5.75342" transform="rotate(90 102.425 96.8219)" fill="white" stroke="#2488FF" stroke-width="1.15068"/></g><path d="M494.52 21.6914H507V97.6574H494.52V21.6914Z" fill="#2488FF"/><path d="M433.652 21.6914V65.7517C433.652 72.9142 435.063 78.3042 437.884 81.9216C440.706 85.4667 445.083 87.2392 451.016 87.2392C457.021 87.2392 461.434 85.4667 464.256 81.9216C467.149 78.3042 468.596 72.9142 468.596 65.7517V21.6914H481.077V65.1005C481.077 75.9528 478.508 84.2006 473.371 89.8438C468.307 95.4869 460.855 98.3085 451.016 98.3085C441.249 98.3085 433.833 95.4869 428.769 89.8438C423.704 84.2006 421.172 75.9528 421.172 65.1005V21.6914H433.652Z" fill="#2488FF"/><path d="M356.459 69.9841C356.459 64.2686 357.58 59.2765 359.823 55.008C362.138 50.6671 365.321 47.339 369.373 45.0239C373.497 42.6364 378.199 41.4426 383.481 41.4426C388.835 41.4426 393.537 42.5278 397.589 44.6983C401.713 46.8688 404.932 49.9436 407.247 53.9227C409.635 57.9019 410.865 62.5684 410.937 67.9222C410.937 69.3692 410.828 70.8523 410.611 72.3716H368.722V73.0228C369.011 77.8701 370.53 81.7046 373.28 84.5262C376.029 87.3478 379.682 88.7586 384.24 88.7586C387.858 88.7586 390.896 87.9266 393.356 86.2625C395.816 84.5262 397.444 82.1025 398.24 78.9915H409.96C408.947 84.6347 406.198 89.265 401.713 92.8824C397.299 96.4999 391.765 98.3086 385.109 98.3086C379.321 98.3086 374.256 97.151 369.915 94.8358C365.647 92.4483 362.319 89.1203 359.931 84.8517C357.616 80.5832 356.459 75.6273 356.459 69.9841ZM398.999 63.7983C398.493 59.7468 396.865 56.5996 394.116 54.3568C391.439 52.0417 388.039 50.8841 383.915 50.8841C380.08 50.8841 376.752 52.0778 373.931 54.4653C371.181 56.7805 369.59 59.8915 369.156 63.7983H398.999Z" class="lw"/><path d="M311.79 79.317C312.007 82.2109 313.346 84.5984 315.806 86.4795C318.338 88.2882 321.594 89.1926 325.573 89.1926C329.118 89.1926 331.976 88.5414 334.146 87.2392C336.389 85.8645 337.51 84.0558 337.51 81.813C337.51 79.932 337.004 78.5212 335.991 77.5806C334.978 76.6401 333.603 75.989 331.867 75.6272C330.203 75.1931 327.598 74.759 324.053 74.325C319.206 73.7462 315.191 72.9865 312.007 72.046C308.896 71.0331 306.364 69.4776 304.411 67.3795C302.53 65.209 301.589 62.3151 301.589 58.6977C301.589 55.2973 302.53 52.2948 304.411 49.6903C306.364 47.0134 309.005 44.9514 312.333 43.5045C315.733 42.0575 319.568 41.334 323.836 41.334C330.854 41.334 336.533 42.8895 340.874 46.0005C345.288 49.1115 347.675 53.4886 348.037 59.1318H336.642C336.353 56.5996 335.087 54.5376 332.844 52.946C330.601 51.2819 327.779 50.4499 324.379 50.4499C320.979 50.4499 318.229 51.1011 316.131 52.4033C314.033 53.7056 312.984 55.4781 312.984 57.721C312.984 59.385 313.49 60.6511 314.503 61.5193C315.589 62.3151 316.927 62.8939 318.519 63.2556C320.11 63.545 322.679 63.9068 326.224 64.3409C330.999 64.8473 335.014 65.6431 338.27 66.7284C341.526 67.7412 344.13 69.4052 346.083 71.7204C348.037 73.9632 349.014 77.038 349.014 80.9448C349.014 84.4176 348.001 87.4924 345.975 90.1693C343.949 92.7738 341.164 94.7996 337.619 96.2466C334.074 97.6212 330.094 98.3085 325.681 98.3085C318.229 98.3085 312.188 96.6445 307.558 93.3164C303 89.9161 300.649 85.2496 300.504 79.317H311.79Z" class="lw"/><path d="M296.607 42.0937V53.0545H291.397C286.55 53.0545 283.041 54.6461 280.871 57.8295C278.7 60.9405 277.615 64.9196 277.615 69.767V97.6574H265.895V42.0937H276.313L277.615 50.4499C279.207 47.8454 281.269 45.8196 283.801 44.3726C286.333 42.8533 289.733 42.0937 294.002 42.0937H296.607Z" class="lw"/><path d="M259.51 87.4563V97.6574H253.324C249.707 97.6574 247.102 96.8978 245.511 95.3785C243.919 93.8591 243.123 91.6525 243.123 88.7586C238.927 95.1252 232.813 98.3086 224.783 98.3086C218.561 98.3086 213.569 96.8616 209.807 93.9677C206.045 91.0737 204.163 87.0946 204.163 82.0302C204.163 76.3146 206.189 71.9375 210.241 68.8989C214.292 65.7879 220.189 64.2324 227.93 64.2324H241.929V60.8682C241.929 57.7572 240.844 55.3335 238.674 53.5972C236.503 51.7885 233.501 50.8841 229.666 50.8841C226.266 50.8841 223.444 51.6438 221.202 53.1631C219.031 54.6101 217.729 56.5635 217.295 59.0233H205.791C206.37 53.4525 208.83 49.1477 213.171 46.1091C217.512 42.9981 223.191 41.4426 230.209 41.4426C237.661 41.4426 243.413 43.179 247.464 46.6517C251.516 50.1244 253.541 55.1165 253.541 61.6279V83.5495C253.541 86.154 254.771 87.4563 257.231 87.4563H259.51ZM241.929 72.9142H227.387C223.77 72.9142 220.984 73.6377 219.031 75.0847C217.078 76.4593 216.101 78.5212 216.101 81.2705C216.101 83.658 217.005 85.5752 218.814 87.0222C220.695 88.4692 223.227 89.1927 226.411 89.1927C231.258 89.1927 235.02 87.8904 237.697 85.2858C240.446 82.6813 241.857 79.2086 241.929 74.8676V72.9142Z" class="lw"/><path d="M174.952 21.6914C180.161 21.6914 184.756 22.7043 188.735 24.73C192.714 26.6835 195.789 29.5051 197.959 33.1948C200.13 36.8123 201.215 41.0446 201.215 45.892C201.215 50.7394 200.13 55.0079 197.959 58.6977C195.789 62.3151 192.714 65.1367 188.735 67.1625C184.756 69.1159 180.161 70.0926 174.952 70.0926H157.48V97.6574H145V21.6914H174.952ZM157.48 59.2403H173.867C178.353 59.2403 181.898 58.0466 184.502 55.6591C187.179 53.1992 188.518 49.9435 188.518 45.892C188.518 41.7681 187.215 38.5124 184.611 36.1249C182.006 33.7374 178.461 32.5437 173.976 32.5437H157.48V59.2403Z" class="lw"/><defs><linearGradient id="paint0_linear_2_269f" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse"><stop stop-color="white"/><stop offset="1" stop-color="#B8B8B8"/></linearGradient></defs></svg><span style="color:var(--text-2);font-weight:500">by ParseLab</span></span><nav><a href="#/docs/introduction">Docs</a><a href="#/docs/components">Components</a><a href="#/docs/blocks">Blocks</a><a href="#/docs/theming">Theming</a></nav><span>Built in Dhaka, used worldwide.</span></div></footer>
@@ -1791,7 +1993,85 @@ const MODALS={
 let lastFocus;
 function openModal(k){ lastFocus=document.activeElement; overlay.innerHTML=`<div class="pu-modal-back" data-back><div class="pu-modal" role="dialog" aria-modal="true">${MODALS[k]}</div></div>`;
   setTimeout(()=>overlay.querySelector('.pu-modal button:not([data-close]), .pu-modal input, .pu-modal button')?.focus(),30); }
-function closeOverlay(){ overlay.innerHTML=''; lastFocus?.focus?.(); }
+let overlayCleanup=null; // set by overlays that add global listeners or lock page scroll
+function closeOverlay(){ overlay.innerHTML=''; overlayCleanup?.(); overlayCleanup=null; lastFocus?.focus?.(); }
+
+/* ---------- drawer ---------- */
+const drawerHead=(k,title,sub,extra='')=>`<div class="pu-drawer-h"><div><h2 id="drawer-${k}-t">${title}</h2>${sub?`<p>${sub}</p>`:''}</div>${extra}<button type="button" class="pu-btn ghost icon sm" data-close aria-label="Close">${I('x')}</button></div>`;
+const DRAWERS={
+ order:{side:'right',html:()=>`${drawerHead('order','Order #1284','Placed Sep 28, 2026 at 2:14 PM','<span class="pu-badge success round"><i class="dot"></i>Paid</span>')}
+  <div class="pu-drawer-b">
+   <section><h3>Customer</h3><div class="pu-person">${av('Nadia Rahman','sm')}<div><b>Nadia Rahman</b><small>nadia@lumenprints.com · 12 orders</small></div></div></section>
+   <section><h3>Shipping</h3><p>House 14, Road 7, Dhanmondi<br>Dhaka 1205, Bangladesh</p><p style="margin-top:6px">Standard · Arrives Oct 3–5</p></section>
+   <section><h3>Items</h3><ul class="pu-drawer-items">${[['layers','p','Heavyweight tee','Black / L · Custom front print',2,'$64.00'],['tag','success','Canvas tote','Natural · Custom print',1,'$24.00'],['box','warning','Ceramic mug, 11 oz','White · Wrap print',1,'$18.00']].map(r=>`<li><span class="prod-thumb" style="background:var(--${r[1]}-soft);color:var(--${r[1]==='p'?'p-text':r[1]})">${I(r[0])}</span><div><b>${r[2]}</b><small>${r[3]}</small></div><span class="q">×${r[4]}</span><b class="num">${r[5]}</b></li>`).join('')}</ul>
+    <dl class="pu-drawer-sum"><dt>Subtotal</dt><dd>$106.00</dd><dt>Shipping</dt><dd>$12.00</dd><dt>Tax</dt><dd>$10.00</dd><dt class="t">Total</dt><dd class="t">$128.00</dd></dl></section>
+  </div>
+  <div class="pu-drawer-f"><button type="button" class="pu-btn secondary" data-close>Close</button><button type="button" class="pu-btn primary" data-close data-after-toast="Order #1284 marked as fulfilled">Mark as fulfilled</button></div>`},
+ filters:{side:'right',html:()=>`${drawerHead('filters','Filter orders','Narrow the orders list. Nothing changes until you apply.')}
+  <form class="pu-drawer-form" data-drawer-form>
+   <div class="pu-drawer-b">
+    <fieldset><legend>Payment status</legend>${[['Paid',1],['Pending',1],['Refunded',0]].map(r=>`<label class="pu-check"><input type="checkbox" name="payment" value="${r[0].toLowerCase()}"${r[1]?' checked':''}> ${r[0]}</label>`).join('')}</fieldset>
+    <div class="pu-field"><label class="pu-label" for="dr-fulfil">Fulfillment</label><select class="pu-select" id="dr-fulfil" name="fulfillment"><option selected>Any</option><option>Unfulfilled</option><option>Fulfilled</option><option>Returned</option></select></div>
+    <div class="pu-field"><label class="pu-label" for="dr-dates">Date</label><select class="pu-select" id="dr-dates" name="date"><option>Last 7 days</option><option selected>Last 30 days</option><option>This year</option></select></div>
+    <fieldset><legend>Order total</legend><div class="pu-drawer-row"><div class="pu-input"><span class="addon">$</span><input type="number" name="min" min="0" placeholder="Min" aria-label="Minimum order total"></div><div class="pu-input"><span class="addon">$</span><input type="number" name="max" min="0" placeholder="Max" aria-label="Maximum order total"></div></div></fieldset>
+    <div class="pu-field"><label class="pu-label" for="dr-tag">Customer tag</label><div class="pu-input">${I('tag')}<input id="dr-tag" name="tag" placeholder="e.g. wholesale"></div></div>
+    <label class="pu-switch" style="justify-content:space-between"><span>Only orders with custom artwork</span><input type="checkbox" role="switch" name="custom"></label>
+   </div>
+   <div class="pu-drawer-f"><button type="reset" class="pu-btn secondary">Reset</button><button type="submit" class="pu-btn primary">Apply filters</button></div>
+  </form>`},
+ sheet:{side:'bottom',html:()=>`${drawerHead('sheet','Print method','Used for this product’s print files.')}
+  <div class="pu-drawer-b"><fieldset><legend class="blk-sr">Print method</legend>${[['Direct to garment','Full color, best for photos and gradients.',1],['Screen print','Bold spot colors, cheapest from 24 units.',0],['Embroidery','Stitched logos on caps and hoodies.',0]].map(r=>`<label class="pu-check pu-drawer-opt"><input type="radio" name="dr-method"${r[2]?' checked':''}><span class="t"><b>${r[0]}</b><span>${r[1]}</span></span></label>`).join('')}</fieldset></div>
+  <div class="pu-drawer-f"><button type="button" class="pu-btn secondary" data-close>Cancel</button><button type="button" class="pu-btn primary" data-close data-after-toast="Print method updated">Use this method</button></div>`}};
+function openDrawer(k,trigger){ if(overlay.innerHTML) closeOverlay(); lastFocus=trigger;
+  const d=DRAWERS[k], pv=trigger.closest('[data-pv]'), scope=pv?.classList.contains('scope-dark')?'scope-dark':pv?.classList.contains('scope-light')?'scope-light':'';
+  overlay.innerHTML=`<div class="pu-drawer-back ${scope}" data-back><div class="pu-drawer ${d.side}" role="dialog" aria-modal="true" aria-labelledby="drawer-${k}-t" tabindex="-1">${d.html()}</div></div>`;
+  const panel=overlay.querySelector('.pu-drawer'), root=document.documentElement, gutter=innerWidth-root.clientWidth;
+  root.style.overflow='hidden'; if(gutter) root.style.paddingRight=gutter+'px';
+  trigger.setAttribute('aria-expanded','true');
+  // capture phase: runs before the page's own shortcuts, which stay off while the dialog is open
+  const trap=e=>{ if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){ e.preventDefault(); e.stopPropagation(); return; }
+    if(e.key!=='Tab') return; const f=[...panel.querySelectorAll('button,a[href],input,select,textarea,[tabindex]:not([tabindex="-1"])')].filter(x=>!x.disabled&&x.offsetParent!==null);
+    if(!f.length){ e.preventDefault(); return; } const a=document.activeElement;
+    if(e.shiftKey&&(a===f[0]||a===panel||!panel.contains(a))){ e.preventDefault(); f[f.length-1].focus(); }
+    else if(!e.shiftKey&&(a===f[f.length-1]||!panel.contains(a))){ e.preventDefault(); f[0].focus(); } };
+  addEventListener('keydown',trap,true);
+  overlayCleanup=()=>{ removeEventListener('keydown',trap,true); root.style.overflow=''; root.style.paddingRight=''; trigger.setAttribute('aria-expanded','false'); };
+  panel.focus(); }
+document.addEventListener('submit',e=>{ const f=e.target.closest('[data-drawer-form]'); if(!f) return; e.preventDefault();
+  const n=[...f.elements].filter(x=>(x.type==='checkbox'&&x.checked)||(x.tagName==='SELECT'&&x.selectedIndex!==[...x.options].findIndex(o=>o.defaultSelected))||(x.matches('input:not([type=checkbox])')&&x.value.trim())).length;
+  const badge=lastFocus?.querySelector?.('.pu-badge'); if(badge) badge.textContent=n; closeOverlay(); toast('success','Filters applied',`${n} ${n===1?'filter':'filters'} active.`); });
+
+/* ---------- dropdown menu ---------- */
+// one menu is open at a time; its outside-press, scroll and resize listeners exist only while it is open
+let ddOpen=null;
+const ddItems=m=>[...m.querySelectorAll('[role^="menuitem"]:not([aria-disabled="true"])')];
+function ddPlace(){ if(!ddOpen) return; const {trigger:t,menu:m}=ddOpen, r=t.getBoundingClientRect(), gap=6, pad=8, vw=document.documentElement.clientWidth, vh=innerHeight;
+  m.style.maxHeight=''; const mw=m.offsetWidth, mh=m.scrollHeight, below=vh-r.bottom-gap-pad, above=r.top-gap-pad, up=mh>below&&above>below, h=Math.min(mh,up?above:below);
+  m.style.maxHeight=h+'px'; m.style.top=(up?r.top-gap-h:r.bottom+gap)+'px'; m.classList.toggle('up',up);
+  let left=m.dataset.align==='end'?r.right-mw:r.left;
+  if(m.dataset.align==='end'&&left<pad) left=r.left; else if(m.dataset.align!=='end'&&left+mw>vw-pad) left=r.right-mw;
+  m.style.left=Math.max(pad,Math.min(left,vw-mw-pad))+'px'; }
+function ddShow(root,focus='first'){ ddHide(false); const t=root.querySelector('[data-dd-t]'), m=root.querySelector('[role="menu"]');
+  const onDown=e=>{ if(!root.contains(e.target)) ddHide(false); }, onMove=e=>{ if(!(e.target instanceof Node&&m.contains(e.target))) ddPlace(); };
+  document.addEventListener('pointerdown',onDown,true); addEventListener('scroll',onMove,true); addEventListener('resize',onMove);
+  ddOpen={root,trigger:t,menu:m,off(){ document.removeEventListener('pointerdown',onDown,true); removeEventListener('scroll',onMove,true); removeEventListener('resize',onMove); }};
+  m.hidden=false; t.setAttribute('aria-expanded','true'); ddPlace(); const it=ddItems(m); (focus==='last'?it[it.length-1]:it[0])?.focus(); }
+function ddHide(refocus=true){ if(!ddOpen) return; const {trigger:t,menu:m}=ddOpen; ddOpen.off(); ddOpen=null; m.hidden=true; t.setAttribute('aria-expanded','false'); if(refocus) t.focus(); }
+function ddActivate(it){ if(it.getAttribute('aria-disabled')==='true') return;
+  if(it.getAttribute('role')==='menuitemcheckbox'){ const on=it.getAttribute('aria-checked')!=='true'; it.setAttribute('aria-checked',on); if(it.dataset.col) it.closest('[data-dd-cols]')?.querySelectorAll(`td[data-col="${it.dataset.col}"],th[data-col="${it.dataset.col}"]`).forEach(c=>c.hidden=!on); return; }
+  const say=it.dataset.say, modal=it.dataset.ddModal; ddHide(true); if(modal) openModal(modal); else if(say) toast('success',say); }
+// capture phase so letters typed in a menu never reach the page's "/" and ⌘K shortcuts
+addEventListener('keydown',e=>{ const t=e.target; if(!(t instanceof Element)) return;
+  if(t.matches('[data-dd-t]')&&(e.key==='ArrowDown'||e.key==='ArrowUp')){ e.preventDefault(); ddShow(t.closest('[data-dd]'),e.key==='ArrowUp'?'last':'first'); return; }
+  const m=t.closest('[role="menu"]'); if(!m||!ddOpen||ddOpen.menu!==m) return;
+  const it=ddItems(m), i=it.indexOf(t), stop=()=>{ e.preventDefault(); e.stopPropagation(); };
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){ stop(); it[(i+(e.key==='ArrowDown'?1:-1)+it.length)%it.length]?.focus(); }
+  else if(e.key==='Home'||e.key==='End'){ stop(); it[e.key==='Home'?0:it.length-1]?.focus(); }
+  else if(e.key==='Escape'){ stop(); ddHide(true); }
+  else if(e.key==='Tab') ddHide(false);
+  else if(e.key.length===1&&e.key!==' '&&!e.metaKey&&!e.ctrlKey&&!e.altKey){ stop(); const k=e.key.toLowerCase(); [...it.slice(i+1),...it.slice(0,i+1)].find(x=>x.textContent.trim().toLowerCase().startsWith(k))?.focus(); }
+},true);
+document.addEventListener('pointermove',e=>{ const it=e.target.closest?.('.pu-dropdown-item'); if(it&&ddOpen?.menu.contains(it)&&it!==document.activeElement&&it.getAttribute('aria-disabled')!=='true') it.focus({preventScroll:true}); });
 
 /* ---------- command palette ---------- */
 let cmdSel=0;
@@ -1863,9 +2143,12 @@ document.addEventListener('click',e=>{
   if(t.dataset.rvGo){ rvShow(t.closest('[data-review]'), t.dataset.rvGo); return; }
   if(t.dataset.asSave!==undefined||t.dataset.asDiscard!==undefined){ asCommit(t.closest('[data-as]'), t.dataset.asSave!==undefined); return; }
   if(t.dataset.modal){ openModal(t.dataset.modal); return; }
-  if(t.dataset.close!==undefined){ const a=t.dataset.after; closeOverlay(); if(a==='deleted') toast('success','Product deleted','“Organic cotton tee” was removed.','Undo'); if(a==='invited') toast('success','Invite sent','They\'ll get an email shortly.'); return; }
+  if(t.dataset.close!==undefined){ const a=t.dataset.after, msg=t.dataset.afterToast; closeOverlay(); if(msg) toast('success',msg); if(a==='deleted') toast('success','Product deleted','“Organic cotton tee” was removed.','Undo'); if(a==='invited') toast('success','Invite sent','They\'ll get an email shortly.'); return; }
   if(t.dataset.toast){ const k=t.dataset.toast; if(k==='success') toast('success','Product saved','Your changes are live on the storefront.'); else if(k==='error') toast('error','Sync failed','Check your API key in Settings and try again.'); else toast('info','Order archived','#1284 moved to archive.','Undo'); return; }
   if(t.dataset.demoClick!==undefined){ const o=t.innerHTML; t.innerHTML=I('loader','spin')+'Loading'; t.disabled=true; t.setAttribute('aria-busy','true'); setTimeout(()=>{ t.innerHTML=o; t.disabled=false; t.removeAttribute('aria-busy'); toast('success','Done','Loading state finished.'); },1600); return; }
+  if(t.dataset.drawer){ openDrawer(t.dataset.drawer,t); return; }
+  if(t.dataset.ddT!==undefined){ const root=t.closest('[data-dd]'); if(ddOpen&&ddOpen.root===root) ddHide(true); else ddShow(root); return; }
+  if(t.matches('[role^="menuitem"]')&&t.closest('.pu-dropdown-menu')){ ddActivate(t); return; }
   if(t.dataset.go){ closeOverlay(); location.hash='#/docs/'+t.dataset.go; return; }
   if(t.dataset.to){ document.getElementById(t.dataset.to)?.scrollIntoView({behavior:'smooth'}); return; }
   if(t.id==='searchBtn'){ openCmd(); return; }
