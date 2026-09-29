@@ -630,6 +630,17 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 .blk-review form .pu-field{ max-width:none; }
 .blk-review-f{ display:flex; justify-content:flex-end; gap:8px; margin-top:14px; }
 @media (max-width:640px){ .blk-review-opts{ grid-template-columns:1fr; } }
+.blk-sup{ width:420px; max-width:100%; }
+.blk-sup .blk-sup-list{ list-style:none; margin:0; padding:6px; }
+.blk-sup .blk-sup-list li{ margin:0; }
+.blk-sup-row{ width:100%; display:flex; align-items:center; gap:12px; padding:12px; border:0; border-radius:var(--r-lg); background:none; color:var(--text); font:inherit; text-align:left; cursor:pointer; }
+.blk-sup-row:hover{ background:var(--bg-subtle); }
+.blk-sup-row .ic{ width:36px; height:36px; flex:none; display:grid; place-items:center; border-radius:var(--r); background:var(--bg-muted); color:var(--text-2); }
+.blk-sup-row .t{ flex:1; min-width:0; }
+.blk-sup-row b{ display:block; font-size:14px; font-weight:500; }
+.blk-sup-row .d{ display:flex; align-items:center; gap:6px; font-size:13px; color:var(--text-3); }
+.blk-sup-row > .ico:last-child{ color:var(--text-3); }
+.blk-dot{ width:8px; height:8px; flex:none; border-radius:50%; background:var(--success); box-shadow:0 0 0 3px var(--success-soft); }
 .blk-sr{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 
 /* ============ OVERLAYS ============ */
@@ -1286,7 +1297,28 @@ const BLOCKS=[
   description="A short review helps other merchants find us."
   reviewUrl="https://apps.shopify.com/printly#modal-show=WriteReview"
   onFeedback={(message) => sendFeedback({ message, shop: shop.domain })}
-/>`}];
+/>`},
+ {id:'support-card',cat:'Engagement',t:'Help and support',d:'Three ways to get help, with live chat status spelled out next to the dot.',free:true,html:`<div class="pu-card blk-sup"><div class="pu-card-h"><div><h4>Help and support</h4><p>Stuck? Pick whatever’s quickest.</p></div></div><ul class="blk-sup-list">${[['a','book','Documentation','Guides for setup, print areas and fulfilment.'],['button','help','Live chat','<span class="blk-dot" aria-hidden="true"></span>Online · Replies in about 5 min'],['a','calendar','Book a call','15 minutes with a Printly specialist.']].map(r=>`<li><${r[0]} class="blk-sup-row" ${r[0]==='a'?'href="javascript:void 0"':'type="button"'}><span class="ic">${I(r[1])}</span><span class="t"><b>${r[2]}</b> <span class="d">${r[3]}</span></span>${I('chevR')}</${r[0]}></li>`).join('')}</ul></div>`,
+  code:`<SupportCard title="Help and support" description="Stuck? Pick whatever's quickest.">
+  <SupportLink
+    icon={<Book />}
+    title="Documentation"
+    description="Guides for setup, print areas and fulfilment."
+    href="https://help.printly.app"
+  />
+  <SupportLink
+    icon={<HelpCircle />}
+    title="Live chat"
+    status={{ online: true, label: "Replies in about 5 min" }}
+    onClick={openChat}
+  />
+  <SupportLink
+    icon={<Calendar />}
+    title="Book a call"
+    description="15 minutes with a Printly specialist."
+    href={bookingUrl}
+  />
+</SupportCard>`}];
 /* ---------- shared doc pieces ---------- */
 const demo=(ex,i)=>{ const id=CODES.push(ex.code)-1;
   return `<div class="demo" data-demo><div class="demo-bar"><div class="seg" role="tablist"><button class="on" data-view="p">Preview</button><button data-view="c">Code</button></div><span class="spacer"></span>
