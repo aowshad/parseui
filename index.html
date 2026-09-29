@@ -672,15 +672,20 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 
 /* ============ RESPONSIVE ============ */
 @media (max-width:1180px){
+  .search-btn{ width:180px; }
   .layout{ grid-template-columns:240px minmax(0,1fr); }
   .toc{ display:none; }
   .main{ padding:32px 36px 80px; }
   .hero-grid{ grid-template-columns:1fr; gap:48px; }
   .dash-kpis{ grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
-@media (max-width:900px){
-  .nav-links, .search-btn .t, .search-btn .kbd{ display:none; }
+/* the nav links stay until 900px, so the search button goes icon-only first to keep the bar from overflowing */
+@media (max-width:1000px){
+  .search-btn .t, .search-btn .kbd{ display:none; }
   .search-btn{ width:34px; padding:0; justify-content:center; border:0; background:none; }
+}
+@media (max-width:900px){
+  .nav-links{ display:none; }
   .menu-btn{ display:grid; }
   .layout, .layout.no-toc{ grid-template-columns:minmax(0,1fr); }
   .sidebar{ position:fixed; z-index:65; left:0; top:0; height:100%; width:290px; background:var(--bg); transform:translateX(-100%); transition:transform .22s; padding-top:calc(env(safe-area-inset-top,0px) + 20px); }
