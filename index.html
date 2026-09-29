@@ -419,6 +419,41 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 .pu-upload{ border:1.5px dashed var(--border-strong); border-radius:var(--r-lg); padding:24px; text-align:center; font-size:14px; color:var(--text-2); width:100%; max-width:420px; background:var(--bg); }
 .pu-upload b{ color:var(--p-text); font-weight:600; }
 
+/* drawer */
+.pu-drawer-back{ position:fixed; inset:0; z-index:80; background:rgba(12,12,18,.45); animation:fade .18s; }
+.pu-drawer{ position:fixed; top:0; right:0; bottom:0; width:min(440px,100vw); display:flex; flex-direction:column; background:var(--bg); color:var(--text); border-left:1px solid var(--border); box-shadow:var(--sh-xl); text-align:left; outline:none; animation:pu-drawer-r .28s cubic-bezier(.2,.9,.3,1); }
+.pu-drawer.bottom{ top:auto; left:0; width:auto; max-height:min(85vh,640px); border-left:0; border-top:1px solid var(--border); border-radius:var(--r-xl) var(--r-xl) 0 0; padding-bottom:env(safe-area-inset-bottom,0px); animation-name:pu-drawer-b; }
+.pu-drawer.bottom::before{ content:""; flex:none; align-self:center; width:40px; height:4px; margin:10px 0 0; border-radius:99px; background:var(--border-strong); }
+@keyframes pu-drawer-r{ from{ transform:translateX(100%); } }
+@keyframes pu-drawer-b{ from{ transform:translateY(100%); } }
+.pu-drawer-h{ flex:none; display:flex; align-items:flex-start; gap:10px; padding:18px 16px 16px 20px; border-bottom:1px solid var(--border); }
+.pu-drawer-h > div{ flex:1; min-width:0; }
+.pu-drawer-h h2{ margin:0; font-size:17px; font-weight:600; letter-spacing:-.01em; }
+.pu-drawer-h p{ margin:2px 0 0; font-size:13px; color:var(--text-3); }
+.pu-drawer-h .pu-badge{ margin-top:4px; }
+.pu-drawer-form{ flex:1; min-height:0; display:flex; flex-direction:column; }
+.pu-drawer-b{ flex:1; min-height:0; overflow-y:auto; overscroll-behavior:contain; padding:18px 20px 22px; display:flex; flex-direction:column; gap:20px; }
+.pu-drawer-b h3{ margin:0 0 10px; font-size:12.5px; font-weight:600; color:var(--text-3); }
+.pu-drawer-b p{ margin:0; font-size:14px; color:var(--text-2); }
+.pu-drawer-b .pu-field{ max-width:none; }
+.pu-drawer fieldset{ margin:0; padding:0; border:0; display:flex; flex-direction:column; gap:10px; min-width:0; }
+.pu-drawer legend{ padding:0; margin-bottom:10px; font-size:13.5px; font-weight:500; }
+.pu-drawer-row{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.pu-drawer-items{ list-style:none; margin:0 0 14px; padding:0; display:flex; flex-direction:column; gap:12px; }
+.pu-drawer-items li{ display:flex; align-items:center; gap:12px; font-size:14px; }
+.pu-drawer-items li > div{ flex:1; min-width:0; } .pu-drawer-items b{ display:block; font-weight:500; } .pu-drawer-items small{ display:block; font-size:12.5px; color:var(--text-3); }
+.pu-drawer-items .q{ color:var(--text-2); font-variant-numeric:tabular-nums; } .pu-drawer-items .num{ width:64px; text-align:right; font-variant-numeric:tabular-nums; }
+.pu-drawer-sum{ margin:0; padding-top:12px; border-top:1px solid var(--border); display:grid; grid-template-columns:1fr auto; gap:6px 12px; font-size:14px; color:var(--text-2); }
+.pu-drawer-sum dd{ margin:0; text-align:right; font-variant-numeric:tabular-nums; } .pu-drawer-sum .t{ color:var(--text); font-weight:600; }
+.pu-drawer-opt{ padding:12px 14px; border:1px solid var(--border); border-radius:var(--r-lg); }
+.pu-drawer-opt:has(input:checked){ border-color:var(--p); box-shadow:0 0 0 1px var(--p); }
+.pu-drawer-f{ flex:none; display:flex; justify-content:flex-end; gap:8px; padding:12px 20px; border-top:1px solid var(--border); background:var(--bg-subtle); }
+@media (max-width:640px){
+  .pu-drawer.right{ top:auto; left:0; width:auto; max-height:85vh; border-left:0; border-top:1px solid var(--border); border-radius:var(--r-xl) var(--r-xl) 0 0; padding-bottom:env(safe-area-inset-bottom,0px); animation-name:pu-drawer-b; }
+  .pu-drawer.right::before{ content:""; flex:none; align-self:center; width:40px; height:4px; margin:10px 0 0; border-radius:99px; background:var(--border-strong); }
+  .pu-drawer-f .pu-btn{ flex:1; }
+}
+
 /* dropdown menu */
 .pu-dropdown{ position:relative; display:inline-flex; }
 .pu-dropdown-menu{ position:fixed; z-index:75; min-width:210px; max-width:calc(100vw - 16px); overflow-y:auto; overscroll-behavior:contain; padding:4px; background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--sh-lg); text-align:left; animation:pu-dropdown-in .14s ease-out; }
@@ -1170,7 +1205,76 @@ C.dropdown={name:'Dropdown menu',importName:'DropdownMenu',file:'dropdown-menu',
 </DropdownMenu>`,
    props:[P('open','boolean','—','Controlled open state.'),P('onOpenChange','(open: boolean) => void','—','Called when the menu opens or closes.'),P('align','"start" | "end"','"start"','Edge of the trigger the menu lines up with. Flips when there is no room.'),P('side','"bottom" | "top"','"bottom"','Preferred side. Flips up automatically near the bottom of the viewport.'),P('loop','boolean','true','Arrow keys wrap from the last item to the first.'),P('DropdownMenuItem.onSelect','(event: Event) => void','—','Runs when the item is chosen. Call event.preventDefault() to keep the menu open.'),P('DropdownMenuItem.variant','"default" | "danger"','"default"','Danger colors the item for destructive actions.'),P('DropdownMenuItem.shortcut','string','—','Shortcut hint shown on the right. Also set as aria-keyshortcuts.'),P('DropdownMenuItem.disabled','boolean','false','Skipped by arrow keys and typeahead.'),P('DropdownMenuCheckboxItem.checked','boolean','false','Checked state. Toggling keeps the menu open.')],
    keys:[['Enter / Space / ↓','On the trigger: opens the menu and focuses the first item.'],['↑','On the trigger: opens the menu and focuses the last item.'],['↓ / ↑','Moves to the next or previous item, wrapping at the ends.'],['Home / End','Moves to the first or last item.'],['A–Z','Moves to the next item that starts with that letter.'],['Enter / Space','Runs the item. Checkbox items toggle and the menu stays open.'],['Escape','Closes the menu and returns focus to the trigger.'],['Tab','Closes the menu and moves focus on.']]};
-const PLANNED=[['combobox','Combobox'],['date-picker','Date picker'],['data-table','Data table'],['command','Command menu'],['file-upload','File upload'],['drawer','Drawer']];
+C.drawer={name:'Drawer',importName:'Drawer',status:'beta',radix:'Dialog',desc:'A panel that slides over the page for details or a short task, without leaving the current screen. On phones it becomes a bottom sheet.',thumb:`<div style="position:relative;width:210px;height:96px;border:1px solid var(--border);border-radius:8px;background:var(--bg-muted);overflow:hidden"><div style="position:absolute;inset:0 0 0 auto;width:96px;background:var(--bg);border-left:1px solid var(--border);box-shadow:var(--sh-lg);padding:10px"><div style="height:8px;width:60%;border-radius:4px;background:var(--text);opacity:.8"></div><div style="height:6px;width:80%;border-radius:3px;background:var(--border-strong);margin-top:10px"></div><div style="height:6px;width:70%;border-radius:3px;background:var(--border-strong);margin-top:6px"></div><div style="position:absolute;left:10px;right:10px;bottom:10px;height:16px;border-radius:5px;background:var(--p)"></div></div></div>`,
+   examples:[
+    {t:'Order details',d:'Slides in from the right with the order summary, line items and footer actions. Focus moves into the drawer and stays there until it closes.',html:`<button type="button" class="pu-btn secondary" data-drawer="order" aria-haspopup="dialog" aria-expanded="false">${I('box')}View order #1284</button>`,
+     code:`<Drawer>
+  <DrawerTrigger asChild>
+    <Button variant="secondary" leadingIcon={<Box />}>View order #1284</Button>
+  </DrawerTrigger>
+  <DrawerContent
+    title="Order #1284"
+    description="Placed Sep 28, 2026 at 2:14 PM"
+    badge={<Badge color="success" dot>Paid</Badge>}
+    footer={
+      <>
+        <DrawerClose asChild><Button variant="secondary">Close</Button></DrawerClose>
+        <Button onClick={markFulfilled}>Mark as fulfilled</Button>
+      </>
+    }
+  >
+    <DrawerSection title="Customer"><Person name="Nadia Rahman" email="nadia@lumenprints.com" /></DrawerSection>
+    <DrawerSection title="Shipping">{order.shippingAddress}</DrawerSection>
+    <DrawerSection title="Items"><LineItems items={order.lineItems} totals={order.totals} /></DrawerSection>
+  </DrawerContent>
+</Drawer>`},
+    {t:'Filters',d:'A form in a drawer. The body scrolls and Reset and Apply stay pinned in the footer. Nothing changes until you apply.',html:`<button type="button" class="pu-btn secondary" data-drawer="filters" aria-haspopup="dialog" aria-expanded="false">${I('filter')}Filters<span class="pu-badge brand round">2</span></button>`,
+     code:`<Drawer>
+  <DrawerTrigger asChild>
+    <Button variant="secondary" leadingIcon={<Filter />}>
+      Filters <Badge color="brand">{activeCount}</Badge>
+    </Button>
+  </DrawerTrigger>
+  <DrawerContent
+    title="Filter orders"
+    as="form"
+    onSubmit={applyFilters}
+    footer={
+      <>
+        <Button variant="secondary" type="reset">Reset</Button>
+        <Button type="submit">Apply filters</Button>
+      </>
+    }
+  >
+    <CheckboxGroup legend="Payment status" options={paymentStatuses} defaultValue={["paid", "pending"]} />
+    <Select label="Fulfillment" options={fulfillment} />
+    <Select label="Date" options={dateRanges} defaultValue="30d" />
+    <Input label="Customer tag" placeholder="e.g. wholesale" />
+    <Switch label="Only orders with custom artwork" />
+  </DrawerContent>
+</Drawer>`},
+    {t:'Bottom sheet',d:'side="bottom" slides up from the bottom edge. Every Drawer does this automatically at 640px and narrower, so right-side drawers become sheets on phones.',html:`<button type="button" class="pu-btn secondary" data-drawer="sheet" aria-haspopup="dialog" aria-expanded="false">${I('layers')}Choose print method</button>`,
+     code:`<Drawer side="bottom">
+  <DrawerTrigger asChild>
+    <Button variant="secondary" leadingIcon={<Layers />}>Choose print method</Button>
+  </DrawerTrigger>
+  <DrawerContent
+    title="Print method"
+    description="Used for this product's print files."
+    footer={<Button onClick={save}>Use this method</Button>}
+  >
+    <RadioGroup options={printMethods} defaultValue="dtg" />
+  </DrawerContent>
+</Drawer>`}],
+   usage:`<Drawer>
+  <DrawerTrigger asChild><Button>Open</Button></DrawerTrigger>
+  <DrawerContent title="Order #1284" footer={<Button>Save</Button>}>
+    …
+  </DrawerContent>
+</Drawer>`,
+   props:[P('open','boolean','—','Controlled open state.'),P('onOpenChange','(open: boolean) => void','—','Called when the drawer opens or closes.'),P('side','"right" | "left" | "bottom"','"right"','Edge the drawer slides from. At 640px and narrower, right and left drawers become bottom sheets.'),P('title','string','—','Required. Labels the dialog through aria-labelledby.'),P('description','string','—','Shown under the title.'),P('footer','ReactNode','—','Actions pinned to the bottom while the body scrolls.'),P('dismissible','boolean','true','Close on Escape and overlay click.'),P('initialFocus','RefObject<HTMLElement>','the panel','Element that receives focus on open. The panel itself by default, so screen readers announce the title first.')],
+   keys:[['Enter / Space','On the trigger: opens the drawer and moves focus into it.'],['Tab / Shift+Tab','Moves between controls inside the drawer. Focus wraps and never reaches the page behind.'],['Escape','Closes the drawer and returns focus to the trigger.']]};
+const PLANNED=[['combobox','Combobox'],['date-picker','Date picker'],['data-table','Data table'],['command','Command menu'],['file-upload','File upload']];
 const COMP_ORDER=Object.keys(C).sort((a,b)=>C[a].name.localeCompare(C[b].name));
 /* ---------- navigation model ---------- */
 const NAV=[
@@ -1746,7 +1850,53 @@ const MODALS={
 let lastFocus;
 function openModal(k){ lastFocus=document.activeElement; overlay.innerHTML=`<div class="pu-modal-back" data-back><div class="pu-modal" role="dialog" aria-modal="true">${MODALS[k]}</div></div>`;
   setTimeout(()=>overlay.querySelector('.pu-modal button:not([data-close]), .pu-modal input, .pu-modal button')?.focus(),30); }
-function closeOverlay(){ overlay.innerHTML=''; lastFocus?.focus?.(); }
+let overlayCleanup=null; // set by overlays that add global listeners or lock page scroll
+function closeOverlay(){ overlay.innerHTML=''; overlayCleanup?.(); overlayCleanup=null; lastFocus?.focus?.(); }
+
+/* ---------- drawer ---------- */
+const drawerHead=(k,title,sub,extra='')=>`<div class="pu-drawer-h"><div><h2 id="drawer-${k}-t">${title}</h2>${sub?`<p>${sub}</p>`:''}</div>${extra}<button type="button" class="pu-btn ghost icon sm" data-close aria-label="Close">${I('x')}</button></div>`;
+const DRAWERS={
+ order:{side:'right',html:()=>`${drawerHead('order','Order #1284','Placed Sep 28, 2026 at 2:14 PM','<span class="pu-badge success round"><i class="dot"></i>Paid</span>')}
+  <div class="pu-drawer-b">
+   <section><h3>Customer</h3><div class="pu-person">${av('Nadia Rahman','sm')}<div><b>Nadia Rahman</b><small>nadia@lumenprints.com · 12 orders</small></div></div></section>
+   <section><h3>Shipping</h3><p>House 14, Road 7, Dhanmondi<br>Dhaka 1205, Bangladesh</p><p style="margin-top:6px">Standard · Arrives Oct 3–5</p></section>
+   <section><h3>Items</h3><ul class="pu-drawer-items">${[['layers','p','Heavyweight tee','Black / L · Custom front print',2,'$64.00'],['tag','success','Canvas tote','Natural · Custom print',1,'$24.00'],['box','warning','Ceramic mug, 11 oz','White · Wrap print',1,'$18.00']].map(r=>`<li><span class="prod-thumb" style="background:var(--${r[1]}-soft);color:var(--${r[1]==='p'?'p-text':r[1]})">${I(r[0])}</span><div><b>${r[2]}</b><small>${r[3]}</small></div><span class="q">×${r[4]}</span><b class="num">${r[5]}</b></li>`).join('')}</ul>
+    <dl class="pu-drawer-sum"><dt>Subtotal</dt><dd>$106.00</dd><dt>Shipping</dt><dd>$12.00</dd><dt>Tax</dt><dd>$10.00</dd><dt class="t">Total</dt><dd class="t">$128.00</dd></dl></section>
+  </div>
+  <div class="pu-drawer-f"><button type="button" class="pu-btn secondary" data-close>Close</button><button type="button" class="pu-btn primary" data-close data-after-toast="Order #1284 marked as fulfilled">Mark as fulfilled</button></div>`},
+ filters:{side:'right',html:()=>`${drawerHead('filters','Filter orders','Narrow the orders list. Nothing changes until you apply.')}
+  <form class="pu-drawer-form" data-drawer-form>
+   <div class="pu-drawer-b">
+    <fieldset><legend>Payment status</legend>${[['Paid',1],['Pending',1],['Refunded',0]].map(r=>`<label class="pu-check"><input type="checkbox" name="payment" value="${r[0].toLowerCase()}"${r[1]?' checked':''}> ${r[0]}</label>`).join('')}</fieldset>
+    <div class="pu-field"><label class="pu-label" for="dr-fulfil">Fulfillment</label><select class="pu-select" id="dr-fulfil" name="fulfillment"><option selected>Any</option><option>Unfulfilled</option><option>Fulfilled</option><option>Returned</option></select></div>
+    <div class="pu-field"><label class="pu-label" for="dr-dates">Date</label><select class="pu-select" id="dr-dates" name="date"><option>Last 7 days</option><option selected>Last 30 days</option><option>This year</option></select></div>
+    <fieldset><legend>Order total</legend><div class="pu-drawer-row"><div class="pu-input"><span class="addon">$</span><input type="number" name="min" min="0" placeholder="Min" aria-label="Minimum order total"></div><div class="pu-input"><span class="addon">$</span><input type="number" name="max" min="0" placeholder="Max" aria-label="Maximum order total"></div></div></fieldset>
+    <div class="pu-field"><label class="pu-label" for="dr-tag">Customer tag</label><div class="pu-input">${I('tag')}<input id="dr-tag" name="tag" placeholder="e.g. wholesale"></div></div>
+    <label class="pu-switch" style="justify-content:space-between"><span>Only orders with custom artwork</span><input type="checkbox" role="switch" name="custom"></label>
+   </div>
+   <div class="pu-drawer-f"><button type="reset" class="pu-btn secondary">Reset</button><button type="submit" class="pu-btn primary">Apply filters</button></div>
+  </form>`},
+ sheet:{side:'bottom',html:()=>`${drawerHead('sheet','Print method','Used for this product’s print files.')}
+  <div class="pu-drawer-b"><fieldset><legend class="blk-sr">Print method</legend>${[['Direct to garment','Full color, best for photos and gradients.',1],['Screen print','Bold spot colors, cheapest from 24 units.',0],['Embroidery','Stitched logos on caps and hoodies.',0]].map(r=>`<label class="pu-check pu-drawer-opt"><input type="radio" name="dr-method"${r[2]?' checked':''}><span class="t"><b>${r[0]}</b><span>${r[1]}</span></span></label>`).join('')}</fieldset></div>
+  <div class="pu-drawer-f"><button type="button" class="pu-btn secondary" data-close>Cancel</button><button type="button" class="pu-btn primary" data-close data-after-toast="Print method updated">Use this method</button></div>`}};
+function openDrawer(k,trigger){ if(overlay.innerHTML) closeOverlay(); lastFocus=trigger;
+  const d=DRAWERS[k], pv=trigger.closest('[data-pv]'), scope=pv?.classList.contains('scope-dark')?'scope-dark':pv?.classList.contains('scope-light')?'scope-light':'';
+  overlay.innerHTML=`<div class="pu-drawer-back ${scope}" data-back><div class="pu-drawer ${d.side}" role="dialog" aria-modal="true" aria-labelledby="drawer-${k}-t" tabindex="-1">${d.html()}</div></div>`;
+  const panel=overlay.querySelector('.pu-drawer'), root=document.documentElement, gutter=innerWidth-root.clientWidth;
+  root.style.overflow='hidden'; if(gutter) root.style.paddingRight=gutter+'px';
+  trigger.setAttribute('aria-expanded','true');
+  // capture phase: runs before the page's own shortcuts, which stay off while the dialog is open
+  const trap=e=>{ if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){ e.preventDefault(); e.stopPropagation(); return; }
+    if(e.key!=='Tab') return; const f=[...panel.querySelectorAll('button,a[href],input,select,textarea,[tabindex]:not([tabindex="-1"])')].filter(x=>!x.disabled&&x.offsetParent!==null);
+    if(!f.length){ e.preventDefault(); return; } const a=document.activeElement;
+    if(e.shiftKey&&(a===f[0]||a===panel||!panel.contains(a))){ e.preventDefault(); f[f.length-1].focus(); }
+    else if(!e.shiftKey&&(a===f[f.length-1]||!panel.contains(a))){ e.preventDefault(); f[0].focus(); } };
+  addEventListener('keydown',trap,true);
+  overlayCleanup=()=>{ removeEventListener('keydown',trap,true); root.style.overflow=''; root.style.paddingRight=''; trigger.setAttribute('aria-expanded','false'); };
+  panel.focus(); }
+document.addEventListener('submit',e=>{ const f=e.target.closest('[data-drawer-form]'); if(!f) return; e.preventDefault();
+  const n=[...f.elements].filter(x=>(x.type==='checkbox'&&x.checked)||(x.tagName==='SELECT'&&x.selectedIndex!==[...x.options].findIndex(o=>o.defaultSelected))||(x.matches('input:not([type=checkbox])')&&x.value.trim())).length;
+  const badge=lastFocus?.querySelector?.('.pu-badge'); if(badge) badge.textContent=n; closeOverlay(); toast('success','Filters applied',`${n} ${n===1?'filter':'filters'} active.`); });
 
 /* ---------- dropdown menu ---------- */
 // one menu is open at a time; its outside-press, scroll and resize listeners exist only while it is open
@@ -1849,9 +1999,10 @@ document.addEventListener('click',e=>{
   if(t.dataset.rlArchive!==undefined||t.dataset.rlDelete!==undefined){ rlBulk(t.closest('[data-rl]'), t.dataset.rlDelete!==undefined?'delete':'archive'); return; }
   if(t.dataset.rvGo){ rvShow(t.closest('[data-review]'), t.dataset.rvGo); return; }
   if(t.dataset.modal){ openModal(t.dataset.modal); return; }
-  if(t.dataset.close!==undefined){ const a=t.dataset.after; closeOverlay(); if(a==='deleted') toast('success','Product deleted','“Organic cotton tee” was removed.','Undo'); if(a==='invited') toast('success','Invite sent','They\'ll get an email shortly.'); return; }
+  if(t.dataset.close!==undefined){ const a=t.dataset.after, msg=t.dataset.afterToast; closeOverlay(); if(msg) toast('success',msg); if(a==='deleted') toast('success','Product deleted','“Organic cotton tee” was removed.','Undo'); if(a==='invited') toast('success','Invite sent','They\'ll get an email shortly.'); return; }
   if(t.dataset.toast){ const k=t.dataset.toast; if(k==='success') toast('success','Product saved','Your changes are live on the storefront.'); else if(k==='error') toast('error','Sync failed','Check your API key in Settings and try again.'); else toast('info','Order archived','#1284 moved to archive.','Undo'); return; }
   if(t.dataset.demoClick!==undefined){ const o=t.innerHTML; t.innerHTML=I('loader','spin')+'Loading'; t.disabled=true; t.setAttribute('aria-busy','true'); setTimeout(()=>{ t.innerHTML=o; t.disabled=false; t.removeAttribute('aria-busy'); toast('success','Done','Loading state finished.'); },1600); return; }
+  if(t.dataset.drawer){ openDrawer(t.dataset.drawer,t); return; }
   if(t.dataset.ddT!==undefined){ const root=t.closest('[data-dd]'); if(ddOpen&&ddOpen.root===root) ddHide(true); else ddShow(root); return; }
   if(t.matches('[role^="menuitem"]')&&t.closest('.pu-dropdown-menu')){ ddActivate(t); return; }
   if(t.dataset.go){ closeOverlay(); location.hash='#/docs/'+t.dataset.go; return; }
