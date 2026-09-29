@@ -1102,18 +1102,20 @@ function lineChart(w=640,h=220){ const min=20,max=100,pad=8,
 const bars=(a)=>`<svg class="spark" viewBox="0 0 120 36" preserveAspectRatio="none" style="height:36px" aria-hidden="true">${a.map((v,i)=>`<rect x="${i*10+1}" y="${36-v*.36}" width="7" height="${v*.36}" rx="1.5" style="fill:${i===a.length-1?'var(--p)':'var(--p-soft-2)'}"/>`).join('')}</svg>`;
 
 /* ---------- dashboard ---------- */
+/* the store admin sidebar shared by the examples; `on` is the active item's label */
+const storeSidebar=(on='Home')=>`<aside class="dash-side">
+    <div class="dash-store"><span class="pu-avatar sq" style="background:var(--p)">LP</span><div><b>Lumen Prints</b><small>lumen.myshopify.com</small></div></div>
+    ${[['home','Home'],['cart','Orders',0,'12'],['box','Products'],['users','Customers'],['chart','Analytics'],['tag','Discounts']].map(n=>`<div class="dnav ${n[1]===on?'on':''}">${I(n[0])}${n[1]}${n[3]?`<span class="pu-badge brand round">${n[3]}</span>`:''}</div>`).join('')}
+    <div class="dnav-label">Apps</div>
+    ${[['layers','Printly designer'],['calendar','Bookwise'],['zap','Variantly']].map(n=>`<div class="dnav${n[1]===on?' on':''}">${I(n[0])}${n[1]}</div>`).join('')}
+    <div class="dnav-label">Store</div><div class="dnav">${I('sliders')}Settings</div>
+    <div class="dash-up"><b>Storage almost full</b>82% of 5 GB used by design assets.<div class="pu-progress sm" style="margin:10px 0"><i style="width:82%"></i></div><button class="pu-btn soft xs">Upgrade plan</button></div>
+  </aside>`;
 function dashboardHTML(){
   const kpi=(l,v,d,up,a)=>`<div class="pu-card kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="d"><span class="${up?'up':'down'}">${up?'↑':'↓'} ${d}</span> vs last month</div><div style="margin-top:10px">${bars(a)}</div></div>`;
   const orders=[['#1284','Nadia Rahman','success','Paid','Fulfilled','$128.00','2 min ago'],['#1283','Tanvir Hasan','warning','Pending','Unfulfilled','$64.50','18 min ago'],['#1282','Sara Kim','success','Paid','Fulfilled','$212.40','1 hr ago'],['#1281','Ovi Das','danger','Refunded','Returned','$39.00','3 hr ago'],['#1280','Maya Chen','success','Paid','Unfulfilled','$96.20','5 hr ago'],['#1279','Rafi Ahmed','success','Paid','Fulfilled','$154.75','Yesterday']];
   return `<div class="dash">
-  <aside class="dash-side">
-    <div class="dash-store"><span class="pu-avatar sq" style="background:var(--p)">LP</span><div><b>Lumen Prints</b><small>lumen.myshopify.com</small></div></div>
-    ${[['home','Home',1],['cart','Orders',0,'12'],['box','Products'],['users','Customers'],['chart','Analytics'],['tag','Discounts']].map(n=>`<div class="dnav ${n[2]?'on':''}">${I(n[0])}${n[1]}${n[3]?`<span class="pu-badge brand round">${n[3]}</span>`:''}</div>`).join('')}
-    <div class="dnav-label">Apps</div>
-    ${[['layers','Printly designer'],['calendar','Bookwise'],['zap','Variantly']].map(n=>`<div class="dnav">${I(n[0])}${n[1]}</div>`).join('')}
-    <div class="dnav-label">Store</div><div class="dnav">${I('sliders')}Settings</div>
-    <div class="dash-up"><b>Storage almost full</b>82% of 5 GB used by design assets.<div class="pu-progress sm" style="margin:10px 0"><i style="width:82%"></i></div><button class="pu-btn soft xs">Upgrade plan</button></div>
-  </aside>
+  ${storeSidebar('Home')}
   <div class="dash-main">
     <div class="dash-top"><div class="pu-input">${I('search')}<input placeholder="Search orders, products, customers" aria-label="Search"><span class="pu-kbd">/</span></div><div style="margin-left:auto;display:flex;align-items:center;gap:8px"><span class="pu-tip"><button class="pu-btn ghost icon" aria-label="Notifications">${I('bell')}</button><span class="tip bot">Notifications</span></span>${av('Nadia Rahman','sm',true)}</div></div>
     <div class="dash-body">
