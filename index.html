@@ -554,6 +554,28 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 .blk-welcome .blk-vals span:not(.ic){ display:block; font-size:13px; color:var(--text-3); }
 .blk-welcome-acts{ display:flex; flex-direction:column; gap:8px; }
 .blk-welcome .blk-note{ margin:14px 0 0; font-size:12.5px; color:var(--text-3); }
+.blk-setup{ width:520px; max-width:100%; }
+.blk-setup-h{ display:flex; align-items:flex-start; gap:12px; padding:18px 18px 0; }
+.blk-setup-h h4{ margin:0; font-size:15px; font-weight:600; }
+.blk-setup .blk-setup-h p{ margin:2px 0 0; font-size:13px; color:var(--text-3); }
+.blk-setup-h .pu-btn{ margin:-6px -8px 0 auto; color:var(--text-3); }
+.blk-setup .pu-progress{ width:auto; margin:14px 18px 6px; }
+.blk-setup .blk-tasks{ list-style:none; margin:0; padding:4px 8px 10px; }
+.blk-tasks .blk-task{ margin:0; border-radius:var(--r-lg); }
+.blk-tasks .blk-task.open{ background:var(--bg-subtle); }
+.blk-task-t{ width:100%; display:flex; align-items:center; gap:12px; padding:10px; border:0; border-radius:var(--r-lg); background:none; font:500 14px/1.4 var(--font); color:var(--text); text-align:left; cursor:pointer; }
+.blk-task-t:hover{ background:var(--bg-muted); } .blk-task.open .blk-task-t:hover{ background:none; }
+.blk-task.done .blk-task-t{ color:var(--text-3); font-weight:400; }
+.blk-task-ic{ width:20px; height:20px; flex:none; display:grid; place-items:center; }
+.blk-task-ic .ico{ width:20px; height:20px; color:var(--success); }
+.blk-task-ic i{ width:17px; height:17px; border-radius:50%; border:1.5px solid var(--border-strong); }
+.blk-task.open .blk-task-ic i{ border-color:var(--p); }
+.blk-task-b{ padding:0 12px 14px 42px; }
+.blk-task .blk-task-b p{ margin:0 0 12px; font-size:13.5px; color:var(--text-2); }
+.blk-task.done .blk-task-b p{ margin:0; }
+.blk-task-acts{ display:flex; flex-wrap:wrap; gap:8px; }
+.blk-setup-min{ display:flex; align-items:center; flex-wrap:wrap; gap:10px 16px; padding:14px 18px; font-size:13.5px; color:var(--text-2); }
+.blk-setup-min .pu-btn{ margin-left:auto; }
 .blk-sr{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 
 /* ============ OVERLAYS ============ */
@@ -1076,6 +1098,20 @@ const BLOCKS=[
   <Button fullWidth onClick={startSetup}>Get started</Button>
   <Button variant="secondary" fullWidth onClick={openTour}>Watch a 2-minute tour</Button>
 </WelcomeCard>`},
+ {id:'setup-guide',cat:'Onboarding',t:'Setup guide',d:'Checklist that walks a new merchant through the first tasks after install. One task is open at a time.',free:true,html:`<div class="pu-card blk-setup" data-setup><div data-setup-body><div class="blk-setup-h"><div><h4>Set up Printly</h4><p data-setup-count>2 of 5 tasks complete</p></div><button type="button" class="pu-btn ghost icon sm" data-setup-x aria-label="Dismiss setup guide">${I('x')}</button></div><div class="pu-progress sm" role="progressbar" aria-label="Setup progress" aria-valuemin="0" aria-valuemax="5" aria-valuenow="2"><i style="width:40%"></i></div><ol class="blk-tasks">${[['Install the theme block','The Printly block is live on your product page.',1],['Choose a product template','Shoppers will personalise the Heavyweight tee.',1],['Upload your first design','Add a PNG or SVG. Printly checks resolution and bleed before anything goes to print.',0,'Upload design',1],['Set print areas','Mark where artwork can go on the front, back and sleeves.',0,'Set print areas'],['Publish to your store','Turn on personalisation so shoppers can start designing.',0,'Publish']].map(s=>`<li class="blk-task${s[2]?' done':''}${s[4]?' open':''}"><button type="button" class="blk-task-t" data-task-t aria-expanded="${s[4]?'true':'false'}"><span class="blk-task-ic">${s[2]?I('checkC')+'<span class="blk-sr">Completed: </span>':'<i></i>'}</span>${s[0]}</button><div class="blk-task-b${s[4]?'':' hidden'}"><p>${s[1]}</p>${s[2]?'':`<div class="blk-task-acts"><button type="button" class="pu-btn primary sm" data-task-do>${s[3]}</button><button type="button" class="pu-btn ghost sm" data-task-skip>Skip for now</button></div>`}</div></li>`).join('')}</ol></div><div class="blk-setup-min hidden" data-setup-min><span>Setup guide hidden. You can finish setting up Printly any time.</span><button type="button" class="pu-btn secondary sm" data-setup-show>Show guide</button></div></div>`,
+  code:`<SetupGuide title="Set up Printly" onDismiss={() => setGuideHidden(true)}>
+  <SetupTask title="Install the theme block" complete />
+  <SetupTask title="Choose a product template" complete />
+  <SetupTask
+    title="Upload your first design"
+    description="Add a PNG or SVG. Printly checks resolution and bleed before anything goes to print."
+    action={<Button size="sm" onClick={openUploader}>Upload design</Button>}
+    onSkip={skipTask}
+    defaultOpen
+  />
+  <SetupTask title="Set print areas" action={<Button size="sm">Set print areas</Button>} />
+  <SetupTask title="Publish to your store" action={<Button size="sm">Publish</Button>} />
+</SetupGuide>`},
  {id:'stats',cat:'App pages',t:'Stats row',d:'Metric cards with trend and sparkline.',free:true,html:`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;width:100%">${[['Visitors','24.8k','14%',1,[30,40,35,50,45,60,70,65,80]],['Sessions','9,412','6%',1,[40,38,45,50,48,55,52,60,64]],['Bounce rate','41%','2%',0,[60,58,62,55,57,50,52,48,45]]].map(k=>`<div class="pu-card kpi"><div class="l">${k[0]}</div><div class="v">${k[1]}</div><div class="d"><span class="${k[3]?'up':'down'}">${k[3]?'↑':'↓'} ${k[2]}</span> this week</div><div style="margin-top:8px">${bars(k[4])}</div></div>`).join('')}</div>`,
   code:`<StatGrid>
   <StatCard label="Visitors" value="24.8k" change={14} trend={visitorSeries} />
@@ -1448,6 +1484,15 @@ function openCust(){ overlay.innerHTML=`<div class="drawer-back" data-back style
 /* ---------- sidebar (mobile) ---------- */
 function closeSidebar(){ document.getElementById('sidebar')?.classList.remove('open'); document.getElementById('sbBack')?.remove(); }
 
+/* ---------- block interactions ---------- */
+function setupOpen(g,li){ g.querySelectorAll('.blk-task').forEach(x=>{ const on=x===li; x.classList.toggle('open',on); x.querySelector('[data-task-t]').setAttribute('aria-expanded',on); x.querySelector('.blk-task-b').classList.toggle('hidden',!on); }); }
+function setupNext(li){ const g=li.closest('[data-setup]'), all=[...g.querySelectorAll('.blk-task')], i=all.indexOf(li);
+  const n=[...all.slice(i+1),...all.slice(0,i)].find(x=>!x.classList.contains('done'))||null; setupOpen(g,n); (n||li).querySelector('[data-task-t]').focus(); }
+function setupDone(li){ const g=li.closest('[data-setup]'), n=g.querySelectorAll('.blk-task').length; li.classList.add('done'); li.querySelector('.blk-task-ic').innerHTML=I('checkC')+'<span class="blk-sr">Completed: </span>'; li.querySelector('.blk-task-acts')?.remove();
+  const d=g.querySelectorAll('.blk-task.done').length, bar=g.querySelector('[role="progressbar"]'); bar.setAttribute('aria-valuenow',d); bar.querySelector('i').style.width=d/n*100+'%';
+  g.querySelector('[data-setup-count]').textContent=d===n?'All tasks complete':`${d} of ${n} tasks complete`; setupNext(li); }
+function setupHide(g,hide){ g.querySelector('[data-setup-body]').classList.toggle('hidden',hide); g.querySelector('[data-setup-min]').classList.toggle('hidden',!hide); g.querySelector(hide?'[data-setup-show]':'[data-setup-x]').focus(); }
+
 /* ---------- global events ---------- */
 async function copyText(t,label='Copied to clipboard'){ try{ await navigator.clipboard.writeText(t); }catch(e){ const ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(_){} ta.remove(); } toast('success',label); }
 document.addEventListener('click',e=>{
@@ -1467,6 +1512,10 @@ document.addEventListener('click',e=>{
   if(t.dataset.i!==undefined && t.closest('[data-tabs]')){ const w=t.closest('[data-tabs]'); t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); w.querySelectorAll('[data-p]').forEach(p=>p.classList.toggle('hidden',p.dataset.p!==t.dataset.i)); return; }
   if(t.closest('[data-group]')){ t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); return; }
   if(t.closest('[data-pag]') && !t.getAttribute('aria-label') && !t.disabled){ t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); return; }
+  if(t.dataset.taskT!==undefined){ const li=t.closest('.blk-task'); setupOpen(li.closest('[data-setup]'), li.classList.contains('open')?null:li); return; }
+  if(t.dataset.taskDo!==undefined){ setupDone(t.closest('.blk-task')); return; }
+  if(t.dataset.taskSkip!==undefined){ setupNext(t.closest('.blk-task')); return; }
+  if(t.dataset.setupX!==undefined||t.dataset.setupShow!==undefined){ setupHide(t.closest('[data-setup]'), t.dataset.setupX!==undefined); return; }
   if(t.dataset.modal){ openModal(t.dataset.modal); return; }
   if(t.dataset.close!==undefined){ const a=t.dataset.after; closeOverlay(); if(a==='deleted') toast('success','Product deleted','“Organic cotton tee” was removed.','Undo'); if(a==='invited') toast('success','Invite sent','They\'ll get an email shortly.'); return; }
   if(t.dataset.toast){ const k=t.dataset.toast; if(k==='success') toast('success','Product saved','Your changes are live on the storefront.'); else if(k==='error') toast('error','Sync failed','Check your API key in Settings and try again.'); else toast('info','Order archived','#1284 moved to archive.','Undo'); return; }
