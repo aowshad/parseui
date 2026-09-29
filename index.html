@@ -609,6 +609,38 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 .blk-rl .blk-rl-empty{ padding:28px 14px; text-align:center; color:var(--text-3); }
 .blk-inv{ display:inline-flex; align-items:center; gap:6px; color:var(--text-2); } .blk-inv.low .ico{ color:var(--warning); } .blk-inv.out .ico{ color:var(--danger); }
 @media (max-width:640px){ .blk-rl-q{ flex-basis:100%; } .blk-rl-sort{ flex:1; margin-left:0; } }
+.blk-plan{ width:480px; max-width:100%; }
+.blk-plan .blk-plan-k{ margin:0 0 4px; font-size:12.5px; font-weight:500; color:var(--text-3); }
+.blk-plan .pu-card-h h4{ display:flex; align-items:center; flex-wrap:wrap; gap:10px; font-size:17px; letter-spacing:-.01em; }
+.blk-plan .blk-plan-r{ margin:4px 0 0; font-size:13px; color:var(--text-2); }
+.blk-meters{ display:flex; flex-direction:column; gap:20px; }
+.blk-meter-t{ display:flex; justify-content:space-between; gap:12px; margin-bottom:8px; font-size:14px; }
+.blk-meter-t b{ font-weight:500; color:var(--text); } .blk-meter-t span{ color:var(--text-2); font-variant-numeric:tabular-nums; }
+.blk-meter .blk-meter-n{ display:flex; align-items:center; gap:6px; margin:8px 0 0; font-size:13px; color:var(--text-3); }
+.blk-meter.warn .pu-progress i{ background:var(--warning); }
+.blk-meter.warn .blk-meter-n{ color:var(--text-2); } .blk-meter.warn .blk-meter-n .ico{ color:var(--warning); }
+.blk-review{ width:400px; max-width:100%; padding:24px; }
+.blk-review-s{ text-align:center; }
+.blk-review .feat-ic{ margin:4px auto 16px; }
+.blk-review h4{ margin:0 0 6px; font-size:17px; font-weight:600; outline-offset:4px; }
+.blk-review .blk-review-s p{ margin:0 0 20px; font-size:14px; color:var(--text-2); }
+.blk-review [data-rv="thanks"] p{ margin-bottom:4px; }
+.blk-review-opts{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.blk-review form h4{ margin-bottom:14px; }
+.blk-review form .pu-field{ max-width:none; }
+.blk-review-f{ display:flex; justify-content:flex-end; gap:8px; margin-top:14px; }
+@media (max-width:640px){ .blk-review-opts{ grid-template-columns:1fr; } }
+.blk-sup{ width:420px; max-width:100%; }
+.blk-sup .blk-sup-list{ list-style:none; margin:0; padding:6px; }
+.blk-sup .blk-sup-list li{ margin:0; }
+.blk-sup-row{ width:100%; display:flex; align-items:center; gap:12px; padding:12px; border:0; border-radius:var(--r-lg); background:none; color:var(--text); font:inherit; text-align:left; cursor:pointer; }
+.blk-sup-row:hover{ background:var(--bg-subtle); }
+.blk-sup-row .ic{ width:36px; height:36px; flex:none; display:grid; place-items:center; border-radius:var(--r); background:var(--bg-muted); color:var(--text-2); }
+.blk-sup-row .t{ flex:1; min-width:0; }
+.blk-sup-row b{ display:block; font-size:14px; font-weight:500; }
+.blk-sup-row .d{ display:flex; align-items:center; gap:6px; font-size:13px; color:var(--text-3); }
+.blk-sup-row > .ico:last-child{ color:var(--text-3); }
+.blk-dot{ width:8px; height:8px; flex:none; border-radius:50%; background:var(--success); box-shadow:0 0 0 3px var(--success-soft); }
 .blk-sr{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 
 /* ============ OVERLAYS ============ */
@@ -1240,7 +1272,53 @@ const BLOCKS=[
  {id:'upload',cat:'App pages',t:'File upload',d:'Drop zone with in-progress file rows.',html:`<div style="width:100%;max-width:440px;display:flex;flex-direction:column;gap:10px"><div class="pu-upload"><div class="feat-ic brand" style="margin:0 auto 10px;width:38px;height:38px">${I('upload')}</div><b>Click to upload</b> or drag and drop<div style="font-size:12.5px;color:var(--text-3);margin-top:4px">SVG, PNG or JPG up to 10 MB</div></div>${[['hoodie-front.png','2.4 MB',100],['mug-wrap.svg','640 KB',58]].map(f=>`<div class="pu-card" style="padding:12px 14px;display:flex;gap:12px;align-items:center"><div class="prod-thumb" style="background:var(--p-soft);color:var(--p-text)">${I('layers')}</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;font-size:13.5px"><b style="font-weight:500">${f[0]}</b><span style="color:var(--text-3)">${f[2]}%</span></div><div style="font-size:12px;color:var(--text-3);margin-bottom:6px">${f[1]}</div><div class="pu-progress sm"><i style="width:${f[2]}%"></i></div></div></div>`).join('')}</div>`,
   code:`<FileUpload accept={["image/*"]} maxSize={10 * 1024 * 1024} onUpload={upload} />`},
  {id:'pricing',cat:'Billing',t:'Pricing plans',d:'Three-tier plan picker used on app listing pages.',html:`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;width:100%;max-width:720px">${[['Starter','$0','For new stores',['1 product template','Community support']],['Growth','$29','For growing brands',['Unlimited templates','Priority support','Analytics'],1],['Scale','$99','For high volume',['Everything in Growth','Custom domain','Dedicated manager']]].map(p=>`<div class="pu-card" style="padding:20px;${p[4]?'border-color:var(--p);box-shadow:0 0 0 3px var(--ring)':''}"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-weight:600">${p[0]}</b>${p[4]?'<span class="pu-badge brand">Popular</span>':''}</div><div style="font-size:30px;font-weight:600;letter-spacing:-.03em;margin:8px 0 0">${p[1]}<small style="font-size:13px;color:var(--text-3);font-weight:400">/mo</small></div><p style="margin:0 0 14px;font-size:13px;color:var(--text-3)">${p[2]}</p><button class="pu-btn ${p[4]?'primary':'secondary'} sm full">Choose ${p[0]}</button><div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;font-size:13px;color:var(--text-2)">${p[3].map(f=>`<span style="display:flex;align-items:center;gap:8px">${I('check')}${f}</span>`).join('')}</div></div>`).join('')}</div>`,
-  code:`<PricingTable plans={plans} highlighted="growth" interval="monthly" />`}];
+  code:`<PricingTable plans={plans} highlighted="growth" interval="monthly" />`},
+ {id:'plan-usage',cat:'Billing',t:'Plan and usage',d:'Current plan, renewal date and usage meters that warn in words, not just color, before a limit is hit.',html:`<div class="pu-card blk-plan"><div class="pu-card-h"><div><p class="blk-plan-k">Current plan</p><h4>Growth · $29/month <span class="pu-badge success round"><i class="dot"></i>Active</span></h4><p class="blk-plan-r">Renews Oct 28</p></div></div><div class="pu-card-b blk-meters">${[['orders','Orders',1840,2500],['designs','Designs',38,50]].map(m=>{ const pct=Math.round(m[2]/m[3]*100), warn=pct>75; return `<div class="blk-meter${warn?' warn':''}"><div class="blk-meter-t"><b id="blk-mu-${m[0]}">${m[1]}</b><span>${m[2].toLocaleString('en-US')} / ${m[3].toLocaleString('en-US')}</span></div><div class="pu-progress" role="progressbar" aria-labelledby="blk-mu-${m[0]}" aria-valuemin="0" aria-valuemax="${m[3]}" aria-valuenow="${m[2]}" aria-valuetext="${m[2].toLocaleString('en-US')} of ${m[3].toLocaleString('en-US')} ${m[1].toLowerCase()} used, ${pct}%"><i style="width:${pct}%"></i></div><p class="blk-meter-n">${warn?`${I('alert')}${pct}% used. You're close to your limit.`:`${pct}% used this billing cycle`}</p></div>`; }).join('')}</div><div class="pu-card-f"><button type="button" class="pu-btn secondary sm">View invoices</button><button type="button" class="pu-btn primary sm">Change plan</button></div></div>`,
+  code:`<PlanCard
+  plan="Growth"
+  price={{ amount: 29, currency: "USD", interval: "month" }}
+  status="active"
+  renewsAt="2026-10-28"
+  actions={
+    <>
+      <Button variant="secondary" onClick={openInvoices}>View invoices</Button>
+      <Button onClick={openPlans}>Change plan</Button>
+    </>
+  }
+>
+  <UsageMeter label="Orders" used={1840} limit={2500} />
+  <UsageMeter label="Designs" used={38} limit={50} warnAt={0.75} />
+</PlanCard>`},
+ {id:'review-request',cat:'Engagement',t:'Review request',d:'Asks for a review and offers private feedback as an equal choice. Both options are always shown: Shopify’s App Store rules forbid review gating.',free:true,html:`<div class="pu-card blk-review" data-review><div class="blk-review-s" data-rv="ask"><div class="feat-ic brand">${I('star','ico-lg')}</div><h4>Enjoying Printly?</h4><p>A short review helps other merchants find us. If something isn’t working, tell us and we’ll fix it.</p><div class="blk-review-opts"><a class="pu-btn secondary" href="javascript:void 0">Leave a review${I('link')}<span class="blk-sr"> (opens the Shopify App Store)</span></a><button type="button" class="pu-btn secondary" data-rv-go="feedback">Share feedback</button></div></div><form class="hidden" data-rv="feedback" data-rv-form><h4>Share feedback</h4><div class="pu-field"><label class="pu-label" for="blk-rv-msg">What could be better?</label><textarea class="pu-textarea" id="blk-rv-msg" name="message" required placeholder="The print preview is slow on large designs…"></textarea><span class="pu-hint">Sara from the Printly team reads every message.</span></div><div class="blk-review-f"><button type="button" class="pu-btn ghost sm" data-rv-go="ask">Back</button><button type="submit" class="pu-btn primary sm">Send</button></div></form><div class="blk-review-s hidden" data-rv="thanks"><div class="feat-ic success">${I('checkC','ico-lg')}</div><h4 tabindex="-1">Thanks for the feedback</h4><p>We’ll reply by email if we need more detail.</p></div></div>`,
+  code:`// Both options are always shown. Shopify's App Store rules
+// don't allow asking only happy merchants for a review.
+<ReviewRequest
+  title="Enjoying Printly?"
+  description="A short review helps other merchants find us."
+  reviewUrl="https://apps.shopify.com/printly#modal-show=WriteReview"
+  onFeedback={(message) => sendFeedback({ message, shop: shop.domain })}
+/>`},
+ {id:'support-card',cat:'Engagement',t:'Help and support',d:'Three ways to get help, with live chat status spelled out next to the dot.',free:true,html:`<div class="pu-card blk-sup"><div class="pu-card-h"><div><h4>Help and support</h4><p>Stuck? Pick whatever’s quickest.</p></div></div><ul class="blk-sup-list">${[['a','book','Documentation','Guides for setup, print areas and fulfilment.'],['button','help','Live chat','<span class="blk-dot" aria-hidden="true"></span>Online · Replies in about 5 min'],['a','calendar','Book a call','15 minutes with a Printly specialist.']].map(r=>`<li><${r[0]} class="blk-sup-row" ${r[0]==='a'?'href="javascript:void 0"':'type="button"'}><span class="ic">${I(r[1])}</span><span class="t"><b>${r[2]}</b> <span class="d">${r[3]}</span></span>${I('chevR')}</${r[0]}></li>`).join('')}</ul></div>`,
+  code:`<SupportCard title="Help and support" description="Stuck? Pick whatever's quickest.">
+  <SupportLink
+    icon={<Book />}
+    title="Documentation"
+    description="Guides for setup, print areas and fulfilment."
+    href="https://help.printly.app"
+  />
+  <SupportLink
+    icon={<HelpCircle />}
+    title="Live chat"
+    status={{ online: true, label: "Replies in about 5 min" }}
+    onClick={openChat}
+  />
+  <SupportLink
+    icon={<Calendar />}
+    title="Book a call"
+    description="15 minutes with a Printly specialist."
+    href={bookingUrl}
+  />
+</SupportCard>`}];
 /* ---------- shared doc pieces ---------- */
 const demo=(ex,i)=>{ const id=CODES.push(ex.code)-1;
   return `<div class="demo" data-demo><div class="demo-bar"><div class="seg" role="tablist"><button class="on" data-view="p">Preview</button><button data-view="c">Code</button></div><span class="spacer"></span>
@@ -1611,6 +1689,7 @@ function rlApply(w){ const q=w.querySelector('[data-rl-q]').value.trim().toLower
 function rlBulk(w,act){ const sel=rlRows(w).filter(r=>r.querySelector('input').checked), n=sel.length;
   sel.forEach(r=>{ if(act==='delete'){ r.remove(); return; } r.dataset.status='archived'; r.querySelector('.pu-badge').outerHTML='<span class="pu-badge gray round"><i class="dot"></i>Archived</span>'; r.querySelector('input').checked=false; });
   rlApply(w); const all=w.querySelector('[data-rl-all]'); (all.disabled?w.querySelector('[data-rl-q]'):all).focus(); toast('success',`${n} ${n===1?'product':'products'} ${act==='delete'?'deleted':'archived'}`); }
+function rvShow(w,s){ w.querySelectorAll('[data-rv]').forEach(p=>p.classList.toggle('hidden',p.dataset.rv!==s)); w.querySelector(s==='feedback'?'textarea':s==='ask'?'[data-rv-go="feedback"]':'[data-rv="thanks"] h4').focus(); }
 function setupHide(g,hide){ g.querySelector('[data-setup-body]').classList.toggle('hidden',hide); g.querySelector('[data-setup-min]').classList.toggle('hidden',!hide); g.querySelector(hide?'[data-setup-show]':'[data-setup-x]').focus(); }
 
 /* ---------- global events ---------- */
@@ -1638,6 +1717,7 @@ document.addEventListener('click',e=>{
   if(t.dataset.setupX!==undefined||t.dataset.setupShow!==undefined){ setupHide(t.closest('[data-setup]'), t.dataset.setupX!==undefined); return; }
   if(t.dataset.rlUnchip!==undefined){ const w=t.closest('[data-rl]'); t.closest('[data-rl-chip]').remove(); rlApply(w); w.querySelector('[data-rl-q]').focus(); return; }
   if(t.dataset.rlArchive!==undefined||t.dataset.rlDelete!==undefined){ rlBulk(t.closest('[data-rl]'), t.dataset.rlDelete!==undefined?'delete':'archive'); return; }
+  if(t.dataset.rvGo){ rvShow(t.closest('[data-review]'), t.dataset.rvGo); return; }
   if(t.dataset.modal){ openModal(t.dataset.modal); return; }
   if(t.dataset.close!==undefined){ const a=t.dataset.after; closeOverlay(); if(a==='deleted') toast('success','Product deleted','“Organic cotton tee” was removed.','Undo'); if(a==='invited') toast('success','Invite sent','They\'ll get an email shortly.'); return; }
   if(t.dataset.toast){ const k=t.dataset.toast; if(k==='success') toast('success','Product saved','Your changes are live on the storefront.'); else if(k==='error') toast('error','Sync failed','Check your API key in Settings and try again.'); else toast('info','Order archived','#1284 moved to archive.','Undo'); return; }
@@ -1672,7 +1752,8 @@ document.addEventListener('change',e=>{ const w=e.target.closest('[data-rl]'); i
   if(e.target.matches('[data-rl-all]')) rlRows(w).forEach(r=>{ if(!r.classList.contains('hidden')) r.querySelector('input').checked=e.target.checked; });
   if(e.target.type==='checkbox') rlSync(w); });
 document.addEventListener('input',e=>{ if(e.target.matches('[data-rl-q]')) rlApply(e.target.closest('[data-rl]')); });
-document.addEventListener('submit',e=>{ const f=e.target.closest('[data-blk-form]'); if(!f) return; e.preventDefault(); toast('success',f.dataset.blkForm); });
+document.addEventListener('submit',e=>{ if(e.target.matches('[data-rv-form]')){ e.preventDefault(); rvShow(e.target.closest('[data-review]'),'thanks'); return; }
+  const f=e.target.closest('[data-blk-form]'); if(!f) return; e.preventDefault(); toast('success',f.dataset.blkForm); });
 window.addEventListener('hashchange',render);
 render();
 </script>
