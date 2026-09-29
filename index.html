@@ -449,6 +449,32 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 .pu-combobox-empty{ padding:12px 10px; font-size:13.5px; color:var(--text-3); }
 .pu-combobox-status, .pu-command-status{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 
+/* command menu */
+.pu-command{ width:100%; max-width:560px; display:flex; flex-direction:column; background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:var(--r-xl); box-shadow:var(--sh-lg); overflow:hidden; text-align:left; transition:border-color .15s, box-shadow .15s; }
+.pu-command:not(.pu-command-dialog):focus-within{ border-color:var(--p); box-shadow:0 0 0 3px var(--ring), var(--sh-lg); }
+.pu-command-in{ display:flex; align-items:center; gap:10px; height:52px; padding:0 14px 0 16px; border-bottom:1px solid var(--border); color:var(--text-3); }
+.pu-command-in input{ flex:1; min-width:0; height:100%; border:0; outline:0; background:none; font:400 15px var(--font); color:var(--text); }
+.pu-command-in input::placeholder{ color:var(--text-3); }
+.pu-command-list{ max-height:320px; overflow-y:auto; overscroll-behavior:contain; padding:6px; }
+.pu-command-list[hidden], .pu-command-empty[hidden]{ display:none; }
+.pu-command-g{ padding:10px 10px 4px; font-size:12px; font-weight:500; color:var(--text-3); }
+.pu-command-i{ display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:var(--r); font-size:14px; color:var(--text-2); cursor:pointer; }
+.pu-command-i .ico{ color:var(--text-3); }
+.pu-command-i[aria-selected="true"]{ background:var(--bg-muted); color:var(--text); }
+.pu-command-i[aria-selected="true"] .ico{ color:var(--p-text); }
+.pu-command:focus-within .pu-command-i[aria-selected="true"]{ box-shadow:inset 0 0 0 2px var(--p); }
+.pu-command-l{ min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.pu-command-sub{ margin-left:8px; font-size:12.5px; color:var(--text-3); }
+.pu-command-k{ margin-left:auto; padding-left:12px; font:500 12px var(--mono); color:var(--text-3); white-space:nowrap; }
+.pu-command-empty{ padding:32px 20px; text-align:center; font-size:14px; line-height:1.6; color:var(--text-3); }
+.pu-command-empty b{ color:var(--text); font-weight:600; }
+.pu-command-foot{ display:flex; gap:16px; padding:9px 14px; border-top:1px solid var(--border); background:var(--bg-subtle); font-size:12px; color:var(--text-3); }
+.pu-command-foot span{ display:flex; align-items:center; gap:4px; }
+.pu-command-foot .pu-kbd{ padding:2px 5px; min-width:18px; font-size:11px; }
+.pu-command-dialog{ width:600px; max-width:100%; box-shadow:var(--sh-xl); animation:pop .18s; }
+.pu-command-dialog .pu-command-list{ max-height:min(380px, 55vh); }
+@media (max-width:640px){ .pu-command-foot{ display:none; } .pu-command-k{ display:none; } }
+
 /* drawer */
 .pu-drawer-back{ position:fixed; inset:0; z-index:80; background:rgba(12,12,18,.45); animation:fade .18s; }
 .pu-drawer{ position:fixed; top:0; right:0; bottom:0; width:min(440px,100vw); display:flex; flex-direction:column; background:var(--bg); color:var(--text); border-left:1px solid var(--border); box-shadow:var(--sh-xl); text-align:left; outline:none; animation:pu-drawer-r .28s cubic-bezier(.2,.9,.3,1); }
@@ -1387,7 +1413,87 @@ C.combobox={name:'Combobox',importName:'Combobox',status:'beta',radix:'Popover',
    usage:`<Combobox label="Product" options={products} value={product} onValueChange={setProduct} />`,
    props:[P('options','string[] | { value: string; label: string }[]','—','Items to filter.'),P('value','string | string[]','—','Selected value, or values with multiple.'),P('onValueChange','(value) => void','—','Called when the selection changes.'),P('multiple','boolean','false','Select several values, shown as removable chips.'),P('creatable','boolean','false','Offer Create "<text>" when nothing matches.'),P('onCreate','(text: string) => void','—','Called with the typed text when a new option is created.'),P('filter','(option, query) => boolean','contains, case-insensitive','Custom matching.'),P('emptyMessage','ReactNode | (query) => ReactNode','"No results"','Shown when nothing matches.'),P('placeholder','string','—','Input placeholder.')],
    keys:[['↓','Opens the list, or moves to the next option.'],['↑','Opens the list on the last option, or moves to the previous one.'],['Enter','Chooses the highlighted option. In multi-select it toggles the option and keeps the list open.'],['Escape','Closes the list. Press again to clear the input.'],['Home / End','Moves the text cursor to the start or end of the input.'],['Backspace','In multi-select, with an empty input, removes the last chip.'],['Tab','Closes the list and moves focus on.']]};
-const PLANNED=[['date-picker','Date picker'],['data-table','Data table'],['command','Command menu'],['file-upload','File upload']];
+/* command menu data and markup, used by the Command menu examples (the docs' own ⌘K works the same way) */
+const CMD_APP=[
+ {g:'Actions',items:[{icon:'plus',label:'New product',hint:'⌘N',kw:'add create',say:'Opening a new product'},{icon:'tag',label:'Create discount',kw:'coupon code sale',say:'Opening the discount builder'},{icon:'users',label:'Invite teammate',kw:'staff member',say:'Opening the invite form'},{icon:'download',label:'Export orders',hint:'⇧⌘E',kw:'csv download',say:'Exporting 1,284 orders as CSV'}]},
+ {g:'Navigation',items:[{icon:'cart',label:'Orders',hint:'G O',kw:'sales purchases',say:'Going to Orders'},{icon:'box',label:'Products',hint:'G P',kw:'catalog inventory',say:'Going to Products'},{icon:'users',label:'Customers',hint:'G C',kw:'people shoppers',say:'Going to Customers'},{icon:'chart',label:'Analytics',hint:'G A',kw:'reports stats',say:'Going to Analytics'},{icon:'sliders',label:'Settings',hint:'G S',kw:'preferences',say:'Going to Settings'}]},
+ {g:'Products',items:[{icon:'layers',label:'Heavyweight tee',hint:'$32.00',kw:'shirt apparel',say:'Opening Heavyweight tee'},{icon:'tag',label:'Canvas tote',hint:'$24.00',kw:'bag',say:'Opening Canvas tote'},{icon:'box',label:'Ceramic mug, 11 oz',hint:'$18.00',kw:'cup drinkware',say:'Opening Ceramic mug, 11 oz'}]}];
+const CMD_SETS={app:CMD_APP,
+ recent:[{g:'Recent',onlyEmpty:1,items:[{icon:'cart',label:'Order #1284',sub:'Nadia Rahman',say:'Opening order #1284'},{icon:'layers',label:'Heavyweight tee',sub:'Product',say:'Opening Heavyweight tee'},{icon:'sliders',label:'Print defaults',sub:'Settings',say:'Opening print defaults'}]},
+  {g:'Suggestions',onlyEmpty:1,items:[CMD_APP[0].items[0],CMD_APP[0].items[3],CMD_APP[0].items[2]]},
+  ...CMD_APP.map(g=>({...g,onlyQuery:1}))]};
+// hoisted so it can run while the catalogue is built
+function cmdMark(v,q){ const i=q?v.toLowerCase().indexOf(q.toLowerCase()):-1; return i<0?esc(v):esc(v.slice(0,i))+'<mark>'+esc(v.slice(i,i+q.length))+'</mark>'+esc(v.slice(i+q.length)); }
+function cmdListHTML(id,key,q=''){ q=q.trim(); const qq=q.toLowerCase(); let n=0, first=null;
+  const html=CMD_SETS[key].filter(g=>qq?!g.onlyEmpty:!g.onlyQuery).map((g,gi)=>{ const items=g.items.filter(it=>!qq||`${it.label} ${it.kw||''} ${it.sub||''}`.toLowerCase().includes(qq)); if(!items.length) return '';
+    return `<div role="group" aria-labelledby="${id}-g${gi}"><div class="pu-command-g" id="${id}-g${gi}" role="presentation">${g.g}</div>${items.map(it=>{ const oid=`${id}-o${n++}`; first=first||oid;
+      return `<div role="option" id="${oid}" class="pu-command-i" aria-selected="${oid===first}" data-say="${esc(it.say).replace(/"/g,'&quot;')}">${I(it.icon)}<span class="pu-command-l">${cmdMark(it.label,q)}${it.sub?`<span class="pu-command-sub">${esc(it.sub)}</span>`:''}</span>${it.hint?`<span class="pu-command-k">${esc(it.hint)}</span>`:''}</div>`; }).join('')}</div>`; }).join('');
+  return {html,count:n,first}; }
+function cmdHTML(id,key,dialog=false){ const r=cmdListHTML(id,key);
+  return `<div class="pu-command${dialog?' pu-command-dialog':''}" data-cmd="${key}" id="${id}"${dialog?' role="dialog" aria-modal="true" aria-label="Command menu"':''}><div class="pu-command-in">${I('search','ico-lg')}<input type="text" role="combobox" aria-expanded="true" aria-controls="${id}-lb" aria-autocomplete="list" aria-label="Search commands" aria-activedescendant="${r.first}" placeholder="Type a command or search…" autocomplete="off" spellcheck="false">${dialog?'<kbd class="pu-kbd" aria-hidden="true">Esc</kbd>':''}</div><div class="pu-command-list" role="listbox" id="${id}-lb" aria-label="Commands">${r.html}</div><div class="pu-command-empty" hidden></div><div class="pu-command-foot" aria-hidden="true"><span><kbd class="pu-kbd">↑</kbd><kbd class="pu-kbd">↓</kbd> Navigate</span><span><kbd class="pu-kbd">↵</kbd> Run</span>${dialog?'<span><kbd class="pu-kbd">Esc</kbd> Close</span>':''}</div><span class="pu-command-status" role="status"></span></div>`; }
+C.command={name:'Command menu',importName:'CommandMenu',file:'command-menu',status:'beta',radix:'Dialog',desc:'A search box that runs actions and jumps anywhere in the app from the keyboard. Use it inline or as a ⌘K dialog.',thumb:`<div class="pu-card" style="width:200px;box-shadow:var(--sh-lg);font-size:12px;overflow:hidden"><div style="display:flex;align-items:center;gap:6px;padding:7px 9px;border-bottom:1px solid var(--border);color:var(--text-3)">${I('search')}Type a command…</div><div style="padding:4px"><div style="font-size:10.5px;color:var(--text-3);padding:3px 6px">Actions</div><div style="display:flex;align-items:center;gap:6px;padding:5px 6px;border-radius:5px;background:var(--bg-muted)">${I('plus')}New product<span style="margin-left:auto;font:10.5px var(--mono);color:var(--text-3)">⌘N</span></div><div style="display:flex;align-items:center;gap:6px;padding:5px 6px">${I('download')}Export orders</div></div></div>`,
+   examples:[
+    {t:'Inline',d:'An embedded panel with grouped results. Typing filters across every group, and the arrow keys skip the group headings.',html:cmdHTML('cmd-inline','app'),
+     code:`<CommandMenu label="Commands" placeholder="Type a command or search…">
+  <CommandList>
+    <CommandGroup heading="Actions">
+      <CommandItem icon={<Plus />} shortcut="⌘N" onSelect={newProduct}>New product</CommandItem>
+      <CommandItem icon={<Tag />} keywords={["coupon"]} onSelect={createDiscount}>Create discount</CommandItem>
+      <CommandItem icon={<Download />} shortcut="⇧⌘E" onSelect={exportOrders}>Export orders</CommandItem>
+    </CommandGroup>
+    <CommandGroup heading="Navigation">
+      <CommandItem icon={<Cart />} shortcut="G O" onSelect={() => navigate("/orders")}>Orders</CommandItem>
+      <CommandItem icon={<Box />} shortcut="G P" onSelect={() => navigate("/products")}>Products</CommandItem>
+    </CommandGroup>
+    <CommandGroup heading="Products">
+      {products.map((p) => (
+        <CommandItem key={p.id} icon={<Layers />} shortcut={p.price} onSelect={() => openProduct(p)}>
+          {p.title}
+        </CommandItem>
+      ))}
+    </CommandGroup>
+    <CommandEmpty>No results.</CommandEmpty>
+  </CommandList>
+</CommandMenu>`},
+    {t:'Dialog',d:'The same menu in a modal dialog. The search in these docs (⌘K or /) is built the same way: focus stays in the input, and Escape closes it and returns focus to where you were.',html:`<button type="button" class="pu-btn secondary" data-cmd-open aria-haspopup="dialog" aria-expanded="false">${I('search')}Search Printly</button>`,
+     code:`const [open, setOpen] = React.useState(false)
+useHotkey("mod+k", () => setOpen((o) => !o))
+
+<Button variant="secondary" leadingIcon={<Search />} onClick={() => setOpen(true)}>
+  Search Printly
+</Button>
+<CommandDialog open={open} onOpenChange={setOpen}>
+  <CommandList>
+    <CommandGroup heading="Actions">…</CommandGroup>
+    <CommandGroup heading="Navigation">…</CommandGroup>
+  </CommandList>
+</CommandDialog>`},
+    {t:'Recent and empty state',d:'With an empty search it shows Recent and Suggestions. Typing searches everything else, and when nothing matches it says so and suggests what to try.',html:cmdHTML('cmd-recent','recent'),
+     code:`<CommandMenu>
+  <CommandList>
+    <CommandGroup heading="Recent" showWhen="empty">
+      {recent.map((r) => (
+        <CommandItem key={r.id} icon={r.icon} description={r.kind} onSelect={() => open(r)}>{r.title}</CommandItem>
+      ))}
+    </CommandGroup>
+    <CommandGroup heading="Suggestions" showWhen="empty">…</CommandGroup>
+    <CommandGroup heading="Actions">…</CommandGroup>
+    <CommandGroup heading="Products">…</CommandGroup>
+    <CommandEmpty>
+      {(query) => <>No results for “{query}”. Try “orders”, “export” or a product name.</>}
+    </CommandEmpty>
+  </CommandList>
+</CommandMenu>`}],
+   usage:`<CommandMenu>
+  <CommandList>
+    <CommandGroup heading="Actions">
+      <CommandItem onSelect={newProduct}>New product</CommandItem>
+    </CommandGroup>
+  </CommandList>
+</CommandMenu>`,
+   props:[P('label','string','"Command menu"','Accessible name for the search input and dialog.'),P('placeholder','string','—','Input placeholder.'),P('value','string','—','Controlled search text.'),P('onValueChange','(value: string) => void','—','Called as the search changes.'),P('filter','(item, query) => boolean','label and keywords contain the query','Custom matching.'),P('loop','boolean','true','Arrow keys wrap from the last item to the first.'),P('CommandDialog.open','boolean','—','Controlled open state of the dialog version.'),P('CommandGroup.showWhen','"always" | "empty" | "query"','"always"','Show the group only while the search is empty, or only while searching.'),P('CommandItem.onSelect','() => void','—','Runs on Enter or click.'),P('CommandItem.keywords','string[]','—','Extra words that match the item.'),P('CommandItem.shortcut','string','—','Hint shown on the right.')],
+   keys:[['Type','Filters across every group.'],['↓ / ↑','Moves to the next or previous item across groups, skipping headings, and wraps.'],['Enter','Runs the highlighted item.'],['Escape','In the dialog: closes it and returns focus. Inline: clears the search.'],['Home / End','Moves the text cursor to the start or end of the search.'],['Tab','In the dialog, focus stays on the search. Inline, moves focus on.']]};
+const PLANNED=[['date-picker','Date picker'],['data-table','Data table'],['file-upload','File upload']];
 const COMP_ORDER=Object.keys(C).sort((a,b)=>C[a].name.localeCompare(C[b].name));
 /* ---------- navigation model ---------- */
 const NAV=[
@@ -2214,6 +2320,31 @@ document.addEventListener('click',ev=>{ const t=ev.target; if(!(t instanceof Ele
 // keep focus in the input when pressing an option, and follow the pointer
 document.addEventListener('mousedown',ev=>{ if(ev.target.closest?.('.pu-combobox-pop, [data-cb-toggle]')) ev.preventDefault(); });
 document.addEventListener('pointermove',ev=>{ const o=ev.target.closest?.('.pu-combobox [role="option"]'); if(o&&!o.classList.contains('active')) cbActive(o.closest('[data-cb]'),o); });
+
+/* ---------- command menu ---------- */
+function cmdRender(root){ const inp=root.querySelector('[role="combobox"]'), q=inp.value.trim(), r=cmdListHTML(root.id,root.dataset.cmd,q), list=root.querySelector('[role="listbox"]'), empty=root.querySelector('.pu-command-empty');
+  list.innerHTML=r.html; list.hidden=!r.count; empty.hidden=!!r.count; list.scrollTop=0;
+  empty.innerHTML=`No results for “<b>${esc(q)}</b>”.<br>Try “orders”, “export” or a product name.`;
+  root.querySelector('.pu-command-status').textContent=r.count?`${r.count} ${r.count===1?'result':'results'}`:`No results for ${q}`;
+  if(r.first) inp.setAttribute('aria-activedescendant',r.first); else inp.removeAttribute('aria-activedescendant'); }
+function cmdActive(root,opt){ if(!opt) return; root.querySelector('[role="option"][aria-selected="true"]')?.setAttribute('aria-selected','false');
+  opt.setAttribute('aria-selected','true'); root.querySelector('[role="combobox"]').setAttribute('aria-activedescendant',opt.id); opt.scrollIntoView({block:'nearest'}); }
+function cmdRun(root,opt){ if(root.classList.contains('pu-command-dialog')) closeOverlay(); toast('success',opt.dataset.say); }
+function openCommandDialog(trigger){ if(overlay.innerHTML) closeOverlay(); lastFocus=trigger;
+  overlay.innerHTML=`<div class="cmdk-back ${pvScope(trigger)}" data-back>${cmdHTML('cmd-dlg','app',true)}</div>`;
+  const panel=overlay.querySelector('.pu-command'); modalOpen(panel,trigger,panel.querySelector('[role="combobox"]')); }
+addEventListener('keydown',ev=>{ const inp=ev.target; if(!(inp instanceof Element)||!inp.matches('.pu-command [role="combobox"]')) return;
+  const root=inp.closest('[data-cmd]'), opts=[...root.querySelectorAll('[role="option"]')], cur=root.querySelector('[role="option"][aria-selected="true"]'), stop=()=>{ ev.preventDefault(); ev.stopPropagation(); };
+  if(ev.key==='ArrowDown'||ev.key==='ArrowUp'){ stop(); if(!opts.length) return; const i=opts.indexOf(cur), d=ev.key==='ArrowDown'?1:-1; cmdActive(root,opts[i<0?(d>0?0:opts.length-1):(i+d+opts.length)%opts.length]); }
+  else if(ev.key==='Enter'){ if(cur){ stop(); cmdRun(root,cur); } }
+  else if(ev.key==='Escape'&&!root.classList.contains('pu-command-dialog')&&inp.value){ stop(); inp.value=''; cmdRender(root); }
+},true);
+document.addEventListener('input',ev=>{ if(ev.target.matches?.('.pu-command [role="combobox"]')) cmdRender(ev.target.closest('[data-cmd]')); });
+document.addEventListener('click',ev=>{ const t=ev.target; if(!(t instanceof Element)) return;
+  const opt=t.closest('.pu-command [role="option"]'); if(opt){ cmdRun(opt.closest('[data-cmd]'),opt); return; }
+  const open=t.closest('[data-cmd-open]'); if(open) openCommandDialog(open); });
+document.addEventListener('mousedown',ev=>{ if(ev.target.closest?.('.pu-command-list')) ev.preventDefault(); });
+document.addEventListener('pointermove',ev=>{ const o=ev.target.closest?.('.pu-command [role="option"]'); if(o&&o.getAttribute('aria-selected')!=='true') cmdActive(o.closest('[data-cmd]'),o); });
 
 /* ---------- command palette ---------- */
 let cmdSel=0;
