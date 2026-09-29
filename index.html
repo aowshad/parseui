@@ -641,6 +641,38 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 .blk-sup-row .d{ display:flex; align-items:center; gap:6px; font-size:13px; color:var(--text-3); }
 .blk-sup-row > .ico:last-child{ color:var(--text-3); }
 .blk-dot{ width:8px; height:8px; flex:none; border-radius:50%; background:var(--success); box-shadow:0 0 0 3px var(--success-soft); }
+.blk-set-f > .blk-set-sw:first-child{ border-top:0; padding-top:0; }
+/* app settings example */
+.blk-as-main{ position:relative; overflow:hidden; }
+.blk-as-main .dash-body{ container:as-body / inline-size; }
+.blk-as{ display:grid; grid-template-columns:180px minmax(0,1fr); gap:24px; align-items:start; }
+.blk-as-nav{ display:flex; flex-direction:column; gap:2px; }
+.blk-as-nav button{ display:flex; align-items:center; gap:10px; padding:8px 10px; border:0; border-radius:var(--r); background:none; color:var(--text-2); font:500 14px/1.3 var(--font); text-align:left; cursor:pointer; }
+.blk-as-nav button:hover{ background:var(--bg-muted); color:var(--text); }
+.blk-as-nav button.on{ background:var(--bg); color:var(--text); box-shadow:var(--sh-xs), 0 0 0 1px var(--border); }
+.blk-as-nav button.on .ico{ color:var(--p-text); }
+.blk-as-panels{ min-width:0; container:as-panels / inline-size; }
+.blk-as-panel{ display:flex; flex-direction:column; }
+.blk-as-sec{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr); gap:12px 24px; }
+.blk-as-sec + .blk-as-sec{ margin-top:24px; padding-top:24px; border-top:1px solid var(--border); }
+.blk-as .blk-as-d h4{ margin:2px 0 4px; font-size:15px; font-weight:600; }
+.blk-as .blk-as-d p{ margin:0; font-size:13.5px; color:var(--text-2); }
+.blk-as-plan{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 14px; border:1px solid var(--border); border-radius:var(--r-lg); background:var(--bg-subtle); }
+.blk-as-plan b{ display:block; font-size:14px; font-weight:600; } .blk-as-plan div span{ display:block; font-size:13px; color:var(--text-2); }
+.blk-as .blk-as-team{ list-style:none; margin:0; padding:0; }
+.blk-as .blk-as-team li{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px 12px; margin:0; padding:10px 0; border-bottom:1px solid var(--border); }
+.blk-as .blk-as-team li:first-child{ padding-top:0; }
+.blk-as-team b{ font-size:14px; font-weight:500; }
+.blk-as-team .pu-select{ width:auto; }
+.blk-savebar{ position:absolute; z-index:6; top:0; left:0; right:0; height:60px; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:0 16px 0 24px; background:var(--text); color:var(--bg); font-size:14px; font-weight:500; transform:translateY(-100%); visibility:hidden; transition:transform .22s ease, visibility 0s linear .22s; }
+.blk-savebar.on{ transform:none; visibility:visible; transition:transform .22s ease; }
+.blk-savebar-t{ display:flex; align-items:center; gap:8px; }
+.blk-savebar-acts{ display:flex; gap:8px; }
+.blk-savebar .pu-btn.secondary{ background:transparent; color:var(--bg); border-color:color-mix(in oklab, var(--bg) 40%, transparent); box-shadow:none; }
+.blk-savebar .pu-btn.secondary:hover{ background:color-mix(in oklab, var(--bg) 12%, transparent); }
+@container as-body (max-width:640px){ .blk-as{ grid-template-columns:minmax(0,1fr); } .blk-as-nav{ flex-direction:row; flex-wrap:wrap; } }
+@container as-panels (max-width:520px){ .blk-as-sec{ grid-template-columns:minmax(0,1fr); } }
+@media (max-width:640px){ .blk-savebar{ padding:0 12px; } .blk-savebar-t .ico{ display:none; } }
 .blk-sr{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 
 /* ============ OVERLAYS ============ */
@@ -1082,7 +1114,7 @@ const NAV=[
  {g:'Foundations',sec:'foundations',items:[['colors','Colors','palette'],['typography','Typography','type'],['spacing','Spacing','spacing'],['radius','Radius','square'],['shadows','Shadows','shadow'],['icons','Icons','star']]},
  {g:'Components',sec:'components',items:[['components','Overview','grid'],...COMP_ORDER.map(k=>[k,C[k].name,'box'])],planned:PLANNED},
  {g:'Blocks',sec:'blocks',items:[['blocks','All blocks','layers']]},
- {g:'Examples',sec:'examples',items:[['dashboard','Store dashboard','chart']]}];
+ {g:'Examples',sec:'examples',items:[['dashboard','Store dashboard','chart'],['app-settings','App settings','sliders']]}];
 const FLAT=NAV.flatMap(g=>g.items.map(i=>({slug:i[0],name:i[1],icon:i[2],group:g.g,sec:g.sec})));
 
 /* ---------- charts ---------- */
@@ -1102,18 +1134,20 @@ function lineChart(w=640,h=220){ const min=20,max=100,pad=8,
 const bars=(a)=>`<svg class="spark" viewBox="0 0 120 36" preserveAspectRatio="none" style="height:36px" aria-hidden="true">${a.map((v,i)=>`<rect x="${i*10+1}" y="${36-v*.36}" width="7" height="${v*.36}" rx="1.5" style="fill:${i===a.length-1?'var(--p)':'var(--p-soft-2)'}"/>`).join('')}</svg>`;
 
 /* ---------- dashboard ---------- */
+/* the store admin sidebar shared by the examples; `on` is the active item's label */
+const storeSidebar=(on='Home')=>`<aside class="dash-side">
+    <div class="dash-store"><span class="pu-avatar sq" style="background:var(--p)">LP</span><div><b>Lumen Prints</b><small>lumen.myshopify.com</small></div></div>
+    ${[['home','Home'],['cart','Orders',0,'12'],['box','Products'],['users','Customers'],['chart','Analytics'],['tag','Discounts']].map(n=>`<div class="dnav ${n[1]===on?'on':''}">${I(n[0])}${n[1]}${n[3]?`<span class="pu-badge brand round">${n[3]}</span>`:''}</div>`).join('')}
+    <div class="dnav-label">Apps</div>
+    ${[['layers','Printly designer'],['calendar','Bookwise'],['zap','Variantly']].map(n=>`<div class="dnav${n[1]===on?' on':''}">${I(n[0])}${n[1]}</div>`).join('')}
+    <div class="dnav-label">Store</div><div class="dnav">${I('sliders')}Settings</div>
+    <div class="dash-up"><b>Storage almost full</b>82% of 5 GB used by design assets.<div class="pu-progress sm" style="margin:10px 0"><i style="width:82%"></i></div><button class="pu-btn soft xs">Upgrade plan</button></div>
+  </aside>`;
 function dashboardHTML(){
   const kpi=(l,v,d,up,a)=>`<div class="pu-card kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="d"><span class="${up?'up':'down'}">${up?'↑':'↓'} ${d}</span> vs last month</div><div style="margin-top:10px">${bars(a)}</div></div>`;
   const orders=[['#1284','Nadia Rahman','success','Paid','Fulfilled','$128.00','2 min ago'],['#1283','Tanvir Hasan','warning','Pending','Unfulfilled','$64.50','18 min ago'],['#1282','Sara Kim','success','Paid','Fulfilled','$212.40','1 hr ago'],['#1281','Ovi Das','danger','Refunded','Returned','$39.00','3 hr ago'],['#1280','Maya Chen','success','Paid','Unfulfilled','$96.20','5 hr ago'],['#1279','Rafi Ahmed','success','Paid','Fulfilled','$154.75','Yesterday']];
   return `<div class="dash">
-  <aside class="dash-side">
-    <div class="dash-store"><span class="pu-avatar sq" style="background:var(--p)">LP</span><div><b>Lumen Prints</b><small>lumen.myshopify.com</small></div></div>
-    ${[['home','Home',1],['cart','Orders',0,'12'],['box','Products'],['users','Customers'],['chart','Analytics'],['tag','Discounts']].map(n=>`<div class="dnav ${n[2]?'on':''}">${I(n[0])}${n[1]}${n[3]?`<span class="pu-badge brand round">${n[3]}</span>`:''}</div>`).join('')}
-    <div class="dnav-label">Apps</div>
-    ${[['layers','Printly designer'],['calendar','Bookwise'],['zap','Variantly']].map(n=>`<div class="dnav">${I(n[0])}${n[1]}</div>`).join('')}
-    <div class="dnav-label">Store</div><div class="dnav">${I('sliders')}Settings</div>
-    <div class="dash-up"><b>Storage almost full</b>82% of 5 GB used by design assets.<div class="pu-progress sm" style="margin:10px 0"><i style="width:82%"></i></div><button class="pu-btn soft xs">Upgrade plan</button></div>
-  </aside>
+  ${storeSidebar('Home')}
   <div class="dash-main">
     <div class="dash-top"><div class="pu-input">${I('search')}<input placeholder="Search orders, products, customers" aria-label="Search"><span class="pu-kbd">/</span></div><div style="margin-left:auto;display:flex;align-items:center;gap:8px"><span class="pu-tip"><button class="pu-btn ghost icon" aria-label="Notifications">${I('bell')}</button><span class="tip bot">Notifications</span></span>${av('Nadia Rahman','sm',true)}</div></div>
     <div class="dash-body">
@@ -1136,6 +1170,66 @@ function dashboardHTML(){
   </div></div>`;
 }
 
+/* ---------- app settings example ---------- */
+function appSettingsHTML(){
+  const field=(id,label,control,hint)=>`<div class="pu-field"><label class="pu-label" for="as-${id}">${label}</label>${control}${hint?`<span class="pu-hint" id="as-${id}-h">${hint}</span>`:''}</div>`;
+  const sw=(id,title,desc,on)=>`<label class="pu-switch blk-set-sw"><span class="t"><b id="as-${id}-l">${title}</b><small id="as-${id}-d">${desc}</small></span><input type="checkbox" role="switch"${on?' checked':''} aria-labelledby="as-${id}-l" aria-describedby="as-${id}-d"></label>`;
+  const sel=(id,opts,extra='')=>`<select class="pu-select" id="as-${id}"${extra}>${opts.map((o,i)=>`<option${i?'':' selected'}>${o}</option>`).join('')}</select>`;
+  const sec=(id,title,desc,body)=>`<section class="blk-as-sec" aria-labelledby="as-s-${id}"><div class="blk-as-d"><h4 id="as-s-${id}">${title}</h4><p>${desc}</p></div><div class="pu-card"><div class="pu-card-b blk-set-f">${body}</div></div></section>`;
+  const panels=[
+   ['General','sliders',
+    sec('store','Store details','Used on packing slips, invoices and the emails Printly sends to shoppers.',
+      field('name','Store name','<div class="pu-input"><input id="as-name" value="Lumen Prints" autocomplete="organization"></div>')+
+      field('email','Contact email',`<div class="pu-input">${I('mail')}<input id="as-email" type="email" value="hello@lumenprints.com" autocomplete="email" aria-describedby="as-email-h"></div>`,'Shoppers reply to this address. It never appears on your storefront.')+
+      field('currency','Currency',sel('currency',['USD, US dollar','EUR, Euro','GBP, British pound','CAD, Canadian dollar'])))+
+    sec('emails','Order emails','What shoppers and your team hear about when an order comes in.',
+      sw('proof','Send a design proof with every order confirmation','Shoppers see exactly what will be printed.',1)+
+      sw('review','Email me when an order needs review','For example, when artwork fails the print check.',1)+
+      field('timing','Send proof emails',sel('timing',['Immediately','After 1 hour','Only when I approve'])))+
+    sec('print','Print defaults','Applied to new products. You can override them per product.',
+      field('method','Default print method',sel('method',['Direct to garment','Screen print','Embroidery']))+
+      field('dpi','Minimum resolution (DPI)','<div class="pu-input"><input id="as-dpi" type="number" min="72" max="1200" step="1" value="300" aria-describedby="as-dpi-h"></div>','Artwork below this is flagged before checkout.')+
+      '<label class="pu-check"><input type="checkbox" checked><span class="t"><b>Add 3 mm bleed to every print file</b><span>Keeps edge-to-edge designs from showing a white line.</span></span></label>')],
+   ['Notifications','bell',
+    sec('notify','Notifications','Choose what your team hears about.',
+      sw('n-orders','New orders','Email and push for every personalised order.',1)+
+      sw('n-flag','Artwork flagged','When a design fails the print check.',1)+
+      sw('n-weekly','Weekly summary','Orders, top designs and print volume every Monday.',0))],
+   ['Billing','tag',
+    sec('plan','Plan','Billed through Shopify with your store’s other apps.',
+      `<div class="blk-as-plan"><div><b>Growth</b><span>$29/month · Renews Oct 28</span></div><span class="pu-badge success round"><i class="dot"></i>Active</span></div>`+
+      field('bill-email','Billing email','<div class="pu-input"><input id="as-bill-email" type="email" value="accounts@lumenprints.com" autocomplete="email"></div>')+
+      sw('invoices','Email invoices to the billing address','A PDF copy arrives on the first of each month.',1))],
+   ['Team','users',
+    sec('team','Members','People at Lumen Prints who can open Printly.',
+      `<ul class="blk-as-team">${[['Nadia Rahman','nadia@lumenprints.com','Owner'],['Tanvir Hasan','tanvir@lumenprints.com','Admin'],['Sara Kim','sara@lumenprints.com','Editor'],['Ovi Das','ovi@lumenprints.com','Viewer']].map(m=>`<li><div class="pu-person">${av(m[0],'sm')}<div><b>${m[0]}</b><small>${m[1]}</small></div></div>${m[2]==='Owner'?'<span class="pu-badge gray">Owner</span>':`<select class="pu-select sm" aria-label="Role for ${m[0]}">${['Admin','Editor','Viewer'].map(r=>`<option${r===m[2]?' selected':''}>${r}</option>`).join('')}</select>`}</li>`).join('')}</ul><div><button type="button" class="pu-btn secondary sm" data-modal="invite">${I('plus')}Invite teammate</button></div>`)],
+   ['Integrations','zap',
+    sec('apps','Connected apps','Send Printly events to the tools your team already uses.',
+      sw('flow','Shopify Flow','Trigger a flow when an order needs review.',1)+
+      sw('slack','Slack','Post flagged artwork to a channel.',0)+
+      sw('drive','Google Drive','Back up print files every night.',0))]];
+  return `<div class="dash">
+  ${storeSidebar('Printly designer')}
+  <div class="dash-main blk-as-main" data-as>
+    <div class="blk-savebar" data-as-bar role="region" aria-label="Unsaved changes"><span class="blk-savebar-t">${I('alert')}Unsaved changes</span><div class="blk-savebar-acts"><button type="button" class="pu-btn secondary sm" data-as-discard>Discard</button><button type="button" class="pu-btn primary sm" data-as-save>Save</button></div></div><span class="blk-sr" aria-live="polite" data-as-live></span>
+    <div class="dash-top"><nav class="pu-crumb" aria-label="Breadcrumb"><a href="javascript:void 0">Printly</a>${I('chevR')}<span class="cur" aria-current="page">Settings</span></nav><div style="margin-left:auto">${av('Nadia Rahman','sm')}</div></div>
+    <div class="dash-body">
+      <div class="dash-head"><div><h3>Settings</h3><p>Printly settings for Lumen Prints.</p></div></div>
+      <form class="blk-as" data-as-form data-tabs novalidate>
+        <div class="blk-as-nav" role="tablist" aria-orientation="vertical" aria-label="Settings sections">${panels.map((p,i)=>`<button type="button" role="tab" id="as-tab-${i}" aria-controls="as-panel-${i}" aria-selected="${i?'false':'true'}" tabindex="${i?-1:0}" class="${i?'':'on'}" data-i="${i}">${I(p[1])}${p[0]}</button>`).join('')}</div>
+        <div class="blk-as-panels">${panels.map((p,i)=>`<div role="tabpanel" id="as-panel-${i}" aria-labelledby="as-tab-${i}" class="blk-as-panel${i?' hidden':''}" data-p="${i}">${p[2]}</div>`).join('')}</div>
+      </form>
+    </div>
+  </div>
+</div>`;
+}
+const asFields=f=>[...f.elements].filter(e=>e.matches('input,select,textarea'));
+const asDirty=f=>asFields(f).some(e=>e.type==='checkbox'||e.type==='radio'?e.checked!==e.defaultChecked:e.tagName==='SELECT'?[...e.options].some(o=>o.selected!==o.defaultSelected):e.value!==e.defaultValue);
+function asBar(root,on){ const bar=root.querySelector('[data-as-bar]'); if(bar.classList.contains('on')===on) return; bar.classList.toggle('on',on); root.querySelector('[data-as-live]').textContent=on?'You have unsaved changes':''; }
+function asCommit(root,save){ const f=root.querySelector('[data-as-form]');
+  if(save) asFields(f).forEach(e=>{ if(e.type==='checkbox'||e.type==='radio') e.defaultChecked=e.checked; else if(e.tagName==='SELECT') [...e.options].forEach(o=>o.defaultSelected=o.selected); else e.defaultValue=e.value; }); else f.reset();
+  asBar(root,false); root.querySelector('[role="tab"][aria-selected="true"]').focus();
+  if(save) toast('success','Settings saved','Printly uses these settings for new orders.'); }
 /* ---------- blocks ---------- */
 const logoTile=(k,size=44)=>`<svg class="logo-tile" fill="none" viewBox="0 0 124 124" style="width:${size}px;height:${size}px" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><g><rect width="120" height="120" rx="16" fill="white"/><rect width="120" height="120" rx="16" fill="url(#paint0_linear_2_269${k})" fill-opacity="0.2"/><rect x="1" y="1" width="118" height="118" rx="15" stroke="#E6E6E6" stroke-width="2"/><path fill-rule="evenodd" clip-rule="evenodd" d="M40.863 72.5991L40.8632 59.378C40.8632 54.1961 42.9241 49.2264 46.5926 45.5623C50.2611 41.8982 55.2367 39.8397 60.4247 39.8397C62.9936 39.8397 65.5373 40.3451 67.9107 41.3269C70.284 42.3088 72.4404 43.748 74.2569 45.5623C76.0733 47.3766 77.5143 49.5305 78.4973 51.901C79.4804 54.2715 79.9863 56.8122 79.9863 59.378C79.9863 61.9438 79.4804 64.4845 78.4973 66.8549C77.5143 69.2254 76.0733 71.3793 74.2569 73.1936C72.4404 75.0079 70.284 76.4471 67.9107 77.429C65.5373 78.4109 62.9936 78.9163 60.4247 78.9163H47.4812V98.4545H60.4247H60.6283C70.9666 98.4008 80.8633 94.2476 88.156 86.9283C95.4486 79.6089 99.5442 69.704 99.5479 59.3779C99.5479 49.0142 95.426 39.0749 88.089 31.7466C80.752 24.4183 70.8009 20.3014 60.4247 20.3014C50.1165 20.3078 40.2273 24.3775 32.9064 31.626C25.5854 38.8744 21.4245 48.7158 21.3278 59.0114L21.3016 59.378V72.4969L21.3014 98.548H40.863V72.5991Z" fill="#696969"/><path d="M51.8391 50.8392C54.1162 48.5622 57.2045 47.283 60.4246 47.283C63.6448 47.283 66.7331 48.5622 69.0101 50.8392C71.2871 53.1162 72.5663 56.2045 72.5663 59.4247C72.5663 62.6448 71.2871 65.7331 69.0101 68.0101C66.7331 70.2872 63.6448 71.5664 60.4246 71.5664H48.2829V59.4247C48.2829 56.2045 49.5621 53.1162 51.8391 50.8392Z" fill="#2488FF"/><path d="M20.1507 20.3014H96.0959" stroke="#2488FF" stroke-width="1.15068"/><path d="M23.6027 98.548H99.5479" stroke="#2488FF" stroke-width="1.15068"/><path d="M99.5479 21.452L99.5479 97.3972" stroke="#2488FF" stroke-width="1.15068"/><path d="M21.3014 21.452L21.3014 97.3972" stroke="#2488FF" stroke-width="1.15068"/><path d="M24.1779 23.1777L18.425 23.1777V17.4248L24.1779 17.4248V23.1777Z" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="24.1781" y="53.0959" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(90 24.1781 53.0959)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="24.1781" y="96.8219" width="5.75343" height="5.75342" transform="rotate(90 24.1781 96.8219)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="66.7534" y="23.1781" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(-180 66.7534 23.1781)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="66.7534" y="101.425" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(-180 66.7534 101.425)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="102.425" y="17.4247" width="5.75343" height="5.75342" transform="rotate(90 102.425 17.4247)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="102.425" y="53.0959" width="13.8082" height="5.75342" rx="2.87671" transform="rotate(90 102.425 53.0959)" fill="white" stroke="#2488FF" stroke-width="1.15068"/><rect x="102.425" y="96.8219" width="5.75343" height="5.75342" transform="rotate(90 102.425 96.8219)" fill="white" stroke="#2488FF" stroke-width="1.15068"/></g><defs><linearGradient id="paint0_linear_2_269${k}" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse"><stop stop-color="white"/><stop offset="1" stop-color="#B8B8B8"/></linearGradient></defs></svg>`;
 const BLOCKS=[
@@ -1534,6 +1628,50 @@ export default function Dashboard() {
   )
 }`})}
 <h2 id="uses">Components used</h2><p>${['Card','Badge','Button','Input','Select','Tabs','Table','Progress','Pagination','Avatar','Tooltip','Kbd'].map(n=>`<a class="inline-code" href="#/docs/${n.toLowerCase()}" style="margin:0 4px 6px 0;display:inline-block">${n}</a>`).join('')}</p>${pager('dashboard')}`;
+PAGES['app-settings']=()=>`${crumbs('Examples','App settings')}<h1>App settings</h1><p class="lead">A full settings screen for an embedded Shopify app: the store sidebar, a section nav, annotated settings sections and a save bar that slides in as soon as anything changes.</p>
+<div class="meta-row"><span class="pu-badge solid">Pro template</span><a class="chip-link" href="javascript:void 0">${I('figma')}Figma</a><a class="chip-link" href="javascript:void 0">${I('link')}Open full screen</a></div>
+${demo({cls:'flush',html:appSettingsHTML(),code:`import { AppShell, PageHeader, SettingsLayout, SettingsNav, SettingsSection, Field, Input, Select, Switch, Checkbox, ContextualSaveBar, toast } from "@parseui/react"
+import { useForm } from "@parseui/react/form"
+
+export default function AppSettings({ settings }) {
+  const form = useForm({ defaultValues: settings })
+  const save = form.handleSubmit(async (values) => {
+    await updateSettings(values)
+    form.reset(values)
+    toast.success("Settings saved")
+  })
+
+  return (
+    <AppShell sidebar={<StoreSidebar active="printly" />}>
+      <ContextualSaveBar
+        open={form.isDirty}
+        message="Unsaved changes"
+        onDiscard={() => form.reset()}
+        onSave={save}
+      />
+      <PageHeader title="Settings" description="Printly settings for Lumen Prints." />
+      <SettingsLayout nav={<SettingsNav items={sections} defaultValue="general" />}>
+        <SettingsSection title="Store details" description="Used on packing slips, invoices and shopper emails.">
+          <Field label="Store name"><Input {...form.register("storeName")} /></Field>
+          <Field label="Contact email" hint="Shoppers reply to this address.">
+            <Input type="email" {...form.register("contactEmail")} />
+          </Field>
+          <Field label="Currency"><Select options={currencies} {...form.register("currency")} /></Field>
+        </SettingsSection>
+        <SettingsSection title="Order emails" description="What shoppers and your team hear about.">
+          <Switch label="Send a design proof with every order confirmation" {...form.register("sendProof")} />
+          <Switch label="Email me when an order needs review" {...form.register("reviewAlerts")} />
+        </SettingsSection>
+        <SettingsSection title="Print defaults" description="Applied to new products.">
+          <Field label="Default print method"><Select options={printMethods} {...form.register("printMethod")} /></Field>
+          <Field label="Minimum resolution (DPI)"><Input type="number" {...form.register("minDpi")} /></Field>
+          <Checkbox label="Add 3 mm bleed to every print file" {...form.register("bleed")} />
+        </SettingsSection>
+      </SettingsLayout>
+    </AppShell>
+  )
+}`})}
+<h2 id="uses">Components used</h2><p>${['Card','Input','Select','Switch','Checkbox','Tabs','Button','Badge','Avatar','Breadcrumb','Toast','Modal'].map(n=>`<a class="inline-code" href="#/docs/${n.toLowerCase()}" style="margin:0 4px 6px 0;display:inline-block">${n}</a>`).join('')}</p>${pager('app-settings')}`;
 /* ---------- home ---------- */
 function homePage(){
   const install='npx parseui@latest init', iid=CODES.push(install)-1;
@@ -1612,7 +1750,7 @@ function homePage(){
 const app=document.getElementById('app'), overlay=document.getElementById('overlay');
 function sidebarHTML(slug){
   return NAV.map(g=>`<div class="sb-group ${g.g==='Components'?'nested':''}"><div class="sb-title">${g.g}${g.g==='Components'?`<span class="count">${COMP_ORDER.length}</span>`:''}</div>
-   ${g.items.map(i=>{ const c=C[i[0]]; return `<a class="sb-link ${i[0]===slug?'on':''}" href="#/docs/${i[0]}">${i[1]}${c&&c.status==='beta'?'<span class="tag">Beta</span>':''}${i[0]==='blocks'?'<span class="tag pro">Pro</span>':''}${i[0]==='dashboard'?'<span class="tag pro">Pro</span>':''}${i[0]==='components'?'<span class="tag free">Free</span>':''}</a>`; }).join('')}
+   ${g.items.map(i=>{ const c=C[i[0]]; return `<a class="sb-link ${i[0]===slug?'on':''}" href="#/docs/${i[0]}">${i[1]}${c&&c.status==='beta'?'<span class="tag">Beta</span>':''}${i[0]==='blocks'?'<span class="tag pro">Pro</span>':''}${['dashboard','app-settings'].includes(i[0])?'<span class="tag pro">Pro</span>':''}${i[0]==='components'?'<span class="tag free">Free</span>':''}</a>`; }).join('')}
    ${(g.planned||[]).map(p=>`<span class="sb-link soon">${p[1]}<span class="tag">Soon</span></span>`).join('')}</div>`).join('');
 }
 function render(){
@@ -1622,7 +1760,7 @@ function render(){
   if(!m){ app.innerHTML=homePage(); document.title='ParseUI — Design system by ParseLab'; window.scrollTo(0,0); applyTheme(); afterRender(); return; }
   const slug=m[1], f=FLAT.find(x=>x.slug===slug)||FLAT[0];
   const body=C[f.slug]?componentPage(f.slug):(PAGES[f.slug]||PAGES.introduction)();
-  const wide=f.slug==='dashboard';
+  const wide=['dashboard','app-settings'].includes(f.slug);
   app.innerHTML=`<div class="layout ${wide?'no-toc':''}"><aside class="sidebar" id="sidebar">${sidebarHTML(f.slug)}</aside><main class="main"><article class="doc" style="${wide?'max-width:1180px':''}">${body}</article></main>${wide?'':`<aside class="toc" id="toc"></aside>`}</div>`;
   document.querySelector(`#topNav a[data-sec="${f.sec}"]`)?.classList.add('on');
   document.title=f.name+' — ParseUI'; window.scrollTo(0,0); buildToc(); applyTheme(); afterRender();
@@ -1718,6 +1856,7 @@ document.addEventListener('click',e=>{
   if(t.dataset.rlUnchip!==undefined){ const w=t.closest('[data-rl]'); t.closest('[data-rl-chip]').remove(); rlApply(w); w.querySelector('[data-rl-q]').focus(); return; }
   if(t.dataset.rlArchive!==undefined||t.dataset.rlDelete!==undefined){ rlBulk(t.closest('[data-rl]'), t.dataset.rlDelete!==undefined?'delete':'archive'); return; }
   if(t.dataset.rvGo){ rvShow(t.closest('[data-review]'), t.dataset.rvGo); return; }
+  if(t.dataset.asSave!==undefined||t.dataset.asDiscard!==undefined){ asCommit(t.closest('[data-as]'), t.dataset.asSave!==undefined); return; }
   if(t.dataset.modal){ openModal(t.dataset.modal); return; }
   if(t.dataset.close!==undefined){ const a=t.dataset.after; closeOverlay(); if(a==='deleted') toast('success','Product deleted','“Organic cotton tee” was removed.','Undo'); if(a==='invited') toast('success','Invite sent','They\'ll get an email shortly.'); return; }
   if(t.dataset.toast){ const k=t.dataset.toast; if(k==='success') toast('success','Product saved','Your changes are live on the storefront.'); else if(k==='error') toast('error','Sync failed','Check your API key in Settings and try again.'); else toast('info','Order archived','#1284 moved to archive.','Undo'); return; }
@@ -1732,7 +1871,7 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('input',e=>{ if(e.target.matches('[data-slider], .pu-slider')){ const el=e.target, v=(el.value-el.min)/(el.max-el.min)*100; el.style.setProperty('--v',v+'%'); const o=el.closest('.pu-field')?.querySelector('[data-sl-out]'); if(o) o.textContent=Math.round(el.value)+'%'; } });
 document.addEventListener('keydown',e=>{
-  if((e.key==='ArrowRight'||e.key==='ArrowLeft')&&e.target.matches('[role="tab"]')){ const tabs=[...e.target.parentNode.querySelectorAll('[role="tab"]')], n=tabs[(tabs.indexOf(e.target)+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length]; e.preventDefault(); n.focus(); n.click(); return; }
+  if(e.target.matches?.('[role="tab"]')&&(e.target.parentNode.getAttribute('aria-orientation')==='vertical'?['ArrowDown','ArrowUp']:['ArrowRight','ArrowLeft']).includes(e.key)){ const tabs=[...e.target.parentNode.querySelectorAll('[role="tab"]')], n=tabs[(tabs.indexOf(e.target)+(['ArrowRight','ArrowDown'].includes(e.key)?1:-1)+tabs.length)%tabs.length]; e.preventDefault(); n.focus(); n.click(); return; }
   if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){ e.preventDefault(); overlay.querySelector('.cmdk')?closeOverlay():openCmd(); return; }
   if(e.key==='Escape'&&overlay.innerHTML){ closeOverlay(); return; }
   if(e.key==='/'&&!/input|textarea|select/i.test(document.activeElement.tagName)&&!overlay.innerHTML){ e.preventDefault(); openCmd(); return; }
@@ -1752,7 +1891,9 @@ document.addEventListener('change',e=>{ const w=e.target.closest('[data-rl]'); i
   if(e.target.matches('[data-rl-all]')) rlRows(w).forEach(r=>{ if(!r.classList.contains('hidden')) r.querySelector('input').checked=e.target.checked; });
   if(e.target.type==='checkbox') rlSync(w); });
 document.addEventListener('input',e=>{ if(e.target.matches('[data-rl-q]')) rlApply(e.target.closest('[data-rl]')); });
-document.addEventListener('submit',e=>{ if(e.target.matches('[data-rv-form]')){ e.preventDefault(); rvShow(e.target.closest('[data-review]'),'thanks'); return; }
+['input','change'].forEach(ev=>document.addEventListener(ev,e=>{ const f=e.target.closest('[data-as-form]'); if(f) asBar(f.closest('[data-as]'),asDirty(f)); }));
+document.addEventListener('submit',e=>{ if(e.target.matches('[data-as-form]')){ e.preventDefault(); asCommit(e.target.closest('[data-as]'),true); return; }
+  if(e.target.matches('[data-rv-form]')){ e.preventDefault(); rvShow(e.target.closest('[data-review]'),'thanks'); return; }
   const f=e.target.closest('[data-blk-form]'); if(!f) return; e.preventDefault(); toast('success',f.dataset.blkForm); });
 window.addEventListener('hashchange',render);
 render();
