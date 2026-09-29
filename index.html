@@ -609,6 +609,16 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 .blk-rl .blk-rl-empty{ padding:28px 14px; text-align:center; color:var(--text-3); }
 .blk-inv{ display:inline-flex; align-items:center; gap:6px; color:var(--text-2); } .blk-inv.low .ico{ color:var(--warning); } .blk-inv.out .ico{ color:var(--danger); }
 @media (max-width:640px){ .blk-rl-q{ flex-basis:100%; } .blk-rl-sort{ flex:1; margin-left:0; } }
+.blk-plan{ width:480px; max-width:100%; }
+.blk-plan .blk-plan-k{ margin:0 0 4px; font-size:12.5px; font-weight:500; color:var(--text-3); }
+.blk-plan .pu-card-h h4{ display:flex; align-items:center; flex-wrap:wrap; gap:10px; font-size:17px; letter-spacing:-.01em; }
+.blk-plan .blk-plan-r{ margin:4px 0 0; font-size:13px; color:var(--text-2); }
+.blk-meters{ display:flex; flex-direction:column; gap:20px; }
+.blk-meter-t{ display:flex; justify-content:space-between; gap:12px; margin-bottom:8px; font-size:14px; }
+.blk-meter-t b{ font-weight:500; color:var(--text); } .blk-meter-t span{ color:var(--text-2); font-variant-numeric:tabular-nums; }
+.blk-meter .blk-meter-n{ display:flex; align-items:center; gap:6px; margin:8px 0 0; font-size:13px; color:var(--text-3); }
+.blk-meter.warn .pu-progress i{ background:var(--warning); }
+.blk-meter.warn .blk-meter-n{ color:var(--text-2); } .blk-meter.warn .blk-meter-n .ico{ color:var(--warning); }
 .blk-sr{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 
 /* ============ OVERLAYS ============ */
@@ -1240,7 +1250,23 @@ const BLOCKS=[
  {id:'upload',cat:'App pages',t:'File upload',d:'Drop zone with in-progress file rows.',html:`<div style="width:100%;max-width:440px;display:flex;flex-direction:column;gap:10px"><div class="pu-upload"><div class="feat-ic brand" style="margin:0 auto 10px;width:38px;height:38px">${I('upload')}</div><b>Click to upload</b> or drag and drop<div style="font-size:12.5px;color:var(--text-3);margin-top:4px">SVG, PNG or JPG up to 10 MB</div></div>${[['hoodie-front.png','2.4 MB',100],['mug-wrap.svg','640 KB',58]].map(f=>`<div class="pu-card" style="padding:12px 14px;display:flex;gap:12px;align-items:center"><div class="prod-thumb" style="background:var(--p-soft);color:var(--p-text)">${I('layers')}</div><div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;font-size:13.5px"><b style="font-weight:500">${f[0]}</b><span style="color:var(--text-3)">${f[2]}%</span></div><div style="font-size:12px;color:var(--text-3);margin-bottom:6px">${f[1]}</div><div class="pu-progress sm"><i style="width:${f[2]}%"></i></div></div></div>`).join('')}</div>`,
   code:`<FileUpload accept={["image/*"]} maxSize={10 * 1024 * 1024} onUpload={upload} />`},
  {id:'pricing',cat:'Billing',t:'Pricing plans',d:'Three-tier plan picker used on app listing pages.',html:`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;width:100%;max-width:720px">${[['Starter','$0','For new stores',['1 product template','Community support']],['Growth','$29','For growing brands',['Unlimited templates','Priority support','Analytics'],1],['Scale','$99','For high volume',['Everything in Growth','Custom domain','Dedicated manager']]].map(p=>`<div class="pu-card" style="padding:20px;${p[4]?'border-color:var(--p);box-shadow:0 0 0 3px var(--ring)':''}"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-weight:600">${p[0]}</b>${p[4]?'<span class="pu-badge brand">Popular</span>':''}</div><div style="font-size:30px;font-weight:600;letter-spacing:-.03em;margin:8px 0 0">${p[1]}<small style="font-size:13px;color:var(--text-3);font-weight:400">/mo</small></div><p style="margin:0 0 14px;font-size:13px;color:var(--text-3)">${p[2]}</p><button class="pu-btn ${p[4]?'primary':'secondary'} sm full">Choose ${p[0]}</button><div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;font-size:13px;color:var(--text-2)">${p[3].map(f=>`<span style="display:flex;align-items:center;gap:8px">${I('check')}${f}</span>`).join('')}</div></div>`).join('')}</div>`,
-  code:`<PricingTable plans={plans} highlighted="growth" interval="monthly" />`}];
+  code:`<PricingTable plans={plans} highlighted="growth" interval="monthly" />`},
+ {id:'plan-usage',cat:'Billing',t:'Plan and usage',d:'Current plan, renewal date and usage meters that warn in words, not just color, before a limit is hit.',html:`<div class="pu-card blk-plan"><div class="pu-card-h"><div><p class="blk-plan-k">Current plan</p><h4>Growth · $29/month <span class="pu-badge success round"><i class="dot"></i>Active</span></h4><p class="blk-plan-r">Renews Oct 28</p></div></div><div class="pu-card-b blk-meters">${[['orders','Orders',1840,2500],['designs','Designs',38,50]].map(m=>{ const pct=Math.round(m[2]/m[3]*100), warn=pct>75; return `<div class="blk-meter${warn?' warn':''}"><div class="blk-meter-t"><b id="blk-mu-${m[0]}">${m[1]}</b><span>${m[2].toLocaleString('en-US')} / ${m[3].toLocaleString('en-US')}</span></div><div class="pu-progress" role="progressbar" aria-labelledby="blk-mu-${m[0]}" aria-valuemin="0" aria-valuemax="${m[3]}" aria-valuenow="${m[2]}" aria-valuetext="${m[2].toLocaleString('en-US')} of ${m[3].toLocaleString('en-US')} ${m[1].toLowerCase()} used, ${pct}%"><i style="width:${pct}%"></i></div><p class="blk-meter-n">${warn?`${I('alert')}${pct}% used. You're close to your limit.`:`${pct}% used this billing cycle`}</p></div>`; }).join('')}</div><div class="pu-card-f"><button type="button" class="pu-btn secondary sm">View invoices</button><button type="button" class="pu-btn primary sm">Change plan</button></div></div>`,
+  code:`<PlanCard
+  plan="Growth"
+  price={{ amount: 29, currency: "USD", interval: "month" }}
+  status="active"
+  renewsAt="2026-10-28"
+  actions={
+    <>
+      <Button variant="secondary" onClick={openInvoices}>View invoices</Button>
+      <Button onClick={openPlans}>Change plan</Button>
+    </>
+  }
+>
+  <UsageMeter label="Orders" used={1840} limit={2500} />
+  <UsageMeter label="Designs" used={38} limit={50} warnAt={0.75} />
+</PlanCard>`}];
 /* ---------- shared doc pieces ---------- */
 const demo=(ex,i)=>{ const id=CODES.push(ex.code)-1;
   return `<div class="demo" data-demo><div class="demo-bar"><div class="seg" role="tablist"><button class="on" data-view="p">Preview</button><button data-view="c">Code</button></div><span class="spacer"></span>
