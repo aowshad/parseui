@@ -449,6 +449,73 @@ table.props{ width:100%; border-collapse:collapse; font-size:13.5px; min-width:5
 .pu-combobox-empty{ padding:12px 10px; font-size:13.5px; color:var(--text-3); }
 .pu-combobox-status, .pu-command-status{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 
+/* file upload */
+.pu-fileupload{ width:100%; max-width:480px; display:flex; flex-direction:column; gap:10px; text-align:left; }
+.pu-fileupload-zone{ padding:24px 20px; border:1.5px dashed var(--border-strong); border-radius:var(--r-lg); background:var(--bg); text-align:center; color:var(--text-2); font-size:14px; cursor:pointer; transition:border-color .15s, background-color .15s; }
+.pu-fileupload-zone:hover{ border-color:color-mix(in oklab, var(--border-strong) 60%, var(--text-3)); }
+.pu-fileupload-zone.drag, .pu-fileupload-grid.drag{ border-color:var(--p); background:var(--p-soft); }
+.pu-fileupload-zone-ic{ width:40px; height:40px; margin:0 auto 10px; display:grid; place-items:center; border-radius:50%; background:var(--p-soft); color:var(--p-text); }
+.pu-fileupload .pu-fileupload-zone p{ margin:0; font-size:14px; color:var(--text-2); }
+.pu-fileupload .pu-fileupload-hint{ margin:4px 0 0; font-size:12.5px; color:var(--text-3); }
+.pu-fileupload .pu-fileupload-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; }
+.pu-fileupload .pu-fileupload-list:empty{ display:none; }
+.pu-fileupload .pu-fileupload-item{ display:flex; align-items:center; gap:12px; margin:0; padding:10px 8px 10px 12px; border:1px solid var(--border); border-radius:var(--r-lg); background:var(--bg); box-shadow:var(--sh-xs); }
+.pu-fileupload-ic{ width:34px; height:34px; flex:none; display:grid; place-items:center; border-radius:var(--r); background:var(--p-soft); color:var(--p-text); }
+.pu-fileupload-item.error{ border-color:color-mix(in oklab, var(--danger) 35%, var(--border)); }
+.pu-fileupload-item.error .pu-fileupload-ic{ background:var(--danger-soft); color:var(--danger); }
+.pu-fileupload-main{ flex:1; min-width:0; }
+.pu-fileupload-top{ display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:13.5px; }
+.pu-fileupload-top b{ min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:500; }
+.pu-fileupload-pct{ flex:none; color:var(--text-3); font-variant-numeric:tabular-nums; }
+.pu-fileupload-item.done .pu-fileupload-pct .ico{ color:var(--success); }
+.pu-fileupload-meta{ margin-bottom:4px; font-size:12.5px; color:var(--text-3); }
+.pu-fileupload-item.done .pu-fileupload-meta, .pu-fileupload-item.error .pu-fileupload-meta{ margin-bottom:0; }
+.pu-fileupload-err{ color:color-mix(in oklab, var(--danger) 80%, var(--text)); font-weight:500; }
+.pu-fileupload-grid{ display:flex; flex-wrap:wrap; gap:10px; padding:10px; border:1.5px dashed var(--border-strong); border-radius:var(--r-lg); background:var(--bg); }
+.pu-fileupload .pu-fileupload-tiles{ display:contents; list-style:none; margin:0; padding:0; }
+.pu-fileupload .pu-fileupload-tile{ position:relative; width:104px; margin:0; }
+.pu-fileupload-tile img{ display:block; width:104px; height:104px; object-fit:cover; border-radius:var(--r); background:var(--bg-muted); box-shadow:inset 0 0 0 1px var(--border); }
+.pu-fileupload-cap{ display:block; margin-top:4px; font-size:12px; color:var(--text-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.pu-fileupload-tile-rm{ position:absolute; top:6px; right:6px; width:26px; height:26px; display:grid; place-items:center; padding:0; border:1px solid var(--border); border-radius:50%; background:var(--bg); color:var(--text); box-shadow:var(--sh-sm); cursor:pointer; }
+.pu-fileupload-tile-rm .ico{ width:14px; height:14px; }
+.pu-fileupload-add{ width:104px; height:104px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:0; border:1px solid var(--border); border-radius:var(--r); background:var(--bg-subtle); color:var(--text-2); font:500 12.5px var(--font); cursor:pointer; }
+.pu-fileupload-add:hover{ background:var(--bg-muted); color:var(--text); }
+.pu-fileupload.compact{ max-width:none; gap:6px; }
+.pu-fileupload-row{ display:flex; align-items:center; flex-wrap:wrap; gap:10px; }
+.pu-fileupload-name{ font-size:14px; color:var(--text-2); overflow-wrap:anywhere; }
+.pu-fileupload-size{ color:var(--text-3); }
+.pu-fileupload-status, .pu-datatable-status{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+
+/* data table */
+.pu-datatable{ border:1px solid var(--border); border-radius:var(--r-lg); background:var(--bg); text-align:left; }
+.pu-datatable-bar{ display:flex; align-items:center; flex-wrap:wrap; gap:8px; min-height:56px; padding:10px 12px 10px 16px; border-bottom:1px solid var(--border); }
+.pu-datatable-bar.bulk{ background:var(--p-soft); border-radius:calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0; }
+.pu-datatable-bar.bulk b{ margin-right:auto; font-size:14px; font-weight:600; color:var(--p-text); }
+.pu-datatable-title b{ display:block; font-size:15px; font-weight:600; } .pu-datatable-title span{ font-size:12.5px; color:var(--text-3); }
+.pu-datatable-scroll{ max-height:420px; overflow:auto; overscroll-behavior:contain; }
+.pu-datatable-scroll:focus-visible{ outline:2px solid var(--p); outline-offset:-2px; }
+.pu-datatable-table{ min-width:760px; }
+.pu-datatable-table thead th{ position:sticky; top:0; z-index:1; background:var(--bg-subtle); box-shadow:inset 0 -1px 0 var(--border); border-bottom:0; }
+.pu-datatable .pu-datatable-cb{ width:44px; padding-right:0; }
+.pu-datatable .pu-datatable-cb .pu-check input{ margin:0; }
+.pu-datatable-sort{ display:inline-flex; align-items:center; gap:4px; margin:-4px -6px; padding:4px 6px; border:0; border-radius:var(--r-sm); background:none; color:inherit; font:inherit; cursor:pointer; }
+.pu-datatable-sort:hover{ background:var(--bg-muted); color:var(--text); }
+th.num .pu-datatable-sort{ flex-direction:row-reverse; }
+.pu-datatable-arrow{ display:grid; opacity:0; transition:transform .15s, opacity .15s; }
+.pu-datatable-arrow .ico{ width:14px; height:14px; }
+.pu-datatable-sort:hover .pu-datatable-arrow, .pu-datatable-sort:focus-visible .pu-datatable-arrow{ opacity:.5; }
+th.sorted{ color:var(--text); } th.sorted .pu-datatable-arrow{ opacity:1; } th.sorted.asc .pu-datatable-arrow{ transform:rotate(180deg); }
+.pu-datatable-table tbody tr.sel td{ background:var(--p-soft); }
+.pu-datatable-foot{ display:flex; align-items:center; flex-wrap:wrap; gap:10px 16px; padding:10px 12px 10px 16px; border-top:1px solid var(--border); font-size:13.5px; color:var(--text-2); }
+.pu-datatable-size{ display:flex; align-items:center; gap:8px; } .pu-datatable-size .pu-select{ width:auto; }
+.pu-datatable-range{ margin-left:auto; font-variant-numeric:tabular-nums; }
+.pu-datatable-foot .pu-pag button[disabled]{ opacity:.4; cursor:default; }
+.pu-datatable-foot .pu-pag button[disabled]:hover{ background:none; }
+.pu-datatable-skel{ display:inline-block; max-width:100%; height:10px; border-radius:99px; vertical-align:middle; background:linear-gradient(90deg, var(--bg-muted) 25%, var(--bg-inset) 37%, var(--bg-muted) 63%) 0 0/400% 100%; animation:pu-datatable-skel 1.3s ease infinite; }
+@keyframes pu-datatable-skel{ from{ background-position:100% 0; } to{ background-position:0 0; } }
+.pu-datatable .pu-empty{ padding:40px 20px; }
+@media (max-width:640px){ .pu-datatable-range{ margin-left:0; } .pu-datatable-foot .pu-pag{ width:100%; flex-wrap:wrap; } }
+
 /* date picker */
 .pu-datepicker-trigger{ justify-content:flex-start; cursor:pointer; font:400 14px var(--font); color:var(--text); text-align:left; }
 .pu-datepicker-trigger:focus-visible{ outline:none; }
@@ -1579,7 +1646,94 @@ C['date-picker']={name:'Date picker',importName:'DatePicker',file:'date-picker',
    usage:`<DatePicker label="Publish date" value={date} onValueChange={setDate} />`,
    props:[P('value','Date | [Date, Date]','—','Selected date, or [start, end] in range mode.'),P('onValueChange','(value) => void','—','Called when a date is chosen, or when a range is applied.'),P('mode','"single" | "range"','"single"','Pick one date or a start and end date.'),P('min','Date','—','Earliest selectable date. Earlier days are aria-disabled.'),P('max','Date','—','Latest selectable date.'),P('disabled','(date: Date) => boolean','—','Disable individual days, e.g. weekends.'),P('weekStartsOn','0 | 1 | 2 | 3 | 4 | 5 | 6','0','First day of the week. 0 is Sunday.'),P('numberOfMonths','1 | 2','1','Months shown side by side. Two months become one on narrow screens.'),P('presets','{ label: string; range: () => [Date, Date] }[]','—','Quick ranges shown beside the calendar in range mode.'),P('locale','string','the browser locale','Passed to Intl.DateTimeFormat for month, weekday and date labels.'),P('inline','boolean','false','Render the calendar without a popover.')],
    keys:[['Enter / Space','On the trigger: opens the calendar on the selected date, or today.'],['← / →','Moves to the previous or next day.'],['↑ / ↓','Moves to the same day in the previous or next week.'],['PageUp / PageDown','Moves to the same day in the previous or next month.'],['Shift+PageUp / Shift+PageDown','Moves to the same day in the previous or next year.'],['Home / End','Moves to the first or last day of the week.'],['Enter / Space','Chooses the focused day. Disabled days can be focused but not chosen.'],['Escape','Closes the calendar and returns focus to the trigger.'],['Tab','Moves between the month buttons, the calendar, presets and actions.']]};
-const PLANNED=[['data-table','Data table'],['file-upload','File upload']];
+C['file-upload']={name:'File upload',importName:'FileUpload',file:'file-upload',status:'beta',desc:'Choose or drop files, with type and size checks and per-file progress. A real file input sits behind an accessible button.',thumb:`<div style="width:200px;display:flex;flex-direction:column;gap:6px;font-size:11.5px"><div style="border:1.5px dashed var(--border-strong);border-radius:8px;padding:10px;text-align:center;color:var(--text-2);background:var(--bg)">${I('upload')}<div><b style="color:var(--p-text)">Browse</b> or drop files</div></div><div class="pu-card" style="padding:6px 8px;display:flex;gap:6px;align-items:center"><span style="flex:1">mug-wrap.svg</span><span style="color:var(--text-3)">64%</span></div></div>`,
+   examples:[
+    {t:'Dropzone',d:'Click Browse or drop files. Each file shows its size and progress, and can be removed. Files over the limit get an error row instead of uploading. Results are announced to screen readers.',cls:'col',html:`<div class="pu-fileupload" data-fu data-fu-mode="list" data-fu-multiple data-fu-max="10485760" data-fu-accept="image/png,image/jpeg,image/svg+xml,application/pdf,.png,.jpg,.jpeg,.svg,.pdf" id="fu-drop"><input type="file" class="pu-fileupload-input" multiple accept="image/png,image/jpeg,image/svg+xml,application/pdf,.png,.jpg,.jpeg,.svg,.pdf" tabindex="-1" aria-hidden="true" hidden><div class="pu-fileupload-zone" data-fu-zone><span class="pu-fileupload-zone-ic">${I('upload','ico-lg')}</span><p><button type="button" class="pu-btn link" data-fu-browse>Browse files</button> or drag them here</p><p class="pu-fileupload-hint">PNG, JPG, SVG or PDF, up to 10 MB each</p></div><ul class="pu-fileupload-list" aria-label="Uploads"><li class="pu-fileupload-item done"><span class="pu-fileupload-ic">${I('layers')}</span><div class="pu-fileupload-main"><div class="pu-fileupload-top"><b>hoodie-front.png</b><span class="pu-fileupload-pct">${I('checkC')}</span></div><div class="pu-fileupload-meta">2.4 MB · Uploaded</div></div><button type="button" class="pu-btn ghost icon sm" data-fu-rm aria-label="Remove hoodie-front.png">${I('trash')}</button></li><li class="pu-fileupload-item" data-fu-sim="48" data-fu-name="mug-wrap.svg" data-fu-bytes="655360"><span class="pu-fileupload-ic">${I('layers')}</span><div class="pu-fileupload-main"><div class="pu-fileupload-top"><b>mug-wrap.svg</b><span class="pu-fileupload-pct">48%</span></div><div class="pu-fileupload-meta">640 KB · Uploading</div><div class="pu-progress sm" role="progressbar" aria-label="Uploading mug-wrap.svg" aria-valuemin="0" aria-valuemax="100" aria-valuenow="48"><i style="width:48%"></i></div></div><button type="button" class="pu-btn ghost icon sm" data-fu-rm aria-label="Remove mug-wrap.svg">${I('trash')}</button></li><li class="pu-fileupload-item error"><span class="pu-fileupload-ic">${I('alert')}</span><div class="pu-fileupload-main"><div class="pu-fileupload-top"><b>poster-print.tiff</b></div><div class="pu-fileupload-meta">24.8 MB · <span class="pu-fileupload-err">Too large, max 10 MB</span></div></div><button type="button" class="pu-btn ghost icon sm" data-fu-rm aria-label="Remove poster-print.tiff">${I('x')}</button></li></ul><span class="pu-fileupload-status" role="status"></span></div>`,
+     code:`<FileUpload
+  multiple
+  accept={["image/png", "image/jpeg", "image/svg+xml", "application/pdf"]}
+  maxSize={10 * 1024 * 1024}
+  onUpload={(file, { onProgress }) => uploadToPrintly(file, onProgress)}
+  onReject={(file, reason) => console.warn(file.name, reason)}
+/>`},
+    {t:'Image upload',d:'Chosen images preview as thumbnails straight from the file with URL.createObjectURL. The URL is revoked when the image is removed, or when you leave the page.',cls:'col',html:`<div class="pu-fileupload" data-fu data-fu-mode="images" data-fu-multiple data-fu-max="10485760" data-fu-accept="image/*" id="fu-img"><input type="file" class="pu-fileupload-input" multiple accept="image/*" tabindex="-1" aria-hidden="true" hidden><div class="pu-fileupload-grid" data-fu-zone><ul class="pu-fileupload-tiles" aria-label="Images"></ul><button type="button" class="pu-fileupload-add" data-fu-browse>${I('plus','ico-lg')}<span>Add images</span></button></div><p class="pu-fileupload-hint">Drop images onto the grid, or use Add images. Up to 10 MB each.</p><ul class="pu-fileupload-list" aria-label="Rejected files"></ul><span class="pu-fileupload-status" role="status"></span></div>`,
+     code:`<FileUpload
+  variant="images"
+  multiple
+  accept={["image/*"]}
+  maxSize={10 * 1024 * 1024}
+  value={images}
+  onFilesChange={setImages}
+/>`},
+    {t:'Compact',d:'A single Upload file button that shows the chosen file name, for forms with one attachment.',html:`<div class="pu-fileupload compact" data-fu data-fu-mode="compact" data-fu-max="5242880" data-fu-accept=".csv,text/csv" id="fu-csv"><input type="file" class="pu-fileupload-input" accept=".csv,text/csv" tabindex="-1" aria-hidden="true" hidden><span class="pu-label" id="fu-csv-l">Import products</span><div class="pu-fileupload-row"><button type="button" class="pu-btn secondary" data-fu-browse aria-describedby="fu-csv-l fu-csv-name">${I('upload')}Upload file</button><span class="pu-fileupload-name" id="fu-csv-name">No file chosen</span><button type="button" class="pu-btn ghost icon sm" data-fu-rm aria-label="Remove chosen file" hidden>${I('x')}</button></div><span class="pu-hint">CSV, up to 5 MB.</span><span class="pu-fileupload-status" role="status"></span></div>`,
+     code:`<FileUpload
+  variant="compact"
+  label="Import products"
+  accept={[".csv", "text/csv"]}
+  maxSize={5 * 1024 * 1024}
+  onFilesChange={([file]) => setCsv(file)}
+/>`}],
+   usage:`<FileUpload accept={["image/*"]} maxSize={10 * 1024 * 1024} onUpload={upload} />`,
+   props:[P('accept','string[]','—','Allowed MIME types or extensions, e.g. "image/*" or ".csv". Other files are rejected with a message.'),P('maxSize','number','—','Largest file in bytes. Larger files get a "Too large" error row.'),P('multiple','boolean','false','Allow choosing or dropping several files.'),P('maxFiles','number','—','Stop accepting files after this many.'),P('variant','"dropzone" | "images" | "compact"','"dropzone"','Layout.'),P('onUpload','(file, { onProgress }) => Promise<void>','—','Called for each accepted file. Report progress from 0 to 100.'),P('onReject','(file, reason) => void','—','Called for files that fail the accept or maxSize checks.'),P('onFilesChange','(files: File[]) => void','—','Called when files are added or removed.')],
+   keys:[['Enter / Space','On Browse, Add images or Upload file: opens the system file picker.'],['Tab','Moves to each file’s remove button in turn.'],['Enter / Space','On a remove button: removes that file and moves focus to the next file, or back to the browse button.']]};
+/* data table columns: [key, header, sortable, numeric] */
+const DT_COLS=[['id','Order',1],['date','Date',1],['customer','Customer',1],['payment','Payment'],['fulfillment','Fulfillment'],['items','Items',0,1],['total','Total',1,1]];
+const dtHead=(sortable,id)=>`<thead><tr>${sortable?`<th class="pu-datatable-cb"><label class="pu-check"><input type="checkbox" data-dt-all aria-label="Select all orders on this page"></label></th>`:''}${DT_COLS.map(c=>`<th scope="col" data-col="${c[0]}"${c[3]?' class="num"':''}>${sortable&&c[2]?`<button type="button" class="pu-datatable-sort" data-dt-sort="${c[0]}">${c[1]}<span class="pu-datatable-arrow" aria-hidden="true">${I('chevD')}</span></button>`:c[1]}</th>`).join('')}</tr></thead>`;
+C['data-table']={name:'Data table',importName:'DataTable',file:'data-table',status:'beta',desc:'A Table with sorting, row selection and bulk actions, pagination, column visibility and loading and empty states. For static rows, use Table.',thumb:`<div style="width:210px;border:1px solid var(--border);border-radius:8px;background:var(--bg);font-size:10.5px;overflow:hidden"><div style="display:flex;gap:6px;padding:5px 8px;background:var(--bg-subtle);border-bottom:1px solid var(--border);color:var(--text-3)"><span style="width:10px;height:10px;border:1px solid var(--border-strong);border-radius:3px"></span><b style="font-weight:500;color:var(--text)">Order ↓</b><span style="margin-left:auto">Total</span></div>${['#1284','#1283','#1282'].map((o,i)=>`<div style="display:flex;gap:6px;align-items:center;padding:5px 8px;border-bottom:1px solid var(--border);${i===1?'background:var(--p-soft)':''}"><span style="width:10px;height:10px;border-radius:3px;${i===1?'background:var(--p)':'border:1px solid var(--border-strong)'}"></span>${o}<span style="margin-left:auto">$${[128,64,212][i]}.00</span></div>`).join('')}</div>`,
+   examples:[
+    {t:'Orders',d:'Sortable headers set aria-sort, rows can be selected for bulk actions, and the page size is adjustable. The Columns control is the Dropdown menu. The header stays put while the table scrolls, and the table scrolls sideways on small screens.',cls:'flush',html:`<div style="padding:20px"><div class="pu-datatable" data-dt data-dd-cols id="dt-orders" data-dt-sort="date" data-dt-dir="desc" data-dt-page="1" data-dt-size="10">
+<div class="pu-datatable-bar" data-dt-tools><div class="pu-datatable-title"><b id="dt-orders-cap">Orders</b><span>${'42'} orders · last 30 days</span></div><div class="pu-dropdown" data-dd style="margin-left:auto"><button type="button" class="pu-btn secondary sm" id="dd-dtc-t" data-dd-t aria-haspopup="menu" aria-expanded="false" aria-controls="dd-dtc-m">${I('sliders')}Columns${I('chevD')}</button><div class="pu-dropdown-menu" role="menu" id="dd-dtc-m" aria-labelledby="dd-dtc-t" data-align="end" hidden><div class="pu-dropdown-label" role="presentation">Show columns</div>${DT_COLS.map((c,i)=>`<button type="button" class="pu-dropdown-item" role="menuitemcheckbox" tabindex="-1" aria-checked="true"${i===0?' aria-disabled="true"':''} data-col="${c[0]}"><span class="pu-dropdown-check">${I('check')}</span>${c[1]}</button>`).join('')}</div></div></div>
+<div class="pu-datatable-bar bulk hidden" data-dt-bulk role="region" aria-label="Bulk actions"><b data-dt-count>0 selected</b><button type="button" class="pu-btn primary sm" data-dt-fulfil>${I('check')}Mark as fulfilled</button><button type="button" class="pu-btn secondary sm" data-dt-export>${I('download')}Export</button><button type="button" class="pu-btn ghost sm" data-dt-clear>Clear selection</button></div>
+<div class="pu-datatable-scroll" tabindex="0" role="region" aria-labelledby="dt-orders-cap"><table class="pu-table pu-datatable-table" aria-labelledby="dt-orders-cap">${dtHead(true)}<tbody></tbody></table></div>
+<div class="pu-datatable-foot"><label class="pu-datatable-size">Rows per page <select class="pu-select sm" data-dt-size-sel><option selected>10</option><option>20</option><option>50</option></select></label><span class="pu-datatable-range" data-dt-range></span><nav class="pu-pag" aria-label="Orders pages" data-dt-pages></nav></div>
+<span class="pu-datatable-status" role="status"></span></div></div>`,
+     code:`const columns = [
+  { key: "id", header: "Order", sortable: true, cell: (o) => <b>#{o.id}</b> },
+  { key: "date", header: "Date", sortable: true, cell: (o) => formatDate(o.date) },
+  { key: "customer", header: "Customer", sortable: true },
+  { key: "payment", header: "Payment", cell: (o) => <Badge color={paymentTone[o.payment]} dot>{o.payment}</Badge> },
+  { key: "fulfillment", header: "Fulfillment", cell: (o) => <Badge color={fulfillmentTone[o.fulfillment]}>{o.fulfillment}</Badge> },
+  { key: "items", header: "Items", align: "end" },
+  { key: "total", header: "Total", sortable: true, align: "end", cell: (o) => formatMoney(o.total) },
+]
+
+<DataTable
+  caption="Orders"
+  data={orders}
+  columns={columns}
+  getRowId={(o) => o.id}
+  defaultSort={{ key: "date", direction: "desc" }}
+  selectable
+  bulkActions={(rows) => (
+    <>
+      <Button size="sm" onClick={() => markFulfilled(rows)}>Mark as fulfilled</Button>
+      <Button size="sm" variant="secondary" onClick={() => exportCsv(rows)}>Export</Button>
+    </>
+  )}
+  pageSizeOptions={[10, 20, 50]}
+  columnVisibility
+  stickyHeader
+/>`},
+    {t:'Loading',d:'Skeleton rows keep the layout steady while data loads. The table sets aria-busy and the result is announced when rows arrive.',cls:'flush',html:`<div style="padding:20px"><div class="pu-datatable" data-dt-load id="dt-load"><div class="pu-datatable-bar"><div class="pu-datatable-title"><b id="dt-load-cap">Orders</b><span data-dt-load-sub>Loading…</span></div><button type="button" class="pu-btn secondary sm" data-dt-replay style="margin-left:auto">${I('refresh')}Reload</button></div><div class="pu-datatable-scroll" tabindex="0" role="region" aria-labelledby="dt-load-cap"><table class="pu-table pu-datatable-table" aria-labelledby="dt-load-cap" aria-busy="true">${dtHead(false)}<tbody></tbody></table></div><span class="pu-datatable-status" role="status"></span></div></div>`,
+     code:`<DataTable caption="Orders" data={orders ?? []} columns={columns} loading={!orders} skeletonRows={5} />`},
+    {t:'Empty',d:'When there is nothing to show, the table keeps its header and explains what to do next.',cls:'flush',html:`<div style="padding:20px"><div class="pu-datatable"><div class="pu-datatable-bar"><div class="pu-datatable-title"><b id="dt-empty-cap">Orders</b><span>0 orders</span></div></div><div class="pu-datatable-scroll" tabindex="0" role="region" aria-labelledby="dt-empty-cap"><table class="pu-table pu-datatable-table" aria-labelledby="dt-empty-cap">${dtHead(false)}<tbody><tr><td colspan="${DT_COLS.length}"><div class="pu-empty"><div class="feat-ic brand">${I('cart','ico-lg')}</div><h4>No orders yet</h4><p>Orders show up here as soon as shoppers check out with a Printly design.</p><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button type="button" class="pu-btn secondary sm" data-dt-say="Store link copied">${I('link')}Copy store link</button><button type="button" class="pu-btn primary sm" data-dt-say="Test order #1001 created">${I('plus')}Create test order</button></div></div></td></tr></tbody></table></div></div></div>`,
+     code:`<DataTable
+  caption="Orders"
+  data={[]}
+  columns={columns}
+  empty={
+    <EmptyState
+      icon={<Cart />}
+      title="No orders yet"
+      description="Orders show up here as soon as shoppers check out with a Printly design."
+      actions={<Button size="sm" onClick={createTestOrder}>Create test order</Button>}
+    />
+  }
+/>`}],
+   usage:`<DataTable data={orders} columns={columns} getRowId={(o) => o.id} selectable />`,
+   props:[P('data','T[]','—','Rows to show.'),P('columns','{ key, header, sortable?, align?, cell? }[]','—','Column definitions. cell renders custom content.'),P('getRowId','(row: T) => string | number','—','Stable id, so selection survives sorting and paging.'),P('defaultSort','{ key: string; direction: "asc" | "desc" }','—','Initial sort. The sorted header gets aria-sort.'),P('selectable','boolean','false','Adds row checkboxes and a select-all for the current page.'),P('bulkActions','(rows: T[]) => ReactNode','—','Replaces the toolbar while rows are selected.'),P('pageSizeOptions','number[]','[10, 20, 50]','Choices for rows per page.'),P('columnVisibility','boolean','false','Adds a Columns menu built on Dropdown menu.'),P('stickyHeader','boolean','false','Keeps the header visible while the body scrolls.'),P('loading','boolean','false','Shows skeleton rows and sets aria-busy.'),P('empty','ReactNode','—','Shown in place of rows when data is empty.'),P('caption','string','—','Accessible name for the table and its scroll region.')],
+   keys:[['Tab','Moves between sort buttons, row checkboxes, bulk actions and pagination.'],['Enter / Space','On a column header: sorts by it, and again to reverse the order.'],['Space','On a row checkbox: selects or clears the row. On the header checkbox: selects or clears the whole page.'],['Enter / Space','On a page button: goes to that page.'],['↑ / ↓ / ← / →','With the table region focused: scrolls it.']]};
+const PLANNED=[];
 const COMP_ORDER=Object.keys(C).sort((a,b)=>C[a].name.localeCompare(C[b].name));
 /* ---------- navigation model ---------- */
 const NAV=[
@@ -1977,7 +2131,7 @@ PAGES.introduction=()=>`${crumbs('Getting started','Introduction')}<h1>Introduct
 <h2 id="why">Why we're building it</h2><p>ParseLab ships several Shopify apps, each with its own buttons, inputs and tables. Every new screen gets redesigned and rebuilt from scratch, and Built for Shopify reviews keep flagging the same inconsistencies. ParseUI replaces that with parts we design once and reuse everywhere.</p>
 <h2 id="principles">Principles</h2>
 <div class="card-grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">${[['Tokens first','Color, type, radius and shadow are variables. Rebrand a product by changing a handful of values.'],['You own the code','Components copy into your repo through the CLI. Edit them freely without waiting on a package release.'],['Accessible by default','Built on Radix primitives with keyboard support, focus management and WCAG AA contrast.'],['Figma and code match','Every component has a Figma twin with the same names, variants and props.']].map(p=>`<div class="fcard" style="min-height:0"><h3>${p[0]}</h3><p style="font-size:14px;color:var(--text-2)">${p[1]}</p></div>`).join('')}</div>
-<h2 id="whats-inside">What's inside</h2><ul><li><b>Foundations</b> — color, typography, spacing, radius, shadows and an icon set.</li><li><b>Components</b> — ${COMP_ORDER.length} base components today, ${PLANNED.length} more planned.</li><li><b>Blocks</b> — ready-made sections like sign-in, pricing, settings and empty states.</li><li><b>Examples</b> — full screens, starting with a store dashboard.</li></ul>
+<h2 id="whats-inside">What's inside</h2><ul><li><b>Foundations</b> — color, typography, spacing, radius, shadows and an icon set.</li><li><b>Components</b> — ${COMP_ORDER.length} base components today${PLANNED.length?`, ${PLANNED.length} more planned`:''}.</li><li><b>Blocks</b> — ready-made sections like sign-in, pricing, settings and empty states.</li><li><b>Examples</b> — full screens, starting with a store dashboard.</li></ul>
 <h2 id="stack">Stack</h2><p>React 18+, TypeScript, Tailwind CSS v4 and Radix UI. Works with Next.js, Remix and Vite, and alongside Shopify Polaris inside embedded apps.</p>${pager('introduction')}`;
 
 PAGES.installation=()=>`${crumbs('Getting started','Installation')}<h1>Installation</h1><p class="lead">Add ParseUI to a new or existing React project in a few minutes.</p>
@@ -2244,6 +2398,7 @@ function afterRender(){
   document.querySelectorAll('[data-indet]').forEach(el=>el.indeterminate=true);
   document.querySelectorAll('[data-slider]').forEach(el=>el.dispatchEvent(new Event('input',{bubbles:true})));
   document.querySelectorAll('[data-dp]').forEach(dpInit);
+  fuInit(); dtInit();
 }
 let tocObs;
 function buildToc(){ const toc=document.getElementById('toc'); if(!toc) return; const hs=[...document.querySelectorAll('.doc h2[id], .doc h3[id^="ex-"]')];
@@ -2510,6 +2665,90 @@ document.addEventListener('click',ev=>{ const t=ev.target; if(!(t instanceof Ele
     dpFocus(root,b,false); dpSummary(root); root.querySelector('.pu-datepicker-status').textContent=`${pre.textContent}: ${dpRangeText(a,b)}.`; return; }
   if(t.closest('[data-dp-apply]')){ const a=root.dataset.dpStart, b=root.dataset.dpEnd; if(!(a&&b)) return; root.dataset.dpPrev=JSON.stringify([a,b]); root.dataset.dpPresetDone=root.dataset.dpPresetCur; dpTrigger(root); root.querySelector('.pu-datepicker-status').textContent=`Showing ${dpRangeText(a,b)}.`; dpHide(true); return; }
   if(t.closest('[data-dp-cancel]')) dpHide(true); });
+
+/* ---------- file upload ---------- */
+// uploads are simulated; object URLs for previews are revoked on remove and when their page is left
+const fuSize=b=>b<1024?`${b} B`:b<1048576?`${Math.round(b/1024)} KB`:`${(b/1048576).toFixed(1).replace(/\.0$/,'')} MB`;
+const fuURLs=new Set();
+const fuAccepts=(accept,f)=>!accept||accept.split(',').map(a=>a.trim().toLowerCase()).some(a=>a.startsWith('.')?f.name.toLowerCase().endsWith(a):a.endsWith('/*')?f.type.startsWith(a.slice(0,-1)):f.type===a);
+const fuCheck=(root,f)=>!fuAccepts(root.dataset.fuAccept,f)?'File type not allowed':f.size>(+root.dataset.fuMax||Infinity)?`Too large, max ${fuSize(+root.dataset.fuMax)}`:'';
+const fuItem=(name,bytes,err)=>`<li class="pu-fileupload-item${err?' error':''}"><span class="pu-fileupload-ic">${I(err?'alert':'layers')}</span><div class="pu-fileupload-main"><div class="pu-fileupload-top"><b>${esc(name)}</b>${err?'':'<span class="pu-fileupload-pct">0%</span>'}</div><div class="pu-fileupload-meta">${fuSize(bytes)} · ${err?`<span class="pu-fileupload-err">${esc(err)}</span>`:'Uploading'}</div>${err?'':`<div class="pu-progress sm" role="progressbar" aria-label="Uploading ${attrEsc(name)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i style="width:0"></i></div>`}</div><button type="button" class="pu-btn ghost icon sm" data-fu-rm aria-label="Remove ${attrEsc(name)}">${I(err?'x':'trash')}</button></li>`;
+function fuProgress(li,name,bytes,p=0){ const step=()=>{ if(!li.isConnected) return; p=Math.min(100,p+10+Math.random()*16);
+    li.querySelector('.pu-progress i').style.width=p+'%'; li.querySelector('.pu-progress').setAttribute('aria-valuenow',Math.round(p)); li.querySelector('.pu-fileupload-pct').textContent=Math.round(p)+'%';
+    if(p<100){ li._fu=setTimeout(step,260); return; }
+    li.classList.add('done'); li.querySelector('.pu-progress').remove(); li.querySelector('.pu-fileupload-pct').innerHTML=I('checkC'); li.querySelector('.pu-fileupload-meta').textContent=`${fuSize(bytes)} · Uploaded`;
+    li.closest('[data-fu]').querySelector('.pu-fileupload-status').textContent=`${name} uploaded.`; };
+  li._fu=setTimeout(step,260); }
+function fuAdd(root,list){ let files=[...list]; if(!files.length) return; if(!root.hasAttribute('data-fu-multiple')) files=files.slice(0,1);
+  const mode=root.dataset.fuMode, said=[];
+  for(const f of files){ const err=fuCheck(root,f); said.push(err?`${f.name}: ${err}`:`${f.name} added`);
+    if(mode==='compact'){ const n=root.querySelector('.pu-fileupload-name'), rm=root.querySelector('[data-fu-rm]');
+      n.innerHTML=err?`<span class="pu-fileupload-err">${esc(f.name)}: ${esc(err)}</span>`:`${esc(f.name)} <span class="pu-fileupload-size">${fuSize(f.size)}</span>`; rm.hidden=false; continue; }
+    if(mode==='images'&&!err){ const url=URL.createObjectURL(f); fuURLs.add(url);
+      root.querySelector('.pu-fileupload-tiles').insertAdjacentHTML('beforeend',`<li class="pu-fileupload-tile"><img src="${url}" alt="${attrEsc(f.name)}"><span class="pu-fileupload-cap">${esc(f.name)}</span><button type="button" class="pu-fileupload-tile-rm" data-fu-rm aria-label="Remove ${attrEsc(f.name)}">${I('x')}</button></li>`); continue; }
+    root.querySelector('.pu-fileupload-list').insertAdjacentHTML('beforeend',fuItem(f.name,f.size,err));
+    if(!err) fuProgress(root.querySelector('.pu-fileupload-list').lastElementChild,f.name,f.size); }
+  root.querySelector('.pu-fileupload-status').textContent=said.join('. ')+'.'; }
+function fuRemove(root,btn){ const st=root.querySelector('.pu-fileupload-status');
+  if(root.dataset.fuMode==='compact'){ root.querySelector('.pu-fileupload-name').textContent='No file chosen'; btn.hidden=true; st.textContent='File removed.'; root.querySelector('[data-fu-browse]').focus(); return; }
+  const item=btn.closest('li'), name=item.querySelector('img')?.alt||item.querySelector('b')?.textContent||'File';
+  const img=item.querySelector('img'); if(img){ URL.revokeObjectURL(img.src); fuURLs.delete(img.src); }
+  clearTimeout(item._fu); const next=(item.nextElementSibling||item.previousElementSibling)?.querySelector('[data-fu-rm]'); item.remove();
+  st.textContent=`${name} removed.`; (next||root.querySelector('[data-fu-browse]')).focus(); }
+function fuInit(){ // resume the sample upload, and revoke preview URLs whose images are gone
+  document.querySelectorAll('[data-fu-sim]').forEach(li=>{ const p=+li.dataset.fuSim; li.removeAttribute('data-fu-sim'); fuProgress(li,li.dataset.fuName,+li.dataset.fuBytes,p); });
+  for(const u of fuURLs) if(!document.querySelector(`img[src="${u}"]`)){ URL.revokeObjectURL(u); fuURLs.delete(u); } }
+document.addEventListener('click',ev=>{ const t=ev.target; if(!(t instanceof Element)) return; const root=t.closest('[data-fu]'); if(!root) return;
+  const rm=t.closest('[data-fu-rm]'); if(rm){ fuRemove(root,rm); return; }
+  if(t.closest('[data-fu-browse]')||(t.closest('[data-fu-zone]')&&!t.closest('button,a,li'))) root.querySelector('.pu-fileupload-input').click(); });
+document.addEventListener('change',ev=>{ const inp=ev.target; if(!inp.matches?.('.pu-fileupload-input')) return; fuAdd(inp.closest('[data-fu]'),inp.files); inp.value=''; });
+['dragenter','dragover'].forEach(type=>document.addEventListener(type,ev=>{ const z=ev.target.closest?.('[data-fu-zone]'); if(!z) return; ev.preventDefault(); if(ev.dataTransfer) ev.dataTransfer.dropEffect='copy'; z.classList.add('drag'); }));
+document.addEventListener('dragleave',ev=>{ const z=ev.target.closest?.('[data-fu-zone]'); if(z&&!z.contains(ev.relatedTarget)) z.classList.remove('drag'); });
+document.addEventListener('drop',ev=>{ const z=ev.target.closest?.('[data-fu-zone]'); if(!z) return; ev.preventDefault(); z.classList.remove('drag'); fuAdd(z.closest('[data-fu]'),ev.dataTransfer?.files||[]); });
+
+/* ---------- data table ---------- */
+const DT_ORDERS=(()=>{ const names=['Nadia Rahman','Tanvir Hasan','Sara Kim','Ovi Das','Maya Chen','Rafi Ahmed','Lena Park','Omar Faruk'], pay=['Paid','Paid','Pending','Paid','Refunded','Paid','Paid','Pending'], ful=['Fulfilled','Unfulfilled','Fulfilled','Unfulfilled','Returned','Fulfilled','Unfulfilled','Fulfilled'];
+  return Array.from({length:42},(_,i)=>{ const items=1+(i*7)%4; return {id:1284-i, date:dpISO(new Date(2026,8,28-Math.floor(i*.7))), customer:names[(i*5)%8], payment:pay[i%8], fulfillment:ful[(i*3)%8], items, total:items*18+(i*37)%60+12}; }); })();
+const DT_TONE={Paid:'success',Pending:'warning',Refunded:'danger',Fulfilled:'gray',Unfulfilled:'warning',Returned:'info'};
+const DT_MONEY=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'});
+const dtSel=root=>new Set(JSON.parse(root.dataset.dtSel||'[]'));
+function dtRows(list,hidden,sel,checkable){ const td=(col,html,cls='')=>`<td data-col="${col}"${cls?` class="${cls}"`:''}${hidden.has(col)?' hidden':''}>${html}</td>`;
+  return list.map(o=>`<tr${sel?.has(o.id)?' class="sel"':''}>${checkable?`<td class="pu-datatable-cb"><label class="pu-check"><input type="checkbox" data-dt-row="${o.id}"${sel.has(o.id)?' checked':''} aria-label="Select order #${o.id}"></label></td>`:''}${td('id',`<b>#${o.id}</b>`)}${td('date',DPF.short.format(dpDate(o.date)))}${td('customer',`<div class="pu-person">${av(o.customer,'sm')}${o.customer}</div>`)}${td('payment',`<span class="pu-badge ${DT_TONE[o.payment]} round"><i class="dot"></i>${o.payment}</span>`)}${td('fulfillment',`<span class="pu-badge ${DT_TONE[o.fulfillment]}">${o.fulfillment}</span>`)}${td('items',o.items,'num')}${td('total',`<b>${DT_MONEY.format(o.total)}</b>`,'num')}</tr>`).join(''); }
+function dtRender(root,say){ const key=root.dataset.dtSort, dir=root.dataset.dtDir==='asc'?1:-1, size=+root.dataset.dtSize, sel=dtSel(root);
+  const sorted=[...DT_ORDERS].sort((a,b)=>(a[key]>b[key]?1:a[key]<b[key]?-1:0)*dir||b.id-a.id), pages=Math.max(1,Math.ceil(sorted.length/size)), page=Math.min(Math.max(1,+root.dataset.dtPage||1),pages);
+  root.dataset.dtPage=page; const slice=sorted.slice((page-1)*size,page*size), hidden=new Set([...root.querySelectorAll('[role="menuitemcheckbox"][aria-checked="false"]')].map(i=>i.dataset.col));
+  root.querySelector('tbody').innerHTML=dtRows(slice,hidden,sel,true);
+  root.querySelectorAll('th[data-col]').forEach(th=>{ const k=th.dataset.col; if(k===key){ th.setAttribute('aria-sort',dir>0?'ascending':'descending'); th.classList.toggle('asc',dir>0); } else th.removeAttribute('aria-sort'); th.classList.toggle('sorted',k===key); });
+  const on=slice.filter(o=>sel.has(o.id)).length, all=root.querySelector('[data-dt-all]'); all.checked=on>0&&on===slice.length; all.indeterminate=on>0&&on<slice.length;
+  root.querySelector('[data-dt-tools]').classList.toggle('hidden',sel.size>0); root.querySelector('[data-dt-bulk]').classList.toggle('hidden',!sel.size); root.querySelector('[data-dt-count]').textContent=`${sel.size} selected`;
+  const from=(page-1)*size+1, to=from+slice.length-1; root.querySelector('[data-dt-range]').textContent=`${from}–${to} of ${sorted.length}`;
+  root.querySelector('[data-dt-pages]').innerHTML=`<button type="button" data-dt-go="${page-1}" aria-label="Previous page"${page===1?' disabled':''}>${I('chevL')}</button>${[...Array(pages)].map((_,i)=>`<button type="button" data-dt-go="${i+1}"${i+1===page?' class="on" aria-current="page"':''} aria-label="Page ${i+1}">${i+1}</button>`).join('')}<button type="button" data-dt-go="${page+1}" aria-label="Next page"${page===pages?' disabled':''}>${I('chevR')}</button>`;
+  if(say) root.querySelector('.pu-datatable-status').textContent=say; }
+function dtLoad(root){ const table=root.querySelector('table'), sub=root.querySelector('[data-dt-load-sub]'); clearTimeout(root._dt);
+  table.setAttribute('aria-busy','true'); sub.textContent='Loading…'; root.querySelector('.pu-datatable-status').textContent='Loading orders.';
+  root.querySelector('tbody').innerHTML=[...Array(5)].map(()=>`<tr aria-hidden="true">${DT_COLS.map((c,i)=>`<td${c[3]?' class="num"':''}><span class="pu-datatable-skel" style="width:${[46,70,110,58,72,20,56][i]}px"></span></td>`).join('')}</tr>`).join('');
+  root._dt=setTimeout(()=>{ if(!root.isConnected) return; table.setAttribute('aria-busy','false'); root.querySelector('tbody').innerHTML=dtRows(DT_ORDERS.slice(0,5),new Set(),null,false); sub.textContent='5 orders'; root.querySelector('.pu-datatable-status').textContent='5 orders loaded.'; },1400); }
+function dtInit(){ document.querySelectorAll('[data-dt]').forEach(r=>{ if(!r.dataset.dtReady){ r.dataset.dtReady=1; dtRender(r); } }); document.querySelectorAll('[data-dt-load]').forEach(r=>{ if(!r.dataset.dtReady){ r.dataset.dtReady=1; dtLoad(r); } }); }
+document.addEventListener('click',ev=>{ const t=ev.target; if(!(t instanceof Element)) return;
+  const say=t.closest('[data-dt-say]'); if(say){ toast('success',say.dataset.dtSay); return; }
+  if(t.closest('[data-dt-replay]')){ dtLoad(t.closest('[data-dt-load]')); return; }
+  const root=t.closest('[data-dt]'); if(!root) return; const label=k=>DT_COLS.find(c=>c[0]===k)[1];
+  // the root also carries data-dt-sort (its state), so match the buttons only
+  const sort=t.closest('button[data-dt-sort]'); if(sort){ const k=sort.dataset.dtSort; if(root.dataset.dtSort===k) root.dataset.dtDir=root.dataset.dtDir==='asc'?'desc':'asc'; else { root.dataset.dtSort=k; root.dataset.dtDir=k==='customer'?'asc':'desc'; }
+    root.dataset.dtPage=1; dtRender(root,`Sorted by ${label(k)}, ${root.dataset.dtDir==='asc'?'ascending':'descending'}.`); return; }
+  const go=t.closest('[data-dt-go]'); if(go&&!go.disabled){ root.dataset.dtPage=go.dataset.dtGo; dtRender(root,`Page ${root.dataset.dtPage}.`); root.querySelector(`[data-dt-go="${root.dataset.dtPage}"][aria-current]`)?.focus(); return; }
+  if(t.closest('[data-dt-fulfil]')||t.closest('[data-dt-export]')||t.closest('[data-dt-clear]')){ const sel=dtSel(root), n=sel.size, noun=n===1?'order':'orders';
+    if(t.closest('[data-dt-fulfil]')){ DT_ORDERS.forEach(o=>{ if(sel.has(o.id)) o.fulfillment='Fulfilled'; }); toast('success',`${n} ${noun} marked as fulfilled`); }
+    else if(t.closest('[data-dt-export]')) toast('success',`Exported ${n} ${noun} as CSV`);
+    root.dataset.dtSel='[]'; dtRender(root,'Selection cleared.'); root.querySelector('[data-dt-all]').focus(); return; }
+  if(t.matches('[role="menuitemcheckbox"][data-col]')) dtRender(root); });
+document.addEventListener('change',ev=>{ const t=ev.target, root=t.closest?.('[data-dt]'); if(!root) return;
+  if(t.matches('[data-dt-size-sel]')){ root.dataset.dtSize=t.value; root.dataset.dtPage=1; dtRender(root,`Showing ${t.value} rows per page.`); return; }
+  const sel=dtSel(root);
+  if(t.matches('[data-dt-all]')) root.querySelectorAll('[data-dt-row]').forEach(c=>t.checked?sel.add(+c.dataset.dtRow):sel.delete(+c.dataset.dtRow));
+  else if(t.matches('[data-dt-row]')) t.checked?sel.add(+t.dataset.dtRow):sel.delete(+t.dataset.dtRow); else return;
+  root.dataset.dtSel=JSON.stringify([...sel]); const f=t.matches('[data-dt-all]')?null:t.dataset.dtRow; dtRender(root,`${sel.size} selected.`);
+  (f?root.querySelector(`[data-dt-row="${f}"]`):root.querySelector('[data-dt-all]'))?.focus(); });
 
 /* ---------- command palette ---------- */
 let cmdSel=0;
