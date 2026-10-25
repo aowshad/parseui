@@ -945,7 +945,7 @@ th.sorted{ color:var(--text); } th.sorted .pu-datatable-arrow{ opacity:1; } th.s
   .layout{ grid-template-columns:240px minmax(0,1fr); }
   .toc{ display:none; }
   .main{ padding:32px 36px 80px; }
-  .hero-grid{ grid-template-columns:1fr; gap:48px; }
+  .hero-grid{ grid-template-columns:minmax(0,1fr); gap:48px; }
   .dash-kpis{ grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
 /* the nav links stay until 900px, so the search button goes icon-only first to keep the bar from overflowing */
@@ -1263,7 +1263,7 @@ C.tabs={name:'Tabs',status:'stable',desc:'Switch between related views on the sa
   </TabsList>
   <TabsContent value="overview">…</TabsContent>
 </Tabs>`},{t:'Pill',html:`<div data-tabs><div class="pu-tabs pill"><button class="on" data-i="0">7 days</button><button data-i="1">30 days</button><button data-i="2">90 days</button></div></div>`,code:`<TabsList variant="pill">…</TabsList>`}],
- props:[P('variant','"underline" | "pill"','"underline"','Visual style of the list.'),P('value','string','—','Active tab.'),P('orientation','"horizontal" | "vertical"','"horizontal"','Arrow-key direction.')]};
+ props:[P('variant','"underline" | "pill"','"underline"','Visual style, on <code>TabsList</code>.'),P('value','string','—','Active tab.'),P('orientation','"horizontal" | "vertical"','"horizontal"','Arrow-key direction.')]};
 
 C.accordion={name:'Accordion',status:'stable',desc:'Stacked sections that expand to reveal content.',thumb:`<div class="pu-acc" style="width:200px;font-size:12px"><details open><summary style="padding:8px 10px;font-size:12px">Refund policy ${I('chevD')}</summary></details></div>`,
  examples:[{t:'Default',html:`<div class="pu-acc"><details open><summary>How does billing work? ${I('chevD')}</summary><div class="body">Apps bill through Shopify. Charges appear on your monthly Shopify invoice.</div></details><details><summary>Can I cancel anytime? ${I('chevD')}</summary><div class="body">Yes. Uninstalling the app stops billing immediately.</div></details><details><summary>Do you offer a free trial? ${I('chevD')}</summary><div class="body">Every plan starts with a 14-day trial.</div></details></div>`,
@@ -1292,12 +1292,13 @@ C.modal={name:'Modal',status:'stable',desc:'A focused dialog for confirmations a
     color="danger"
     title="Delete this product?"
     description="This removes the product and its 4 variants. This can't be undone."
-  >
-    <ModalClose asChild><Button variant="secondary">Cancel</Button></ModalClose>
-    <Button variant="danger">Delete product</Button>
-  </ModalContent>
+    footer={<>
+      <ModalClose asChild><Button variant="secondary">Cancel</Button></ModalClose>
+      <Button variant="danger">Delete product</Button>
+    </>}
+  />
 </Modal>`}],
- props:[P('open','boolean','—','Controlled open state.'),P('size','"sm" | "md" | "lg"','"md"','Max width.'),P('dismissible','boolean','true','Close on overlay click and Escape.')]};
+ props:[P('open','boolean','—','Controlled open state, on <code>Modal</code>. Pair with <code>onOpenChange</code>.'),P('dismissible','boolean','true','Close on overlay click and Escape.'),P('size','"sm" | "md" | "lg"','"md"','Max width, on <code>ModalContent</code>.'),P('icon, color','ReactNode, "brand" | "danger" | "success" | "warning"','—','Icon tile above the title, on <code>ModalContent</code>.'),P('title, description','ReactNode','—','Heading and supporting text. The title names the dialog for screen readers.'),P('footer','ReactNode','—','Actions row. Children of <code>ModalContent</code> become the body.')]};
 
 C.toast={name:'Toast',status:'stable',desc:'Brief confirmation of an action, shown at the edge of the screen.',thumb:`<div class="pu-toast" style="width:200px;padding:10px;font-size:12px;box-shadow:var(--sh-md)"><div class="t"><b style="font-size:12.5px">Saved</b>Changes published</div></div>`,
  examples:[{t:'Trigger',html:`<button class="pu-btn secondary" data-toast="success">Show success</button><button class="pu-btn secondary" data-toast="error">Show error</button><button class="pu-btn secondary" data-toast="info">Show with action</button>`,
@@ -1356,7 +1357,7 @@ C.dropdown={name:'Dropdown menu',importName:'DropdownMenu',file:'dropdown-menu',
 <div class="pu-dropdown" data-dd><button type="button" class="pu-btn ghost icon sm" id="dd-row-t" data-dd-t aria-haspopup="menu" aria-expanded="false" aria-controls="dd-row-m" aria-label="Actions for Organic cotton tee">${I('more')}</button><div class="pu-dropdown-menu" role="menu" id="dd-row-m" aria-labelledby="dd-row-t" data-align="end" hidden>${[['pen','Edit','Opened the product editor'],['copy','Duplicate','Duplicated as “Organic cotton tee (copy)”'],['box','Archive','Archived Organic cotton tee']].map(r=>`<button type="button" class="pu-dropdown-item" role="menuitem" tabindex="-1" data-say="${r[2]}">${I(r[0])}${r[1]}</button>`).join('')}<div class="pu-dropdown-sep" role="separator"></div><button type="button" class="pu-dropdown-item danger" role="menuitem" tabindex="-1" data-dd-modal="delete">${I('trash')}Delete</button></div></div></div>`,
      code:`<DropdownMenu>
   <DropdownMenuTrigger asChild>
-    <Button variant="ghost" size="sm" icon aria-label="Actions for Organic cotton tee">
+    <Button variant="ghost" size="sm" iconOnly aria-label="Actions for Organic cotton tee">
       <MoreHorizontal />
     </Button>
   </DropdownMenuTrigger>
@@ -1417,7 +1418,7 @@ C.dropdown={name:'Dropdown menu',importName:'DropdownMenu',file:'dropdown-menu',
     <DropdownMenuItem variant="danger" onSelect={remove}>Delete</DropdownMenuItem>
   </DropdownMenuContent>
 </DropdownMenu>`,
-   props:[P('open','boolean','—','Controlled open state.'),P('onOpenChange','(open: boolean) => void','—','Called when the menu opens or closes.'),P('align','"start" | "end"','"start"','Edge of the trigger the menu lines up with. Flips when there is no room.'),P('side','"bottom" | "top"','"bottom"','Preferred side. Flips up automatically near the bottom of the viewport.'),P('loop','boolean','true','Arrow keys wrap from the last item to the first.'),P('DropdownMenuItem.onSelect','(event: Event) => void','—','Runs when the item is chosen. Call event.preventDefault() to keep the menu open.'),P('DropdownMenuItem.variant','"default" | "danger"','"default"','Danger colors the item for destructive actions.'),P('DropdownMenuItem.shortcut','string','—','Shortcut hint shown on the right. Also set as aria-keyshortcuts.'),P('DropdownMenuItem.disabled','boolean','false','Skipped by arrow keys and typeahead.'),P('DropdownMenuCheckboxItem.checked','boolean','false','Checked state. Toggling keeps the menu open.')],
+   props:[P('open','boolean','—','Controlled open state.'),P('onOpenChange','(open: boolean) => void','—','Called when the menu opens or closes.'),P('DropdownMenuContent.align','"start" | "end"','"start"','Edge of the trigger the menu lines up with. Flips when there is no room.'),P('DropdownMenuContent.side','"bottom" | "top"','"bottom"','Preferred side. Flips up automatically near the bottom of the viewport.'),P('DropdownMenuContent.loop','boolean','true','Arrow keys wrap from the last item to the first.'),P('DropdownMenuItem.onSelect','(event: Event) => void','—','Runs when the item is chosen. Call event.preventDefault() to keep the menu open.'),P('DropdownMenuItem.variant','"default" | "danger"','"default"','Danger colors the item for destructive actions.'),P('DropdownMenuItem.shortcut','string','—','Shortcut hint shown on the right. Also set as aria-keyshortcuts.'),P('DropdownMenuItem.disabled','boolean','false','Skipped by arrow keys and typeahead.'),P('DropdownMenuCheckboxItem.checked','boolean','false','Checked state. Toggling keeps the menu open unless <code>closeOnSelect</code> is set.')],
    keys:[['Enter / Space / ↓','On the trigger: opens the menu and focuses the first item.'],['↑','On the trigger: opens the menu and focuses the last item.'],['↓ / ↑','Moves to the next or previous item, wrapping at the ends.'],['Home / End','Moves to the first or last item.'],['A–Z','Moves to the next item that starts with that letter.'],['Enter / Space','Runs the item. Checkbox items toggle and the menu stays open.'],['Escape','Closes the menu and returns focus to the trigger.'],['Tab','Closes the menu and moves focus on.']]};
 C.drawer={name:'Drawer',importName:'Drawer',status:'beta',radix:'Dialog',desc:'A panel that slides over the page for details or a short task, without leaving the current screen. On phones it becomes a bottom sheet.',thumb:`<div style="position:relative;width:210px;height:96px;border:1px solid var(--border);border-radius:8px;background:var(--bg-muted);overflow:hidden"><div style="position:absolute;inset:0 0 0 auto;width:96px;background:var(--bg);border-left:1px solid var(--border);box-shadow:var(--sh-lg);padding:10px"><div style="height:8px;width:60%;border-radius:4px;background:var(--text);opacity:.8"></div><div style="height:6px;width:80%;border-radius:3px;background:var(--border-strong);margin-top:10px"></div><div style="height:6px;width:70%;border-radius:3px;background:var(--border-strong);margin-top:6px"></div><div style="position:absolute;left:10px;right:10px;bottom:10px;height:16px;border-radius:5px;background:var(--p)"></div></div></div>`,
    examples:[
@@ -1486,7 +1487,7 @@ C.drawer={name:'Drawer',importName:'Drawer',status:'beta',radix:'Dialog',desc:'A
     …
   </DrawerContent>
 </Drawer>`,
-   props:[P('open','boolean','—','Controlled open state.'),P('onOpenChange','(open: boolean) => void','—','Called when the drawer opens or closes.'),P('side','"right" | "left" | "bottom"','"right"','Edge the drawer slides from. At 640px and narrower, right and left drawers become bottom sheets.'),P('title','string','—','Required. Labels the dialog through aria-labelledby.'),P('description','string','—','Shown under the title.'),P('footer','ReactNode','—','Actions pinned to the bottom while the body scrolls.'),P('dismissible','boolean','true','Close on Escape and overlay click.'),P('initialFocus','RefObject<HTMLElement>','the panel','Element that receives focus on open. The panel itself by default, so screen readers announce the title first.')],
+   props:[P('open','boolean','—','Controlled open state.'),P('onOpenChange','(open: boolean) => void','—','Called when the drawer opens or closes.'),P('side','"right" | "left" | "bottom"','"right"','Edge the drawer slides from. At 640px and narrower, right and left drawers become bottom sheets.'),P('title','string','—','On <code>DrawerContent</code>. Required. Labels the dialog through aria-labelledby.'),P('description','string','—','On <code>DrawerContent</code>. Shown under the title.'),P('footer','ReactNode','—','On <code>DrawerContent</code>. Actions pinned to the bottom while the body scrolls.'),P('dismissible','boolean','true','Close on Escape and overlay click.'),P('initialFocus','RefObject<HTMLElement>','the panel','Element that receives focus on open. The panel itself by default, so screen readers announce the title first.')],
    keys:[['Enter / Space','On the trigger: opens the drawer and moves focus into it.'],['Tab / Shift+Tab','Moves between controls inside the drawer. Focus wraps and never reaches the page behind.'],['Escape','Closes the drawer and returns focus to the trigger.']]};
 /* combobox data and markup, used by the Combobox examples */
 const CB_DATA={
@@ -1578,7 +1579,17 @@ C.command={name:'Command menu',importName:'CommandMenu',file:'command-menu',stat
 </CommandMenu>`},
     {t:'Dialog',d:'The same menu in a modal dialog. The search in these docs (⌘K or /) is built the same way: focus stays in the input, and Escape closes it and returns focus to where you were.',html:`<button type="button" class="pu-btn secondary" data-cmd-open aria-haspopup="dialog" aria-expanded="false">${I('search')}Search Printly</button>`,
      code:`const [open, setOpen] = React.useState(false)
-useHotkey("mod+k", () => setOpen((o) => !o))
+
+React.useEffect(() => {
+  const onKey = (e: KeyboardEvent) => {
+    if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault()
+      setOpen((o) => !o)
+    }
+  }
+  document.addEventListener("keydown", onKey)
+  return () => document.removeEventListener("keydown", onKey)
+}, [])
 
 <Button variant="secondary" leadingIcon={<Search />} onClick={() => setOpen(true)}>
   Search Printly
@@ -2119,7 +2130,7 @@ export default function Page() {
     "@parseui": "${REG}{name}.json"
   }
 }`,'json','components.json')}${pmTabs(shadcn('add @parseui/button @parseui/switch'))}
-<h2 id="names">Name clashes with shadcn/ui</h2><p>ParseUI uses the same file names as shadcn/ui (<code>button.tsx</code>, <code>card.tsx</code> and so on). If a file already exists, the CLI asks before replacing it. Add <code>--path components/parseui</code> to keep both side by side.</p>${pager('installation')}`;
+<h2 id="names">Name clashes with shadcn/ui</h2><p>ParseUI uses the same file names as shadcn/ui (<code>button.tsx</code>, <code>card.tsx</code> and so on). If a file already exists, the CLI asks before replacing it. ParseUI parts import each other through your <code>ui</code> alias (the drawer uses <code>@/components/ui/button</code>), so keep one version of each file rather than mixing the two libraries.</p>${pager('installation')}`;
 
 PAGES.theming=()=>`${crumbs('Getting started','Theming')}<h1>Theming</h1><p class="lead">Everything visual is a CSS variable. Change a few tokens and every component follows. Try it: open the customizer in the top bar.</p>
 <h2 id="brand">Brand color</h2><p>Pick a brand to see the whole site recolor. Hover, soft and text shades are computed from one value.</p><div style="margin:16px 0 8px">${swatches()}</div>
