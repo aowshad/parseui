@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "switch",
+  "title": "Switch",
+  "description": "Toggle a setting that takes effect immediately.",
+  "dependencies": [
+    "radix-ui",
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "utils",
+    "https://aowshad.github.io/parseui/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/parseui/ui/switch.tsx",
+      "content": "import * as React from \"react\"\nimport { Switch as SwitchPrimitive } from \"radix-ui\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\n\nimport { cn } from \"@/lib/utils\"\n\nconst switchVariants = cva(\n  \"peer relative inline-flex shrink-0 cursor-pointer items-center rounded-full bg-muted p-0.5 transition-colors duration-[180ms] outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary motion-reduce:transition-none\",\n  {\n    variants: {\n      size: {\n        sm: \"h-4 w-[30px]\",\n        md: \"h-5 w-9\",\n      },\n    },\n    defaultVariants: { size: \"md\" },\n  }\n)\n\nconst switchThumbVariants = cva(\n  \"pointer-events-none block rounded-full bg-background shadow-[0_1px_2px_rgb(0_0_0/0.25)] transition-transform duration-[180ms] data-[state=unchecked]:translate-x-0 motion-reduce:transition-none dark:bg-foreground\",\n  {\n    variants: {\n      size: {\n        sm: \"size-3 data-[state=checked]:translate-x-3.5\",\n        md: \"size-4 data-[state=checked]:translate-x-4\",\n      },\n    },\n    defaultVariants: { size: \"md\" },\n  }\n)\n\ntype SwitchProps = React.ComponentProps<typeof SwitchPrimitive.Root> &\n  VariantProps<typeof switchVariants> & {\n    /** Clickable label shown after the track. */\n    label?: React.ReactNode\n  }\n\nfunction Switch({ className, size, label, id, disabled, ...props }: SwitchProps) {\n  const autoId = React.useId()\n  const switchId = id ?? autoId\n\n  const control = (\n    <SwitchPrimitive.Root\n      data-slot=\"switch\"\n      data-size={size ?? \"md\"}\n      id={switchId}\n      disabled={disabled}\n      className={cn(switchVariants({ size }), label == null && className)}\n      {...props}\n    >\n      <SwitchPrimitive.Thumb data-slot=\"switch-thumb\" className={switchThumbVariants({ size })} />\n    </SwitchPrimitive.Root>\n  )\n\n  if (label == null) return control\n\n  return (\n    <div\n      data-slot=\"switch-field\"\n      className={cn(\"inline-flex items-center gap-2.5 text-sm text-foreground\", className)}\n    >\n      {control}\n      <label\n        data-slot=\"switch-label\"\n        htmlFor={switchId}\n        className=\"cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-50\"\n      >\n        {label}\n      </label>\n    </div>\n  )\n}\n\nexport { Switch, switchVariants, type SwitchProps }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

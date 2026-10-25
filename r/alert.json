@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "alert",
+  "title": "Alert",
+  "description": "Inline message that tells the user something important about the current page.",
+  "dependencies": [
+    "class-variance-authority",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "utils",
+    "https://aowshad.github.io/parseui/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/parseui/ui/alert.tsx",
+      "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { CircleCheck, CircleX, Info, TriangleAlert, X } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\nconst alertVariants = cva(\n  \"flex w-full gap-3 rounded-lg border px-4 py-3.5 text-left text-sm leading-[1.6] shadow-xs\",\n  {\n    variants: {\n      color: {\n        info: \"border-info/22 bg-info-soft [&>[data-slot=alert-icon]]:text-info\",\n        success: \"border-success/22 bg-success-soft [&>[data-slot=alert-icon]]:text-success\",\n        warning: \"border-warning/25 bg-warning-soft [&>[data-slot=alert-icon]]:text-warning\",\n        danger:\n          \"border-destructive/22 bg-destructive-soft [&>[data-slot=alert-icon]]:text-destructive\",\n      },\n    },\n    defaultVariants: { color: \"info\" },\n  }\n)\n\nconst ICONS = { info: Info, success: CircleCheck, warning: TriangleAlert, danger: CircleX } as const\n\ntype AlertProps = Omit<React.ComponentProps<\"div\">, \"color\" | \"title\"> &\n  VariantProps<typeof alertVariants> & {\n    /** Bold first line. */\n    title?: React.ReactNode\n    /** Buttons or links below the text. */\n    actions?: React.ReactNode\n    /** Replaces the color's default icon. Pass `null` to hide it. */\n    icon?: React.ReactNode\n    /** Shows a close button that calls this. */\n    onDismiss?: () => void\n    /** Accessible name of the close button. */\n    dismissLabel?: string\n  }\n\nfunction Alert({\n  className,\n  color,\n  title,\n  actions,\n  icon,\n  onDismiss,\n  dismissLabel = \"Dismiss\",\n  role,\n  children,\n  ...props\n}: AlertProps) {\n  const resolved = color ?? \"info\"\n  const Icon = ICONS[resolved]\n  const urgent = resolved === \"danger\" || resolved === \"warning\"\n\n  return (\n    <div\n      data-slot=\"alert\"\n      data-color={resolved}\n      role={role ?? (urgent ? \"alert\" : \"status\")}\n      className={cn(alertVariants({ color: resolved }), className)}\n      {...props}\n    >\n      {icon !== null && (\n        <span\n          data-slot=\"alert-icon\"\n          aria-hidden\n          className=\"mt-0.5 flex shrink-0 [&_svg]:size-4 [&_svg]:stroke-[1.8]\"\n        >\n          {icon ?? <Icon />}\n        </span>\n      )}\n      <div data-slot=\"alert-content\" className=\"min-w-0 flex-1 text-muted-foreground\">\n        {title != null && <AlertTitle>{title}</AlertTitle>}\n        {children != null && <AlertDescription>{children}</AlertDescription>}\n        {actions != null && <AlertActions>{actions}</AlertActions>}\n      </div>\n      {onDismiss && (\n        <button\n          type=\"button\"\n          data-slot=\"alert-dismiss\"\n          aria-label={dismissLabel}\n          onClick={onDismiss}\n          className=\"mt-0.5 inline-grid size-[18px] shrink-0 cursor-pointer place-items-center rounded-sm text-muted-foreground/70 transition-colors outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background [&_svg]:size-4\"\n        >\n          <X aria-hidden />\n        </button>\n      )}\n    </div>\n  )\n}\n\nfunction AlertTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"alert-title\"\n      className={cn(\"mb-0.5 font-semibold text-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction AlertDescription({ className, ...props }: React.ComponentProps<\"div\">) {\n  return <div data-slot=\"alert-description\" className={cn(className)} {...props} />\n}\n\nfunction AlertActions({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"alert-actions\"\n      className={cn(\"mt-2.5 flex flex-wrap items-center gap-3\", className)}\n      {...props}\n    />\n  )\n}\n\nexport { Alert, AlertTitle, AlertDescription, AlertActions, alertVariants, type AlertProps }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

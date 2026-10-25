@@ -40,7 +40,9 @@
       "type": "registry:theme",
       "title": "ParseUI theme",
       "description": "The full ParseUI look for a shadcn project: Parse blue brand, neutrals, status colors and the radius scale, in light and dark.",
-      "registryDependencies": ["https://aowshad.github.io/parseui/r/tokens.json"],
+      "registryDependencies": [
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
       "cssVars": {
         "theme": {
           "radius-sm": "calc(var(--radius) * 0.75)",
@@ -92,13 +94,590 @@
       }
     },
     {
+      "name": "accordion",
+      "type": "registry:ui",
+      "title": "Accordion",
+      "description": "Stacked sections that expand to reveal content.",
+      "dependencies": [
+        "radix-ui",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/accordion.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "alert",
+      "type": "registry:ui",
+      "title": "Alert",
+      "description": "Inline message that tells the user something important about the current page.",
+      "dependencies": [
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/alert.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "avatar",
+      "type": "registry:ui",
+      "title": "Avatar",
+      "description": "Represents a person or store with an image, initials, or a fallback.",
+      "dependencies": [
+        "radix-ui",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/avatar.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "Short labels for status, category or count. Badges are not interactive.",
+      "dependencies": [
+        "radix-ui",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/badge.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "breadcrumb",
+      "type": "registry:ui",
+      "title": "Breadcrumb",
+      "description": "Shows where the current page sits in the hierarchy.",
+      "dependencies": [
+        "radix-ui",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/breadcrumb.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "button",
       "type": "registry:ui",
       "title": "Button",
       "description": "Triggers an action or event, such as submitting a form, opening a dialog, or saving changes.",
-      "dependencies": ["radix-ui", "class-variance-authority", "lucide-react"],
-      "registryDependencies": ["utils", "https://aowshad.github.io/parseui/r/tokens.json"],
-      "files": [{ "path": "registry/parseui/ui/button.tsx", "type": "registry:ui" }]
+      "dependencies": [
+        "radix-ui",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/button.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "description": "Groups related content and actions on a surface.",
+      "dependencies": [
+        "radix-ui",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/card.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "description": "Select one or many options, or toggle a single setting that applies on save.",
+      "dependencies": [
+        "radix-ui",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/checkbox.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "combobox",
+      "type": "registry:ui",
+      "title": "Combobox",
+      "description": "A text input with a filtered list of options. Use it when a Select would be too long to scroll, or when people should be able to add their own value.",
+      "dependencies": [
+        "radix-ui",
+        "cmdk",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json",
+        "https://aowshad.github.io/parseui/r/input.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/combobox.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "command-menu",
+      "type": "registry:ui",
+      "title": "Command menu",
+      "description": "A search box that runs actions and jumps anywhere in the app from the keyboard. Use it inline or as a ⌘K dialog.",
+      "dependencies": [
+        "cmdk",
+        "radix-ui",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/command-menu.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "data-table",
+      "type": "registry:ui",
+      "title": "Data table",
+      "description": "A Table with sorting, row selection and bulk actions, pagination, column visibility and loading and empty states. For static rows, use Table.",
+      "dependencies": [
+        "@tanstack/react-table@8",
+        "radix-ui",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json",
+        "https://aowshad.github.io/parseui/r/table.json",
+        "https://aowshad.github.io/parseui/r/button.json",
+        "https://aowshad.github.io/parseui/r/checkbox.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/data-table.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "date-picker",
+      "type": "registry:ui",
+      "title": "Date picker",
+      "description": "Pick a date or a date range from a calendar. Dates are formatted with Intl.DateTimeFormat, and the week can start on any day.",
+      "dependencies": [
+        "radix-ui",
+        "react-day-picker@9",
+        "date-fns@4",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json",
+        "https://aowshad.github.io/parseui/r/button.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/date-picker.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "drawer",
+      "type": "registry:ui",
+      "title": "Drawer",
+      "description": "A panel that slides over the page for details or a short task, without leaving the current screen. On phones it becomes a bottom sheet.",
+      "dependencies": [
+        "radix-ui",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json",
+        "https://aowshad.github.io/parseui/r/button.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/drawer.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "registry:ui",
+      "title": "Dropdown menu",
+      "description": "A list of actions that opens from a button. For choosing a value in a form, use Select.",
+      "dependencies": [
+        "radix-ui",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/dropdown-menu.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "file-upload",
+      "type": "registry:ui",
+      "title": "File upload",
+      "description": "Choose or drop files, with type and size checks and per-file progress. A real file input sits behind an accessible button.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json",
+        "https://aowshad.github.io/parseui/r/button.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/file-upload.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "description": "A text field with label, hint, validation and optional leading or trailing content.",
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "kbd",
+      "type": "registry:ui",
+      "title": "Kbd",
+      "description": "Displays a keyboard shortcut.",
+      "dependencies": [],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/kbd.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "modal",
+      "type": "registry:ui",
+      "title": "Modal",
+      "description": "A focused dialog for confirmations and short tasks. Traps focus and closes with Escape.",
+      "dependencies": [
+        "radix-ui",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/modal.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "pagination",
+      "type": "registry:ui",
+      "title": "Pagination",
+      "description": "Move between pages of a long list.",
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/pagination.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "progress",
+      "type": "registry:ui",
+      "title": "Progress",
+      "description": "Shows completion of a task or a quota.",
+      "dependencies": [
+        "radix-ui",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/progress.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "radio",
+      "type": "registry:ui",
+      "title": "Radio group",
+      "description": "Choose exactly one option from a visible set.",
+      "dependencies": [
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json",
+        "https://aowshad.github.io/parseui/r/input.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/radio.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "Select",
+      "description": "Choose one value from a short list. For long or searchable lists, use Combobox.",
+      "dependencies": [
+        "radix-ui",
+        "class-variance-authority",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json",
+        "https://aowshad.github.io/parseui/r/input.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/select.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "slider",
+      "type": "registry:ui",
+      "title": "Slider",
+      "description": "Pick a value from a continuous or stepped range.",
+      "dependencies": [
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json",
+        "https://aowshad.github.io/parseui/r/input.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/slider.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "description": "Toggle a setting that takes effect immediately.",
+      "dependencies": [
+        "radix-ui",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/switch.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "table",
+      "type": "registry:ui",
+      "title": "Table",
+      "description": "Displays rows of structured data. For sorting, filters and selection use Data table.",
+      "dependencies": [],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/table.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "Switch between related views on the same page.",
+      "dependencies": [
+        "radix-ui",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/tabs.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "textarea",
+      "type": "registry:ui",
+      "title": "Textarea",
+      "description": "Multi-line text input that grows with its content.",
+      "dependencies": [],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json",
+        "https://aowshad.github.io/parseui/r/input.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/textarea.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "toast",
+      "type": "registry:ui",
+      "title": "Toast",
+      "description": "Brief confirmation of an action, shown at the edge of the screen.",
+      "dependencies": [
+        "sonner",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/toast.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "description": "A short hint shown on hover or keyboard focus.",
+      "dependencies": [
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "utils",
+        "https://aowshad.github.io/parseui/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "registry/parseui/ui/tooltip.tsx",
+          "type": "registry:ui"
+        }
+      ]
     }
   ]
 }

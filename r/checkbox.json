@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "checkbox",
+  "title": "Checkbox",
+  "description": "Select one or many options, or toggle a single setting that applies on save.",
+  "dependencies": [
+    "radix-ui",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "utils",
+    "https://aowshad.github.io/parseui/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/parseui/ui/checkbox.tsx",
+      "content": "import * as React from \"react\"\nimport { Checkbox as CheckboxPrimitive } from \"radix-ui\"\nimport { Check, Minus } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\ntype CheckboxProps = React.ComponentProps<typeof CheckboxPrimitive.Root> & {\n  /** Clickable label shown next to the box. */\n  label?: React.ReactNode\n  /** Secondary text below the label. */\n  description?: React.ReactNode\n}\n\nfunction Checkbox({\n  className,\n  label,\n  description,\n  id,\n  disabled,\n  \"aria-describedby\": ariaDescribedBy,\n  ...props\n}: CheckboxProps) {\n  const autoId = React.useId()\n  const boxId = id ?? autoId\n  const descriptionId = `${boxId}-description`\n  const labelled = label != null || description != null\n\n  const box = (\n    <CheckboxPrimitive.Root\n      data-slot=\"checkbox\"\n      id={boxId}\n      disabled={disabled}\n      aria-describedby={\n        cn(ariaDescribedBy, description != null && descriptionId) || undefined\n      }\n      className={cn(\n        \"inline-flex size-[17px] shrink-0 cursor-pointer items-center justify-center rounded-[calc(var(--radius)*0.5)] border border-input bg-background text-primary-foreground shadow-xs transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=indeterminate]:border-primary data-[state=indeterminate]:bg-primary motion-reduce:transition-none\",\n        labelled ? \"mt-0.5\" : className\n      )}\n      {...props}\n    >\n      <CheckboxPrimitive.Indicator\n        data-slot=\"checkbox-indicator\"\n        className=\"group/indicator flex items-center justify-center\"\n      >\n        <Check\n          aria-hidden\n          strokeWidth={3.2}\n          className=\"size-3 group-data-[state=indeterminate]/indicator:hidden\"\n        />\n        <Minus\n          aria-hidden\n          strokeWidth={3.2}\n          className=\"hidden size-3 group-data-[state=indeterminate]/indicator:block\"\n        />\n      </CheckboxPrimitive.Indicator>\n    </CheckboxPrimitive.Root>\n  )\n\n  if (!labelled) return box\n\n  return (\n    <div\n      data-slot=\"checkbox-field\"\n      data-disabled={disabled || undefined}\n      className={cn(\"group/checkbox flex items-start gap-2.5 text-left text-sm\", className)}\n    >\n      {box}\n      <div className=\"grid\">\n        {label != null && (\n          <label\n            data-slot=\"checkbox-label\"\n            htmlFor={boxId}\n            className={cn(\n              \"cursor-pointer text-foreground group-data-disabled/checkbox:cursor-not-allowed group-data-disabled/checkbox:opacity-50\",\n              description != null && \"font-medium\"\n            )}\n          >\n            {label}\n          </label>\n        )}\n        {description != null && (\n          <span\n            data-slot=\"checkbox-description\"\n            id={descriptionId}\n            className=\"text-[13px] text-muted-foreground/70 group-data-disabled/checkbox:opacity-50\"\n          >\n            {description}\n          </span>\n        )}\n      </div>\n    </div>\n  )\n}\n\nexport { Checkbox, type CheckboxProps }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

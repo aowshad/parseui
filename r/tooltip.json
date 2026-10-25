@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tooltip",
+  "title": "Tooltip",
+  "description": "A short hint shown on hover or keyboard focus.",
+  "dependencies": [
+    "radix-ui"
+  ],
+  "registryDependencies": [
+    "utils",
+    "https://aowshad.github.io/parseui/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/parseui/ui/tooltip.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { Tooltip as TooltipPrimitive } from \"radix-ui\"\n\nimport { cn } from \"@/lib/utils\"\n\nfunction TooltipProvider({\n  delayDuration = 300,\n  ...props\n}: React.ComponentProps<typeof TooltipPrimitive.Provider>) {\n  return (\n    <TooltipPrimitive.Provider\n      data-slot=\"tooltip-provider\"\n      delayDuration={delayDuration}\n      {...props}\n    />\n  )\n}\n\ntype TooltipProps = React.ComponentProps<typeof TooltipPrimitive.Root> & {\n  /** Tooltip text. When set, `children` is the trigger. Leave it out to compose TooltipTrigger and TooltipContent yourself. */\n  content?: React.ReactNode\n  /** Preferred placement. */\n  side?: React.ComponentProps<typeof TooltipPrimitive.Content>[\"side\"]\n  /** Alignment against the trigger. */\n  align?: React.ComponentProps<typeof TooltipPrimitive.Content>[\"align\"]\n  /** Open delay in ms. */\n  delay?: number\n}\n\nfunction Tooltip({\n  content,\n  side = \"top\",\n  align,\n  delay = 300,\n  delayDuration,\n  children,\n  ...props\n}: TooltipProps) {\n  return (\n    <TooltipProvider delayDuration={delayDuration ?? delay}>\n      <TooltipPrimitive.Root data-slot=\"tooltip\" delayDuration={delayDuration ?? delay} {...props}>\n        {content === undefined ? (\n          children\n        ) : (\n          <>\n            <TooltipTrigger asChild>{children}</TooltipTrigger>\n            <TooltipContent side={side} align={align}>\n              {content}\n            </TooltipContent>\n          </>\n        )}\n      </TooltipPrimitive.Root>\n    </TooltipProvider>\n  )\n}\n\nfunction TooltipTrigger(props: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {\n  return <TooltipPrimitive.Trigger data-slot=\"tooltip-trigger\" {...props} />\n}\n\nfunction TooltipContent({\n  className,\n  side = \"top\",\n  sideOffset = 3,\n  children,\n  ...props\n}: React.ComponentProps<typeof TooltipPrimitive.Content>) {\n  return (\n    <TooltipPrimitive.Portal>\n      <TooltipPrimitive.Content\n        data-slot=\"tooltip-content\"\n        side={side}\n        sideOffset={sideOffset}\n        collisionPadding={8}\n        className={cn(\n          \"z-50 w-fit max-w-xs origin-(--radix-tooltip-content-transform-origin) rounded-sm bg-foreground px-[9px] py-1.5 text-[12.5px] leading-snug font-medium text-balance text-background shadow-md\",\n          \"animate-in duration-150 fade-in-0 data-[side=bottom]:slide-in-from-top-1 data-[side=left]:slide-in-from-right-1 data-[side=right]:slide-in-from-left-1 data-[side=top]:slide-in-from-bottom-1\",\n          \"data-[state=closed]:animate-out data-[state=closed]:fade-out-0\",\n          \"motion-reduce:animate-none motion-reduce:data-[state=closed]:animate-none\",\n          className\n        )}\n        {...props}\n      >\n        {children}\n        <TooltipPrimitive.Arrow\n          data-slot=\"tooltip-arrow\"\n          width={10}\n          height={5}\n          className=\"fill-foreground\"\n        />\n      </TooltipPrimitive.Content>\n    </TooltipPrimitive.Portal>\n  )\n}\n\nexport { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider, type TooltipProps }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "radio",
+  "title": "Radio group",
+  "description": "Choose exactly one option from a visible set.",
+  "dependencies": [
+    "radix-ui"
+  ],
+  "registryDependencies": [
+    "utils",
+    "https://aowshad.github.io/parseui/r/tokens.json",
+    "https://aowshad.github.io/parseui/r/input.json"
+  ],
+  "files": [
+    {
+      "path": "registry/parseui/ui/radio.tsx",
+      "content": "import * as React from \"react\"\nimport { RadioGroup as RadioGroupPrimitive } from \"radix-ui\"\n\nimport { cn } from \"@/lib/utils\"\nimport { useField } from \"@/registry/parseui/ui/input\"\n\ntype RadioGroupProps = React.ComponentProps<typeof RadioGroupPrimitive.Root>\n\nfunction RadioGroup({\n  className,\n  orientation = \"vertical\",\n  \"aria-labelledby\": ariaLabelledBy,\n  \"aria-describedby\": ariaDescribedBy,\n  ...props\n}: RadioGroupProps) {\n  // inside a Field, the field label names the group and its hint describes it\n  const field = useField()\n  return (\n    <RadioGroupPrimitive.Root\n      data-slot=\"radio-group\"\n      orientation={orientation}\n      aria-labelledby={ariaLabelledBy ?? (props[\"aria-label\"] ? undefined : field?.labelId)}\n      aria-describedby={cn(ariaDescribedBy, field?.hintId, field?.errorId) || undefined}\n      aria-invalid={field?.invalid || undefined}\n      aria-required={props.required ?? field?.required}\n      disabled={props.disabled ?? field?.disabled}\n      className={cn(\n        \"flex gap-3\",\n        orientation === \"horizontal\" ? \"flex-row flex-wrap gap-x-6\" : \"flex-col\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\ntype RadioProps = React.ComponentProps<typeof RadioGroupPrimitive.Item> & {\n  /** Clickable label shown next to the circle. */\n  label?: React.ReactNode\n  /** Secondary text below the label. */\n  description?: React.ReactNode\n}\n\nfunction Radio({\n  className,\n  label,\n  description,\n  id,\n  disabled,\n  \"aria-describedby\": ariaDescribedBy,\n  ...props\n}: RadioProps) {\n  const autoId = React.useId()\n  const itemId = id ?? autoId\n  const descriptionId = `${itemId}-description`\n  const labelled = label != null || description != null\n\n  const item = (\n    <RadioGroupPrimitive.Item\n      data-slot=\"radio\"\n      id={itemId}\n      disabled={disabled}\n      aria-describedby={\n        cn(ariaDescribedBy, description != null && descriptionId) || undefined\n      }\n      className={cn(\n        \"size-[17px] shrink-0 cursor-pointer rounded-full border border-input bg-background shadow-xs transition-[border-color,border-width] outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive data-[state=checked]:border-[5px] data-[state=checked]:border-primary motion-reduce:transition-none\",\n        labelled ? \"mt-0.5\" : className\n      )}\n      {...props}\n    />\n  )\n\n  if (!labelled) return item\n\n  return (\n    <div\n      data-slot=\"radio-field\"\n      data-disabled={disabled || undefined}\n      className={cn(\"group/radio flex items-start gap-2.5 text-left text-sm\", className)}\n    >\n      {item}\n      <div className=\"grid\">\n        {label != null && (\n          <label\n            data-slot=\"radio-label\"\n            htmlFor={itemId}\n            className={cn(\n              \"cursor-pointer text-foreground group-data-disabled/radio:cursor-not-allowed group-data-disabled/radio:opacity-50\",\n              description != null && \"font-medium\"\n            )}\n          >\n            {label}\n          </label>\n        )}\n        {description != null && (\n          <span\n            data-slot=\"radio-description\"\n            id={descriptionId}\n            className=\"text-[13px] text-muted-foreground/70 group-data-disabled/radio:opacity-50\"\n          >\n            {description}\n          </span>\n        )}\n      </div>\n    </div>\n  )\n}\n\nexport { RadioGroup, Radio, type RadioGroupProps, type RadioProps }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

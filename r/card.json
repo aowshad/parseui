@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "card",
+  "title": "Card",
+  "description": "Groups related content and actions on a surface.",
+  "dependencies": [
+    "radix-ui",
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "utils",
+    "https://aowshad.github.io/parseui/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/parseui/ui/card.tsx",
+      "content": "import * as React from \"react\"\nimport { Slot } from \"radix-ui\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\n\nimport { cn } from \"@/lib/utils\"\n\nconst cardBodyVariants = cva(\"\", {\n  variants: {\n    padding: {\n      none: \"p-0\",\n      sm: \"p-3\",\n      md: \"p-[18px]\",\n      lg: \"p-6\",\n    },\n  },\n  defaultVariants: { padding: \"md\" },\n})\n\ntype CardPadding = NonNullable<VariantProps<typeof cardBodyVariants>[\"padding\"]>\n\nconst CardContext = React.createContext<{ padding?: CardPadding }>({})\n\ntype CardProps = React.ComponentProps<\"div\"> & {\n  asChild?: boolean\n  /** Inner spacing of CardBody. */\n  padding?: CardPadding\n  /** Adds a larger shadow. */\n  elevated?: boolean\n}\n\nfunction Card({ className, asChild = false, padding, elevated = false, ...props }: CardProps) {\n  const Comp = asChild ? Slot.Root : \"div\"\n\n  return (\n    <CardContext.Provider value={{ padding }}>\n      <Comp\n        data-slot=\"card\"\n        data-elevated={elevated || undefined}\n        className={cn(\n          \"flex flex-col rounded-xl border bg-background text-left text-foreground\",\n          elevated ? \"shadow-lg\" : \"shadow-xs\",\n          className\n        )}\n        {...props}\n      />\n    </CardContext.Provider>\n  )\n}\n\ntype CardHeaderProps = Omit<React.ComponentProps<\"div\">, \"title\"> & {\n  title?: React.ReactNode\n  description?: React.ReactNode\n  /** Content pinned to the right edge, such as a button or menu. */\n  actions?: React.ReactNode\n}\n\nfunction CardHeader({\n  className,\n  title,\n  description,\n  actions,\n  children,\n  ...props\n}: CardHeaderProps) {\n  return (\n    <div\n      data-slot=\"card-header\"\n      className={cn(\"flex items-center gap-2.5 border-b px-[18px] py-4\", className)}\n      {...props}\n    >\n      {(title != null || description != null) && (\n        <div className=\"min-w-0 flex-1\">\n          {title != null && <CardTitle>{title}</CardTitle>}\n          {description != null && <CardDescription>{description}</CardDescription>}\n        </div>\n      )}\n      {children}\n      {actions != null && (\n        <div data-slot=\"card-actions\" className=\"ml-auto flex shrink-0 items-center gap-2\">\n          {actions}\n        </div>\n      )}\n    </div>\n  )\n}\n\nfunction CardTitle({\n  className,\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"h3\"> & { asChild?: boolean }) {\n  const Comp = asChild ? Slot.Root : \"h3\"\n  return (\n    <Comp\n      data-slot=\"card-title\"\n      className={cn(\"m-0 text-[15px] leading-normal font-semibold\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardDescription({ className, ...props }: React.ComponentProps<\"p\">) {\n  return (\n    <p\n      data-slot=\"card-description\"\n      className={cn(\"mt-0.5 mb-0 text-[13px] leading-normal text-muted-foreground/70\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardBody({\n  className,\n  padding,\n  ...props\n}: React.ComponentProps<\"div\"> & { padding?: CardPadding }) {\n  const ctx = React.useContext(CardContext)\n  return (\n    <div\n      data-slot=\"card-body\"\n      className={cn(cardBodyVariants({ padding: padding ?? ctx.padding }), className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-footer\"\n      className={cn(\n        \"flex items-center justify-end gap-2 rounded-b-xl border-t bg-muted/50 px-[18px] py-3\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Card,\n  CardHeader,\n  CardTitle,\n  CardDescription,\n  CardBody,\n  CardFooter,\n  cardBodyVariants,\n  type CardProps,\n  type CardHeaderProps,\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}
