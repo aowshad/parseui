@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kbd",
+  "title": "Kbd",
+  "description": "Displays a keyboard shortcut.",
+  "dependencies": [],
+  "registryDependencies": [
+    "utils",
+    "https://aowshad.github.io/parseui/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/parseui/ui/kbd.tsx",
+      "content": "import * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\nfunction Kbd({ className, ...props }: React.ComponentProps<\"kbd\">) {\n  return (\n    <kbd\n      data-slot=\"kbd\"\n      className={cn(\n        \"inline-block min-w-[22px] rounded-[5px] border border-input bg-background px-1.5 py-1 text-center font-mono text-xs leading-none font-medium text-muted-foreground shadow-[0_1px_0_var(--color-input)] select-none [&_svg]:inline-block [&_svg]:size-3 [&_svg]:align-[-1px]\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\n/** Lays out the keys of one shortcut, e.g. ⌘ K. */\nfunction KbdGroup({ className, ...props }: React.ComponentProps<\"kbd\">) {\n  return (\n    <kbd\n      data-slot=\"kbd-group\"\n      className={cn(\"inline-flex items-center gap-1 font-sans\", className)}\n      {...props}\n    />\n  )\n}\n\nexport { Kbd, KbdGroup }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "badge",
+  "title": "Badge",
+  "description": "Short labels for status, category or count. Badges are not interactive.",
+  "dependencies": [
+    "radix-ui",
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "utils",
+    "https://aowshad.github.io/parseui/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/parseui/ui/badge.tsx",
+      "content": "import * as React from \"react\"\nimport { Slot } from \"radix-ui\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\n\nimport { cn } from \"@/lib/utils\"\n\nconst badgeVariants = cva(\n  \"inline-flex h-[22px] w-fit shrink-0 items-center gap-[5px] whitespace-nowrap rounded-sm border border-transparent px-2 text-xs leading-none font-medium [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3\",\n  {\n    variants: {\n      color: {\n        gray: \"\",\n        brand: \"\",\n        success: \"\",\n        warning: \"\",\n        danger: \"\",\n        info: \"\",\n      },\n      variant: {\n        soft: \"\",\n        outline: \"bg-background\",\n        solid: \"\",\n      },\n      shape: {\n        rounded: \"rounded-sm\",\n        pill: \"rounded-full\",\n      },\n    },\n    compoundVariants: [\n      // soft\n      { variant: \"soft\", color: \"gray\", class: \"bg-muted text-muted-foreground\" },\n      { variant: \"soft\", color: \"brand\", class: \"bg-primary-soft text-primary-text\" },\n      { variant: \"soft\", color: \"success\", class: \"bg-success-soft text-success\" },\n      { variant: \"soft\", color: \"warning\", class: \"bg-warning-soft text-warning\" },\n      { variant: \"soft\", color: \"danger\", class: \"bg-destructive-soft text-destructive\" },\n      { variant: \"soft\", color: \"info\", class: \"bg-info-soft text-info\" },\n      // outline\n      { variant: \"outline\", color: \"gray\", class: \"border-input text-muted-foreground\" },\n      { variant: \"outline\", color: \"brand\", class: \"border-primary/35 text-primary-text\" },\n      { variant: \"outline\", color: \"success\", class: \"border-success/35 text-success\" },\n      { variant: \"outline\", color: \"warning\", class: \"border-warning/40 text-warning\" },\n      { variant: \"outline\", color: \"danger\", class: \"border-destructive/35 text-destructive\" },\n      { variant: \"outline\", color: \"info\", class: \"border-info/35 text-info\" },\n      // solid\n      { variant: \"solid\", color: \"gray\", class: \"bg-foreground text-background\" },\n      { variant: \"solid\", color: \"brand\", class: \"bg-primary text-primary-foreground\" },\n      { variant: \"solid\", color: \"success\", class: \"bg-success text-background\" },\n      { variant: \"solid\", color: \"warning\", class: \"bg-warning text-background\" },\n      { variant: \"solid\", color: \"danger\", class: \"bg-destructive text-white\" },\n      { variant: \"solid\", color: \"info\", class: \"bg-info text-background\" },\n    ],\n    defaultVariants: { color: \"gray\", variant: \"soft\", shape: \"rounded\" },\n  }\n)\n\ntype BadgeProps = Omit<React.ComponentProps<\"span\">, \"color\"> &\n  VariantProps<typeof badgeVariants> & {\n    asChild?: boolean\n    /** Leading status dot in the current text color. */\n    dot?: boolean\n  }\n\nfunction Badge({\n  className,\n  color,\n  variant,\n  shape,\n  dot = false,\n  asChild = false,\n  children,\n  ...props\n}: BadgeProps) {\n  const Comp = asChild ? Slot.Root : \"span\"\n  // The site's \"solid\" badge with no color is the brand fill.\n  const resolvedColor = color ?? (variant === \"solid\" ? \"brand\" : \"gray\")\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-color={resolvedColor}\n      data-variant={variant ?? \"soft\"}\n      className={cn(badgeVariants({ color: resolvedColor, variant, shape }), className)}\n      {...props}\n    >\n      {asChild ? (\n        children\n      ) : (\n        <>\n          {dot && (\n            <span\n              data-slot=\"badge-dot\"\n              aria-hidden\n              className=\"size-1.5 shrink-0 rounded-full bg-current\"\n            />\n          )}\n          {children}\n        </>\n      )}\n    </Comp>\n  )\n}\n\nexport { Badge, badgeVariants, type BadgeProps }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

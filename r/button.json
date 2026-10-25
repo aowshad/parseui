@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button",
+  "title": "Button",
+  "description": "Triggers an action or event, such as submitting a form, opening a dialog, or saving changes.",
+  "dependencies": [
+    "radix-ui",
+    "class-variance-authority",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "utils",
+    "https://aowshad.github.io/parseui/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/parseui/ui/button.tsx",
+      "content": "import * as React from \"react\"\nimport { Slot } from \"radix-ui\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { Loader2 } from \"lucide-react\"\n\nimport { cn } from \"@/lib/utils\"\n\nconst buttonVariants = cva(\n  \"relative inline-flex shrink-0 cursor-pointer items-center justify-center gap-1.5 whitespace-nowrap rounded-md border border-transparent font-medium transition-colors outline-none select-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 aria-busy:cursor-progress [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        primary:\n          \"bg-primary text-primary-foreground shadow-xs inset-shadow-[0_1px_0_rgb(255_255_255/0.14)] hover:bg-primary-hover\",\n        secondary:\n          \"border-input bg-background text-foreground shadow-xs hover:bg-muted/60\",\n        soft: \"bg-primary-soft text-primary-text hover:bg-primary-soft-hover\",\n        ghost: \"text-muted-foreground hover:bg-muted hover:text-foreground\",\n        danger:\n          \"bg-destructive text-white shadow-xs hover:bg-destructive-hover\",\n        link: \"h-auto! border-0 px-0! text-primary-text underline-offset-[3px] hover:underline\",\n      },\n      size: {\n        xs: \"h-7 rounded-sm px-2.5 text-[13px]\",\n        sm: \"h-8 px-3 text-[13.5px]\",\n        md: \"h-9 px-3.5 text-sm\",\n        lg: \"h-11 px-4.5 text-[15px]\",\n      },\n      iconOnly: { true: \"px-0\" },\n      fullWidth: { true: \"w-full\" },\n    },\n    compoundVariants: [\n      { iconOnly: true, size: \"xs\", class: \"w-7\" },\n      { iconOnly: true, size: \"sm\", class: \"w-8\" },\n      { iconOnly: true, size: \"md\", class: \"w-9\" },\n      { iconOnly: true, size: \"lg\", class: \"w-11\" },\n    ],\n    defaultVariants: { variant: \"primary\", size: \"md\" },\n  }\n)\n\ntype ButtonProps = React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n    loading?: boolean\n    leadingIcon?: React.ReactNode\n    trailingIcon?: React.ReactNode\n  }\n\nfunction Button({\n  className,\n  variant,\n  size,\n  iconOnly,\n  fullWidth,\n  asChild = false,\n  loading = false,\n  leadingIcon,\n  trailingIcon,\n  disabled,\n  type,\n  children,\n  ...props\n}: ButtonProps) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant ?? \"primary\"}\n      type={asChild ? undefined : (type ?? \"button\")}\n      aria-busy={loading || undefined}\n      disabled={asChild ? undefined : disabled || loading}\n      className={cn(buttonVariants({ variant, size, iconOnly, fullWidth }), className)}\n      {...props}\n    >\n      {asChild ? (\n        children\n      ) : (\n        <>\n          {loading ? <Loader2 aria-hidden className=\"animate-spin\" /> : leadingIcon}\n          {children}\n          {!loading && trailingIcon}\n        </>\n      )}\n    </Comp>\n  )\n}\n\nexport { Button, buttonVariants, type ButtonProps }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

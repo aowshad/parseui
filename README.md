@@ -8,7 +8,18 @@
 
 ---
 
-> **Status: v0.1 preview.** This repo hosts the documentation and showcase site for ParseUI. The components on the site are HTML/CSS stand-ins that show how the library will look and be used. Package names (`@parseui/react`, `@parseui/icons`), the `parseui` CLI and the component APIs are proposals, not published packages yet.
+> **Status: v0.1 preview.** This repo hosts the documentation site and the ParseUI component registry. Every base component has real React source in [`registry/`](registry/), installable with the shadcn CLI. The live previews on the site are still HTML/CSS stand-ins of those components. `@parseui/icons` is a proposal, not a published package yet.
+
+## Install a component
+
+In any project set up with `shadcn init`:
+
+```bash
+npx shadcn@latest add https://aowshad.github.io/parseui/r/theme.json   # optional: the ParseUI palette
+npx shadcn@latest add https://aowshad.github.io/parseui/r/switch.json
+```
+
+Every component is published at `https://aowshad.github.io/parseui/r/<name>.json`. See [registry/README.md](registry/README.md) to add or change one.
 
 ## What's in the preview
 
@@ -21,7 +32,7 @@
 
 ## Run it locally
 
-No build step. It's one static HTML file.
+No build step for the site. It's one static HTML file. Serve it over HTTP so the Manual install tab can load the source from `r/`.
 
 ```bash
 git clone https://github.com/aowshad/parseui.git
@@ -46,6 +57,10 @@ Every push to `main` redeploys automatically.
 ```
 .
 ├── index.html                      # the whole site: styles, components, router
+├── registry.json                   # shadcn registry: one item per component
+├── registry/parseui/ui/            # React source for every component
+├── r/                              # built registry JSON (npm run registry:build), served by Pages
+├── package.json                    # dev tools for the registry only
 ├── assets/
 │   ├── favicon.svg
 │   ├── parseui-logo-light-bg.svg

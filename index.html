@@ -138,6 +138,8 @@ code,kbd,pre{ font-family:var(--mono); }
 .doc p{ color:var(--text-2); margin:0 0 14px; max-width:680px; }
 .doc p code, .doc li code, .props code, .inline-code{ font-size:.86em; padding:2px 5px; border-radius:5px; background:var(--bg-muted); color:var(--text); border:1px solid var(--border); }
 .doc ul{ color:var(--text-2); padding-left:20px; }
+.inline-link{ color:var(--p-text); text-decoration:underline; text-decoration-color:color-mix(in oklab, var(--p-text) 40%, transparent); text-underline-offset:3px; }
+.inline-link:hover{ text-decoration-color:currentColor; }
 .doc li{ margin:4px 0; }
 .meta-row{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
 .chip-link{ display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 10px; border:1px solid var(--border); border-radius:7px; font-size:13px; color:var(--text-2); background:var(--bg); }
@@ -661,8 +663,10 @@ th.sorted{ color:var(--text); } th.sorted .pu-datatable-arrow{ opacity:1; } th.s
 .hero h1{ font-size:clamp(40px,5.2vw,62px); line-height:1.02; letter-spacing:-.045em; font-weight:600; margin:0 0 20px; max-width:12ch; text-wrap:balance; }
 .hero .sub{ font-size:18px; color:var(--text-2); max-width:470px; margin:0 0 28px; line-height:1.55; }
 .hero-cta{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:28px; }
-.install{ display:inline-flex; align-items:center; gap:12px; height:42px; padding:0 6px 0 14px; border:1px solid var(--border); border-radius:10px; background:var(--bg-subtle); font:13.5px var(--mono); color:var(--text-2); }
+.install{ display:inline-flex; align-items:center; gap:12px; height:42px; max-width:100%; padding:0 6px 0 14px; border:1px solid var(--border); border-radius:10px; background:var(--bg-subtle); font:13.5px var(--mono); color:var(--text-2); }
 .install .dollar{ color:var(--text-3); }
+.install-cmd{ min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.install button{ flex:none; }
 .install button{ border:0; background:none; width:30px; height:30px; display:grid; place-items:center; border-radius:6px; color:var(--text-3); cursor:pointer; }
 .install button:hover{ background:var(--bg-muted); color:var(--text); }
 .brand-try{ display:flex; align-items:center; gap:12px; margin-top:26px; font-size:13.5px; color:var(--text-3); }
@@ -941,7 +945,7 @@ th.sorted{ color:var(--text); } th.sorted .pu-datatable-arrow{ opacity:1; } th.s
   .layout{ grid-template-columns:240px minmax(0,1fr); }
   .toc{ display:none; }
   .main{ padding:32px 36px 80px; }
-  .hero-grid{ grid-template-columns:1fr; gap:48px; }
+  .hero-grid{ grid-template-columns:minmax(0,1fr); gap:48px; }
   .dash-kpis{ grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
 /* the nav links stay until 900px, so the search button goes icon-only first to keep the bar from overflowing */
@@ -1055,7 +1059,8 @@ const BRANDS=[
   {id:'parse',name:'Parse blue',c:'#2488FF'},{id:'violet',name:'Violet',c:'#5B3DF5'},{id:'emerald',name:'Emerald',c:'#0E9F6E'},
   {id:'orange',name:'Orange',c:'#EA580C'},{id:'rose',name:'Rose',c:'#E11D48'},{id:'neutral',name:'Neutral',c:null}];
 const store={ get(k,d){ try{ const v=localStorage.getItem('parseui:'+k); return v===null?d:v; }catch(e){ return d; } }, set(k,v){ try{ localStorage.setItem('parseui:'+k,v); }catch(e){} } };
-const state={ brand:store.get('brand','parse'), radius:store.get('radius','8'), theme:store.get('theme','system') };
+const state={ brand:store.get('brand','parse'), radius:store.get('radius','8'), theme:store.get('theme','system'), pm:store.get('pm','pnpm') };
+if(!['pnpm','npm','yarn','bun'].includes(state.pm)) state.pm='pnpm';
 function applyTheme(){
   const b=BRANDS.find(x=>x.id===state.brand)||BRANDS[0], s=document.documentElement.style;
   if(b.c){ s.setProperty('--brand',b.c); s.setProperty('--brand-fg','#fff'); } else { s.setProperty('--brand','initial'); s.setProperty('--brand-fg','initial'); }
@@ -1083,7 +1088,7 @@ C.button={name:'Button',status:'stable',desc:'Triggers an action or event, such 
  examples:[
   {id:'variants',t:'Variants',d:'Use <code>primary</code> for the main action on a screen, <code>secondary</code> for everything else. Keep one primary button per view.',
    html:`<button class="pu-btn primary">Primary</button><button class="pu-btn secondary">Secondary</button><button class="pu-btn soft">Soft</button><button class="pu-btn ghost">Ghost</button><button class="pu-btn danger">Danger</button><button class="pu-btn link">Link</button>`,
-   code:`import { Button } from "@parseui/react"
+   code:`import { Button } from "@/components/ui/button"
 
 export function ButtonVariants() {
   return (
@@ -1105,8 +1110,8 @@ export function ButtonVariants() {
 <Button size="lg">Large</Button>`},
   {id:'icons',t:'With icon',d:'Pass any icon to <code>leadingIcon</code> or <code>trailingIcon</code>. Icons inherit size and color from the button.',
    html:`<button class="pu-btn primary">${I('plus')}New product</button><button class="pu-btn secondary">${I('download')}Export CSV</button><button class="pu-btn secondary">Continue${I('arrowR')}</button>`,
-   code:`import { Button } from "@parseui/react"
-import { Plus, Download, ArrowRight } from "@parseui/icons"
+   code:`import { Button } from "@/components/ui/button"
+import { Plus, Download, ArrowRight } from "lucide-react"
 
 <Button leadingIcon={<Plus />}>New product</Button>
 <Button variant="secondary" leadingIcon={<Download />}>Export CSV</Button>
@@ -1258,7 +1263,7 @@ C.tabs={name:'Tabs',status:'stable',desc:'Switch between related views on the sa
   </TabsList>
   <TabsContent value="overview">…</TabsContent>
 </Tabs>`},{t:'Pill',html:`<div data-tabs><div class="pu-tabs pill"><button class="on" data-i="0">7 days</button><button data-i="1">30 days</button><button data-i="2">90 days</button></div></div>`,code:`<TabsList variant="pill">…</TabsList>`}],
- props:[P('variant','"underline" | "pill"','"underline"','Visual style of the list.'),P('value','string','—','Active tab.'),P('orientation','"horizontal" | "vertical"','"horizontal"','Arrow-key direction.')]};
+ props:[P('variant','"underline" | "pill"','"underline"','Visual style, on <code>TabsList</code>.'),P('value','string','—','Active tab.'),P('orientation','"horizontal" | "vertical"','"horizontal"','Arrow-key direction.')]};
 
 C.accordion={name:'Accordion',status:'stable',desc:'Stacked sections that expand to reveal content.',thumb:`<div class="pu-acc" style="width:200px;font-size:12px"><details open><summary style="padding:8px 10px;font-size:12px">Refund policy ${I('chevD')}</summary></details></div>`,
  examples:[{t:'Default',html:`<div class="pu-acc"><details open><summary>How does billing work? ${I('chevD')}</summary><div class="body">Apps bill through Shopify. Charges appear on your monthly Shopify invoice.</div></details><details><summary>Can I cancel anytime? ${I('chevD')}</summary><div class="body">Yes. Uninstalling the app stops billing immediately.</div></details><details><summary>Do you offer a free trial? ${I('chevD')}</summary><div class="body">Every plan starts with a 14-day trial.</div></details></div>`,
@@ -1287,16 +1292,17 @@ C.modal={name:'Modal',status:'stable',desc:'A focused dialog for confirmations a
     color="danger"
     title="Delete this product?"
     description="This removes the product and its 4 variants. This can't be undone."
-  >
-    <ModalClose asChild><Button variant="secondary">Cancel</Button></ModalClose>
-    <Button variant="danger">Delete product</Button>
-  </ModalContent>
+    footer={<>
+      <ModalClose asChild><Button variant="secondary">Cancel</Button></ModalClose>
+      <Button variant="danger">Delete product</Button>
+    </>}
+  />
 </Modal>`}],
- props:[P('open','boolean','—','Controlled open state.'),P('size','"sm" | "md" | "lg"','"md"','Max width.'),P('dismissible','boolean','true','Close on overlay click and Escape.')]};
+ props:[P('open','boolean','—','Controlled open state, on <code>Modal</code>. Pair with <code>onOpenChange</code>.'),P('dismissible','boolean','true','Close on overlay click and Escape.'),P('size','"sm" | "md" | "lg"','"md"','Max width, on <code>ModalContent</code>.'),P('icon, color','ReactNode, "brand" | "danger" | "success" | "warning"','—','Icon tile above the title, on <code>ModalContent</code>.'),P('title, description','ReactNode','—','Heading and supporting text. The title names the dialog for screen readers.'),P('footer','ReactNode','—','Actions row. Children of <code>ModalContent</code> become the body.')]};
 
 C.toast={name:'Toast',status:'stable',desc:'Brief confirmation of an action, shown at the edge of the screen.',thumb:`<div class="pu-toast" style="width:200px;padding:10px;font-size:12px;box-shadow:var(--sh-md)"><div class="t"><b style="font-size:12.5px">Saved</b>Changes published</div></div>`,
  examples:[{t:'Trigger',html:`<button class="pu-btn secondary" data-toast="success">Show success</button><button class="pu-btn secondary" data-toast="error">Show error</button><button class="pu-btn secondary" data-toast="info">Show with action</button>`,
-  code:`import { toast } from "@parseui/react"
+  code:`import { toast } from "@/components/ui/toast"
 
 toast.success("Product saved", { description: "Your changes are live." })
 toast.error("Sync failed", { description: "Check your API key." })
@@ -1351,7 +1357,7 @@ C.dropdown={name:'Dropdown menu',importName:'DropdownMenu',file:'dropdown-menu',
 <div class="pu-dropdown" data-dd><button type="button" class="pu-btn ghost icon sm" id="dd-row-t" data-dd-t aria-haspopup="menu" aria-expanded="false" aria-controls="dd-row-m" aria-label="Actions for Organic cotton tee">${I('more')}</button><div class="pu-dropdown-menu" role="menu" id="dd-row-m" aria-labelledby="dd-row-t" data-align="end" hidden>${[['pen','Edit','Opened the product editor'],['copy','Duplicate','Duplicated as “Organic cotton tee (copy)”'],['box','Archive','Archived Organic cotton tee']].map(r=>`<button type="button" class="pu-dropdown-item" role="menuitem" tabindex="-1" data-say="${r[2]}">${I(r[0])}${r[1]}</button>`).join('')}<div class="pu-dropdown-sep" role="separator"></div><button type="button" class="pu-dropdown-item danger" role="menuitem" tabindex="-1" data-dd-modal="delete">${I('trash')}Delete</button></div></div></div>`,
      code:`<DropdownMenu>
   <DropdownMenuTrigger asChild>
-    <Button variant="ghost" size="sm" icon aria-label="Actions for Organic cotton tee">
+    <Button variant="ghost" size="sm" iconOnly aria-label="Actions for Organic cotton tee">
       <MoreHorizontal />
     </Button>
   </DropdownMenuTrigger>
@@ -1412,7 +1418,7 @@ C.dropdown={name:'Dropdown menu',importName:'DropdownMenu',file:'dropdown-menu',
     <DropdownMenuItem variant="danger" onSelect={remove}>Delete</DropdownMenuItem>
   </DropdownMenuContent>
 </DropdownMenu>`,
-   props:[P('open','boolean','—','Controlled open state.'),P('onOpenChange','(open: boolean) => void','—','Called when the menu opens or closes.'),P('align','"start" | "end"','"start"','Edge of the trigger the menu lines up with. Flips when there is no room.'),P('side','"bottom" | "top"','"bottom"','Preferred side. Flips up automatically near the bottom of the viewport.'),P('loop','boolean','true','Arrow keys wrap from the last item to the first.'),P('DropdownMenuItem.onSelect','(event: Event) => void','—','Runs when the item is chosen. Call event.preventDefault() to keep the menu open.'),P('DropdownMenuItem.variant','"default" | "danger"','"default"','Danger colors the item for destructive actions.'),P('DropdownMenuItem.shortcut','string','—','Shortcut hint shown on the right. Also set as aria-keyshortcuts.'),P('DropdownMenuItem.disabled','boolean','false','Skipped by arrow keys and typeahead.'),P('DropdownMenuCheckboxItem.checked','boolean','false','Checked state. Toggling keeps the menu open.')],
+   props:[P('open','boolean','—','Controlled open state.'),P('onOpenChange','(open: boolean) => void','—','Called when the menu opens or closes.'),P('DropdownMenuContent.align','"start" | "end"','"start"','Edge of the trigger the menu lines up with. Flips when there is no room.'),P('DropdownMenuContent.side','"bottom" | "top"','"bottom"','Preferred side. Flips up automatically near the bottom of the viewport.'),P('DropdownMenuContent.loop','boolean','true','Arrow keys wrap from the last item to the first.'),P('DropdownMenuItem.onSelect','(event: Event) => void','—','Runs when the item is chosen. Call event.preventDefault() to keep the menu open.'),P('DropdownMenuItem.variant','"default" | "danger"','"default"','Danger colors the item for destructive actions.'),P('DropdownMenuItem.shortcut','string','—','Shortcut hint shown on the right. Also set as aria-keyshortcuts.'),P('DropdownMenuItem.disabled','boolean','false','Skipped by arrow keys and typeahead.'),P('DropdownMenuCheckboxItem.checked','boolean','false','Checked state. Toggling keeps the menu open unless <code>closeOnSelect</code> is set.')],
    keys:[['Enter / Space / ↓','On the trigger: opens the menu and focuses the first item.'],['↑','On the trigger: opens the menu and focuses the last item.'],['↓ / ↑','Moves to the next or previous item, wrapping at the ends.'],['Home / End','Moves to the first or last item.'],['A–Z','Moves to the next item that starts with that letter.'],['Enter / Space','Runs the item. Checkbox items toggle and the menu stays open.'],['Escape','Closes the menu and returns focus to the trigger.'],['Tab','Closes the menu and moves focus on.']]};
 C.drawer={name:'Drawer',importName:'Drawer',status:'beta',radix:'Dialog',desc:'A panel that slides over the page for details or a short task, without leaving the current screen. On phones it becomes a bottom sheet.',thumb:`<div style="position:relative;width:210px;height:96px;border:1px solid var(--border);border-radius:8px;background:var(--bg-muted);overflow:hidden"><div style="position:absolute;inset:0 0 0 auto;width:96px;background:var(--bg);border-left:1px solid var(--border);box-shadow:var(--sh-lg);padding:10px"><div style="height:8px;width:60%;border-radius:4px;background:var(--text);opacity:.8"></div><div style="height:6px;width:80%;border-radius:3px;background:var(--border-strong);margin-top:10px"></div><div style="height:6px;width:70%;border-radius:3px;background:var(--border-strong);margin-top:6px"></div><div style="position:absolute;left:10px;right:10px;bottom:10px;height:16px;border-radius:5px;background:var(--p)"></div></div></div>`,
    examples:[
@@ -1481,7 +1487,7 @@ C.drawer={name:'Drawer',importName:'Drawer',status:'beta',radix:'Dialog',desc:'A
     …
   </DrawerContent>
 </Drawer>`,
-   props:[P('open','boolean','—','Controlled open state.'),P('onOpenChange','(open: boolean) => void','—','Called when the drawer opens or closes.'),P('side','"right" | "left" | "bottom"','"right"','Edge the drawer slides from. At 640px and narrower, right and left drawers become bottom sheets.'),P('title','string','—','Required. Labels the dialog through aria-labelledby.'),P('description','string','—','Shown under the title.'),P('footer','ReactNode','—','Actions pinned to the bottom while the body scrolls.'),P('dismissible','boolean','true','Close on Escape and overlay click.'),P('initialFocus','RefObject<HTMLElement>','the panel','Element that receives focus on open. The panel itself by default, so screen readers announce the title first.')],
+   props:[P('open','boolean','—','Controlled open state.'),P('onOpenChange','(open: boolean) => void','—','Called when the drawer opens or closes.'),P('side','"right" | "left" | "bottom"','"right"','Edge the drawer slides from. At 640px and narrower, right and left drawers become bottom sheets.'),P('title','string','—','On <code>DrawerContent</code>. Required. Labels the dialog through aria-labelledby.'),P('description','string','—','On <code>DrawerContent</code>. Shown under the title.'),P('footer','ReactNode','—','On <code>DrawerContent</code>. Actions pinned to the bottom while the body scrolls.'),P('dismissible','boolean','true','Close on Escape and overlay click.'),P('initialFocus','RefObject<HTMLElement>','the panel','Element that receives focus on open. The panel itself by default, so screen readers announce the title first.')],
    keys:[['Enter / Space','On the trigger: opens the drawer and moves focus into it.'],['Tab / Shift+Tab','Moves between controls inside the drawer. Focus wraps and never reaches the page behind.'],['Escape','Closes the drawer and returns focus to the trigger.']]};
 /* combobox data and markup, used by the Combobox examples */
 const CB_DATA={
@@ -1573,7 +1579,17 @@ C.command={name:'Command menu',importName:'CommandMenu',file:'command-menu',stat
 </CommandMenu>`},
     {t:'Dialog',d:'The same menu in a modal dialog. The search in these docs (⌘K or /) is built the same way: focus stays in the input, and Escape closes it and returns focus to where you were.',html:`<button type="button" class="pu-btn secondary" data-cmd-open aria-haspopup="dialog" aria-expanded="false">${I('search')}Search Printly</button>`,
      code:`const [open, setOpen] = React.useState(false)
-useHotkey("mod+k", () => setOpen((o) => !o))
+
+React.useEffect(() => {
+  const onKey = (e: KeyboardEvent) => {
+    if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault()
+      setOpen((o) => !o)
+    }
+  }
+  document.addEventListener("keydown", onKey)
+  return () => document.removeEventListener("keydown", onKey)
+}, [])
 
 <Button variant="secondary" leadingIcon={<Search />} onClick={() => setOpen(true)}>
   Search Printly
@@ -2049,8 +2065,21 @@ const demo=(ex,i)=>{ const id=CODES.push(ex.code)-1;
 const propsTable=rows=>`<div class="props-wrap"><table class="props"><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>${rows.map(r=>`<tr><td><code>${r[0]}</code></td><td class="type">${esc(r[1])}</td><td class="type">${esc(r[2])}</td><td>${r[3]}</td></tr>`).join('')}</tbody></table></div>`;
 // keys: [['Enter / Space', 'Opens the menu'], ...]; " / " separates alternatives, "+" joins a chord
 const keysTable=rows=>`<div class="props-wrap"><table class="props"><thead><tr><th>Key</th><th>Action</th></tr></thead><tbody>${rows.map(r=>`<tr><td style="white-space:nowrap">${r[0].split(' / ').map(alt=>alt.split('+').map(k=>`<kbd class="pu-kbd">${esc(k)}</kbd>`).join('+')).join(' <span style="color:var(--text-3)">or</span> ')}</td><td>${r[1]}</td></tr>`).join('')}</tbody></table></div>`;
-const pmTabs=(cmd)=>{ const v={pnpm:`pnpm dlx ${cmd}`,npm:`npx ${cmd}`,yarn:`yarn dlx ${cmd}`,bun:`bunx --bun ${cmd}`}; const id=CODES.push(v.pnpm)-1;
-  return `<div class="cblock" data-pm='${JSON.stringify(v).replace(/'/g,"&#39;")}'><div class="cblock-head">${I('terminal')}Terminal<div class="seg">${Object.keys(v).map((k,i)=>`<button class="${i?'':'on'}" data-pmk="${k}">${k}</button>`).join('')}</div></div><div class="codewrap"><pre class="code">${hl(v.pnpm,'bash')}</pre><button class="copy" data-copy="${id}" aria-label="Copy command">${I('copy')}</button></div></div>`; };
+/* package managers: one choice, saved per browser, shared by every snippet on every page */
+const REG='https://aowshad.github.io/parseui/r/', SRC='https://github.com/aowshad/parseui/blob/main/registry/parseui/ui/';
+const PMS=['pnpm','npm','yarn','bun'], PM_RUN={pnpm:'pnpm dlx',npm:'npx',yarn:'yarn',bun:'bunx --bun'}, PM_ADD={pnpm:'pnpm add',npm:'npm install',yarn:'yarn add',bun:'bun add'};
+// shadcn('add x') -> {pnpm:'pnpm dlx shadcn@latest add x', ...}; multi-line strings get the prefix on every line
+const shadcn=a=>Object.fromEntries(PMS.map(p=>[p,a.split('\n').map(l=>l&&!l.startsWith('#')?`${PM_RUN[p]} shadcn@latest ${l}`:l).join('\n')]));
+const pkgAdd=pk=>Object.fromEntries(PMS.map(p=>[p,`${PM_ADD[p]} ${pk}`]));
+const pmAttr=v=>JSON.stringify(v).replace(/&/g,'&amp;').replace(/'/g,'&#39;');
+const pmTabs=(v,title='Terminal')=>{ const id=CODES.push(v[state.pm])-1;
+  return `<div class="cblock" data-pm='${pmAttr(v)}'><div class="cblock-head">${I('terminal')}${title}<div class="seg" role="group" aria-label="Package manager">${PMS.map(k=>`<button type="button" class="${k===state.pm?'on':''}" aria-pressed="${k===state.pm}" data-pmk="${k}">${k}</button>`).join('')}</div></div><div class="codewrap"><pre class="code">${hl(v[state.pm],'bash')}</pre><button class="copy" data-copy="${id}" aria-label="Copy command">${I('copy')}</button></div></div>`; };
+function setPm(pm){ if(!PM_RUN[pm]) return; state.pm=pm; store.set('pm',pm);
+  document.querySelectorAll('[data-pm]').forEach(blk=>{ const v=JSON.parse(blk.dataset.pm), txt=v[pm];
+    blk.querySelectorAll('[data-pmk]').forEach(b=>{ b.classList.toggle('on',b.dataset.pmk===pm); b.setAttribute('aria-pressed',b.dataset.pmk===pm); });
+    const pre=blk.querySelector('pre'); if(pre) pre.innerHTML=hl(txt,'bash');
+    const line=blk.querySelector('[data-pm-text]'); if(line) line.textContent=txt;
+    const cp=blk.querySelector('[data-copy]'); if(cp) CODES[+cp.dataset.copy]=txt; }); }
 const crumbs=(...a)=>`<div class="eyebrow">${a[0]}</div>`;
 function pager(slug){ const i=FLAT.findIndex(f=>f.slug===slug); const p=FLAT[i-1], n=FLAT[i+1];
   return `<div class="pager">${p?`<a href="#/docs/${p.slug}">Previous<b>${p.name}</b></a>`:''}${n?`<a class="next" href="#/docs/${n.slug}">Next<b>${n.name}</b></a>`:''}</div>`; }
@@ -2060,69 +2089,21 @@ const statusTag=s=>s==='beta'?'<span class="pu-badge warning">Beta</span>':'<spa
 function componentPage(k){
   const c=C[k], file=c.file||k.replace(/[^a-z]/g,''), imp=c.importName||c.name.replace(/\s/g,'');
   let h=`${crumbs('Base components',c.name)}<h1>${c.name}</h1><p class="lead">${c.desc}</p>
-  <div class="meta-row">${statusTag(c.status)}<a class="chip-link" href="javascript:void 0">${I('figma')}Figma</a><a class="chip-link" href="javascript:void 0">${I('link')}Source</a>${c.radix?`<a class="chip-link" href="javascript:void 0">${I('layers')}Built on Radix ${c.radix}</a>`:''}</div>
+  <div class="meta-row">${statusTag(c.status)}<a class="chip-link" href="javascript:void 0">${I('figma')}Figma</a><a class="chip-link" href="${SRC}${file}.tsx" target="_blank" rel="noopener">${I('link')}Source</a>${c.radix?`<a class="chip-link" href="javascript:void 0">${I('layers')}Built on Radix ${c.radix}</a>`:''}</div>
   ${demo(c.examples[0])}
   <h2 id="installation">Installation</h2>
   <div class="demo" data-inst style="border:0;margin:0"><div class="pu-tabs" style="margin-bottom:6px"><button class="on" data-inst-t="cli">CLI</button><button data-inst-t="manual">Manual</button></div>
-   <div data-inst-p="cli">${pmTabs('parseui@latest add '+file)}</div>
-   <div data-inst-p="manual" class="hidden"><div class="steps">
-     <div class="step"><h4>Install the dependencies</h4>${codeBlock('npm install @radix-ui/react-slot class-variance-authority','bash')}</div>
-     <div class="step"><h4>Copy the source into your project</h4><p>Paste into <code>components/ui/${file}.tsx</code>.</p>${codeBlock(k==='button'?BUTTON_SRC:`// components/ui/${file}.tsx\n// Full source is published with v0.2 of @parseui/react`,'tsx')}</div>
-     <div class="step"><h4>Update the import paths</h4><p>Match your project's alias, for example <code>@/components/ui/${file}</code>.</p></div></div></div></div>
-  <h2 id="usage">Usage</h2>${codeBlock(`import { ${imp} } from "@parseui/react"`,'tsx')}${codeBlock(c.usage||c.examples[0].code.split('\n').filter(l=>!l.startsWith('import')).join('\n').trim(),'tsx')}
+   <div data-inst-p="cli">${pmTabs(shadcn(`add ${REG}${file}.json`))}<p>Needs a project set up with <code>shadcn init</code>. See <a class="inline-link" href="#/docs/installation">Installation</a>.</p></div>
+   <div data-inst-p="manual" class="hidden"><div class="steps" data-manual="${file}"><div class="step"><h4>Loading the source…</h4></div></div></div></div>
+  <h2 id="usage">Usage</h2>${codeBlock(`import { ${imp} } from "@/components/ui/${file}"`,'tsx')}${codeBlock(c.usage||c.examples[0].code.split('\n').filter(l=>!l.startsWith('import')).join('\n').trim(),'tsx')}
   <h2 id="examples">Examples</h2>`;
   c.examples.forEach((ex,i)=>{ if(i===0 && !c.rich) return; h+=`<h3 id="ex-${ex.id||i}">${ex.t}</h3>${ex.d?`<p>${ex.d}</p>`:''}${demo(ex)}`; });
   if(!c.rich && c.examples.length===1) h+=`<p>More examples are added as the component is designed in Figma.</p>`;
   h+=`<h2 id="api">API reference</h2><h3>${imp}</h3><p>Also accepts every native HTML attribute of the underlying element.</p>${propsTable(c.props)}`;
-  if(k==='button') h+=`<h2 id="accessibility">Accessibility</h2><ul><li>Renders a native <code>button</code> with <code>type="button"</code> by default, so it never submits a form by accident.</li><li>Focus ring uses a 2px offset in the brand color and meets 3:1 contrast on every surface.</li><li><code>loading</code> sets <code>aria-busy</code> and keeps the accessible name.</li><li>Icon-only buttons warn in development when <code>aria-label</code> is missing.</li></ul>`;
+  if(k==='button') h+=`<h2 id="accessibility">Accessibility</h2><ul><li>Renders a native <code>button</code> with <code>type="button"</code> by default, so it never submits a form by accident.</li><li>Focus ring uses a 2px offset in the brand color and meets 3:1 contrast on every surface.</li><li><code>loading</code> sets <code>aria-busy</code> and keeps the accessible name.</li><li>Icon-only buttons (<code>iconOnly</code>) have no visible text, so always pass an <code>aria-label</code>.</li></ul>`;
   if(c.keys) h+=`<h2 id="keyboard">Keyboard</h2>${keysTable(c.keys)}`;
   return h+pager(k);
 }
-const BUTTON_SRC=`import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
-
-const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-1.5 rounded-[--radius] font-medium transition-colors focus-visible:ring-2 disabled:opacity-50",
-  {
-    variants: {
-      variant: {
-        primary: "bg-primary text-primary-foreground hover:bg-primary-hover",
-        secondary: "border border-strong bg-background hover:bg-subtle",
-        soft: "bg-primary-soft text-primary-text",
-        ghost: "hover:bg-muted",
-        danger: "bg-danger text-white",
-        link: "text-primary-text underline-offset-4 hover:underline",
-      },
-      size: { xs: "h-7 px-2.5 text-[13px]", sm: "h-8 px-3", md: "h-9 px-3.5", lg: "h-11 px-4.5" },
-    },
-    defaultVariants: { variant: "primary", size: "md" },
-  }
-)
-
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean
-  loading?: boolean
-  leadingIcon?: React.ReactNode
-  trailingIcon?: React.ReactNode
-}
-
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild, loading, leadingIcon, trailingIcon, children, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
-    return (
-      <Comp ref={ref} aria-busy={loading} disabled={loading || props.disabled}
-        className={cn(buttonVariants({ variant, size }), className)} {...props}>
-        {loading ? <Spinner /> : leadingIcon}
-        {children}
-        {trailingIcon}
-      </Comp>
-    )
-  }
-)`;
 
 /* ---------- getting started pages ---------- */
 const PAGES={};
@@ -2132,58 +2113,74 @@ PAGES.introduction=()=>`${crumbs('Getting started','Introduction')}<h1>Introduct
 <h2 id="principles">Principles</h2>
 <div class="card-grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">${[['Tokens first','Color, type, radius and shadow are variables. Rebrand a product by changing a handful of values.'],['You own the code','Components copy into your repo through the CLI. Edit them freely without waiting on a package release.'],['Accessible by default','Built on Radix primitives with keyboard support, focus management and WCAG AA contrast.'],['Figma and code match','Every component has a Figma twin with the same names, variants and props.']].map(p=>`<div class="fcard" style="min-height:0"><h3>${p[0]}</h3><p style="font-size:14px;color:var(--text-2)">${p[1]}</p></div>`).join('')}</div>
 <h2 id="whats-inside">What's inside</h2><ul><li><b>Foundations</b> — color, typography, spacing, radius, shadows and an icon set.</li><li><b>Components</b> — ${COMP_ORDER.length} base components today${PLANNED.length?`, ${PLANNED.length} more planned`:''}.</li><li><b>Blocks</b> — ready-made sections like sign-in, pricing, settings and empty states.</li><li><b>Examples</b> — full screens, starting with a store dashboard.</li></ul>
-<h2 id="stack">Stack</h2><p>React 18+, TypeScript, Tailwind CSS v4 and Radix UI. Works with Next.js, Remix and Vite, and alongside Shopify Polaris inside embedded apps.</p>${pager('introduction')}`;
+<h2 id="stack">Stack</h2><p>React 19, TypeScript, Tailwind CSS v4 and Radix UI, installed through the shadcn CLI. Works with Next.js, React Router and Vite, and alongside Shopify Polaris inside embedded apps.</p>${pager('introduction')}`;
 
-PAGES.installation=()=>`${crumbs('Getting started','Installation')}<h1>Installation</h1><p class="lead">Add ParseUI to a new or existing React project in a few minutes.</p>
+PAGES.installation=()=>`${crumbs('Getting started','Installation')}<h1>Installation</h1><p class="lead">ParseUI is a <a class="inline-link" href="https://ui.shadcn.com/docs/registry" target="_blank" rel="noopener">shadcn registry</a>. The shadcn CLI copies each component into your repo as editable source, with its dependencies.</p>
 <h2 id="steps">Set up your project</h2><div class="steps">
-<div class="step"><h4>Initialise ParseUI</h4><p>Creates <code>parseui.json</code>, adds the theme CSS and a <code>cn()</code> helper.</p>${pmTabs('parseui@latest init')}</div>
-<div class="step"><h4>Pick your brand</h4><p>The CLI asks for a base color and radius. You can change them later in <code>theme.css</code>.</p>${codeBlock(`✔ Which brand color? › Parse blue
-✔ Which radius? › 8px
-✔ Where is your global CSS? › app/globals.css
-✔ Configure import alias? › @/components`,'bash')}</div>
-<div class="step"><h4>Add components</h4>${pmTabs('parseui@latest add button input badge')}</div>
+<div class="step"><h4>Set up shadcn</h4><p>Skip this if your project already has a <code>components.json</code>. It works with Next.js, Vite, React Router and other React setups that use Tailwind CSS v4.</p>${pmTabs(shadcn('init'))}</div>
+<div class="step"><h4>Add the ParseUI theme</h4><p>Writes the ParseUI palette, status colors and radius scale into your global CSS, in light and dark. Skip it to keep your own brand: components follow your <code>--primary</code> either way.</p>${pmTabs(shadcn(`add ${REG}theme.json`))}</div>
+<div class="step"><h4>Add components</h4><p>Pass one or more registry URLs. Each component brings the npm packages and other ParseUI parts it needs.</p>${pmTabs(shadcn(`add ${REG}button.json ${REG}input.json ${REG}badge.json`))}</div>
 <div class="step"><h4>Use them</h4>${codeBlock(`import { Button } from "@/components/ui/button"
 
 export default function Page() {
   return <Button>Save changes</Button>
 }`)}</div></div>
-<h2 id="package">Prefer a package?</h2><p>If you'd rather not own the source, install the compiled package. You get updates through npm but can't edit internals.</p>${codeBlock('npm install @parseui/react @parseui/icons','bash')}${pager('installation')}`;
+<h2 id="namespace">Shorter names</h2><p>Register the <code>@parseui</code> namespace once in <code>components.json</code>, then add components by name.</p>${codeBlock(`{
+  "registries": {
+    "@parseui": "${REG}{name}.json"
+  }
+}`,'json','components.json')}${pmTabs(shadcn('add @parseui/button @parseui/switch'))}
+<h2 id="names">Name clashes with shadcn/ui</h2><p>ParseUI uses the same file names as shadcn/ui (<code>button.tsx</code>, <code>card.tsx</code> and so on). If a file already exists, the CLI asks before replacing it. ParseUI parts import each other through your <code>ui</code> alias (the drawer uses <code>@/components/ui/button</code>), so keep one version of each file rather than mixing the two libraries.</p>${pager('installation')}`;
 
 PAGES.theming=()=>`${crumbs('Getting started','Theming')}<h1>Theming</h1><p class="lead">Everything visual is a CSS variable. Change a few tokens and every component follows. Try it: open the customizer in the top bar.</p>
-<h2 id="brand">Brand color</h2><p>Pick a brand to see the whole site recolor. Derived tokens like hover, soft and focus ring are computed from one value.</p><div style="margin:16px 0 8px">${swatches()}</div>
-<h2 id="tokens">Theme tokens</h2>${codeBlock(`:root {
-  --brand: #2488FF;
-  --brand-fg: #ffffff;
-  --radius: 8px;
-
-  --bg: #ffffff;
-  --text: #14141b;
-  --border: #e7e7ec;
+<h2 id="brand">Brand color</h2><p>Pick a brand to see the whole site recolor. Hover, soft and text shades are computed from one value.</p><div style="margin:16px 0 8px">${swatches()}</div>
+<h2 id="tokens">Theme tokens</h2><p>ParseUI uses the standard shadcn token names, so it works with any shadcn theme. The <a class="inline-link" href="#/docs/installation">ParseUI theme</a> sets them to these values:</p>${codeBlock(`:root {
+  --radius: 0.5rem;
+  --primary: #2488FF;
+  --primary-foreground: #FFFFFF;
+  --background: #FFFFFF;
+  --foreground: #14141B;
+  --muted: #F1F1F4;
+  --muted-foreground: #51515E;
+  --border: #E7E7EC;
+  --input: #D6D6DD;
+  --destructive: #DC3E42;
+  --success: #12915A;
+  --warning: #C27A04;
+  --info: #2F6FEB;
 }
 
 .dark {
-  --bg: #0f0f14;
-  --text: #ededf2;
-  --border: #26262f;
+  --background: #0F0F14;
+  --foreground: #EDEDF2;
+  --muted: #1C1C24;
+  --muted-foreground: #A6A6B3;
+  --border: #26262F;
+  --input: #34343F;
+  --destructive: #F26B6E;
+  --success: #3DC98A;
+  --warning: #F0B34A;
+  --info: #6B9CF7;
 }
 
-/* derived — you rarely touch these */
-:root {
-  --p-hover: color-mix(in oklab, var(--brand) 86%, var(--text));
-  --p-soft: color-mix(in oklab, var(--brand) 11%, var(--bg));
-}`,'css','theme.css')}
-<h2 id="per-product">One theme per product</h2><p>Each ParseLab app keeps its own brand while sharing everything else. Set the brand in the app's root layout:</p>${codeBlock(`<ParseUIProvider brand="#0E9F6E" radius={10} mode="system">
-  <App />
-</ParseUIProvider>`)}
-<h2 id="dark">Dark mode</h2><p>Every component is designed for both modes. Follow the system setting, or force one with <code>mode</code>. Use the sun and moon toggles on any preview to check both.</p>${pager('theming')}`;
+/* derived: added with every component, you rarely touch these */
+@theme inline {
+  --color-primary-hover: color-mix(in oklab, var(--primary) 86%, var(--foreground));
+  --color-primary-soft: color-mix(in oklab, var(--primary) 11%, var(--background));
+  --color-primary-text: color-mix(in oklab, var(--primary) 82%, var(--foreground));
+  --color-success-soft: color-mix(in oklab, var(--success) 11%, var(--background));
+}`,'css','globals.css')}
+<h2 id="per-product">One theme per product</h2><p>Each ParseLab app keeps its own brand while sharing everything else. Override the brand and radius in the app's global CSS:</p>${codeBlock(`:root {
+  --primary: #0E9F6E;
+  --ring: #0E9F6E;
+  --radius: 0.625rem;
+}`,'css','globals.css')}
+<h2 id="dark">Dark mode</h2><p>Every component is designed for both modes. Dark values apply under a <code>.dark</code> class on <code>&lt;html&gt;</code>, the shadcn convention, so <code>next-themes</code> and similar setups work as is. Use the sun and moon toggles on any preview to check both.</p>${pager('theming')}`;
 
-PAGES.cli=()=>`${crumbs('Getting started','CLI')}<h1>CLI</h1><p class="lead">The <code>parseui</code> command adds components, blocks and themes to your project.</p>
-<h2 id="commands">Commands</h2>${propsTable([['init','—','—','Set up config, theme CSS and utilities.'],['add &lt;name…&gt;','—','—','Copy one or more components or blocks into your project.'],['diff &lt;name&gt;','—','—','Show what changed upstream since you added a component.'],['theme','—','—','Regenerate theme tokens from a brand color.'],['list','—','—','Print every available component and block.']]).replace('<th>Prop</th><th>Type</th><th>Default</th>','<th>Command</th><th></th><th></th>')}
-<h2 id="examples">Examples</h2>${pmTabs('parseui@latest add button')}${codeBlock(`# add a Pro block (requires a licence key)
-npx parseui@latest add blocks/pricing --key $PARSEUI_KEY
-
-# check for upstream changes
-npx parseui@latest diff button`,'bash')}${pager('cli')}`;
+PAGES.cli=()=>`${crumbs('Getting started','CLI')}<h1>CLI</h1><p class="lead">ParseUI doesn't need its own CLI. The <code>shadcn</code> CLI adds components, checks for updates and shows what an item contains.</p>
+<h2 id="commands">Commands</h2>${propsTable([['init','—','—','Set up <code>components.json</code>, global CSS and the <code>cn()</code> helper.'],['add &lt;url…&gt;','—','—','Copy one or more components into your project, with their dependencies.'],['add &lt;url&gt; --diff','—','—','Show what changed upstream since you added a component.'],['view &lt;url&gt;','—','—','Print an item\'s files and dependencies without installing it.'],['search @parseui','—','—','List every ParseUI item. Needs the <a class="inline-link" href="#/docs/installation">namespace</a>.']]).replace('<th>Prop</th><th>Type</th><th>Default</th>','<th>Command</th><th></th><th></th>')}
+<h2 id="examples">Examples</h2>${pmTabs(shadcn(`add ${REG}button.json`))}${pmTabs(shadcn(`# check for upstream changes\nadd ${REG}button.json --diff\n\n# see what an item installs\nview ${REG}data-table.json`))}
+<h2 id="registry">Registry URLs</h2><p>Every component is published at <code>${REG}&lt;name&gt;.json</code>. The full index is at <a class="inline-link" href="${REG}registry.json" target="_blank" rel="noopener">registry.json</a>.</p>${pager('cli')}`;
 
 PAGES.figma=()=>`${crumbs('Getting started','Figma kit')}<h1>Figma kit</h1><p class="lead">A Figma library that mirrors the code: same component names, same variants, same tokens as Figma variables.</p>
 <div class="callout">${I('figma','ico-lg')}<div><b>Coming with v0.2.</b> Foundations are being set up as Figma variables first, then components one by one.</div></div>
@@ -2303,10 +2300,10 @@ export default function AppSettings({ settings }) {
 <h2 id="uses">Components used</h2><p>${['Card','Input','Select','Switch','Checkbox','Tabs','Button','Badge','Avatar','Breadcrumb','Toast','Modal'].map(n=>`<a class="inline-code" href="#/docs/${n.toLowerCase()}" style="margin:0 4px 6px 0;display:inline-block">${n}</a>`).join('')}</p>${pager('app-settings')}`;
 /* ---------- home ---------- */
 function homePage(){
-  const install='npx parseui@latest init', iid=CODES.push(install)-1;
-  const use=[['Install','Set up tokens and utilities once per project.',`npx parseui@latest init\n\n✔ Brand color › Parse blue\n✔ Radius › 8px`,'bash'],
-             ['Add what you need','Components land in your repo as editable source.',`npx parseui@latest add button\nnpx parseui@latest add table\nnpx parseui@latest add blocks/stats`,'bash'],
-             ['Build','Compose screens with a consistent API.',`import { Button, Badge } from "@/ui"\n\n<Button leadingIcon={<Plus />}>\n  New product\n</Button>`,'tsx']];
+  const install=shadcn(`add ${REG}theme.json`), iid=CODES.push(install[state.pm])-1;
+  const use=[['Set up','Add the ParseUI theme to any shadcn project.',shadcn(`init\nadd ${REG}theme.json`),'bash'],
+             ['Add what you need','Components land in your repo as editable source.',shadcn(`add ${REG}button.json\nadd ${REG}table.json\nadd ${REG}date-picker.json`),'bash'],
+             ['Build','Compose screens with a consistent API.',`import { Button } from "@/components/ui/button"\n\n<Button leadingIcon={<Plus />}>\n  New product\n</Button>`,'tsx']];
   return `<div class="home">
   <section class="hero"><div class="wrap hero-grid">
     <div>
@@ -2314,7 +2311,7 @@ function homePage(){
       <h1>Build every ParseLab app from one kit.</h1>
       <p class="sub">ParseUI is our design system: tokens, ${COMP_ORDER.length} React components, blocks and full screen examples, with a Figma library that matches the code line for line.</p>
       <div class="hero-cta"><a class="pu-btn primary lg" href="#/docs/components">Browse components</a><a class="pu-btn secondary lg" href="#/docs/introduction">Read the docs</a></div>
-      <div class="install"><span><span class="dollar">$</span> ${install}</span><button data-copy="${iid}" aria-label="Copy install command">${I('copy')}</button></div>
+      <div class="install" data-pm='${pmAttr(install)}'><span class="install-cmd"><span class="dollar">$</span> <span data-pm-text>${esc(install[state.pm])}</span></span><button data-copy="${iid}" aria-label="Copy install command">${I('copy')}</button></div>
       <div class="brand-try">Try a brand ${swatches()}</div>
     </div>
     <div class="stage">
@@ -2355,7 +2352,7 @@ function homePage(){
 
   <section class="sec"><div class="wrap">
     <div class="sec-h"><div><h2>How our developers use it</h2><p>Components copy into the repo, so teams can adjust them without waiting on a release.</p></div></div>
-    <div class="use-grid">${use.map((u,i)=>`<div class="use-card"><div class="h"><span class="n">${i+1}</span><div><h3>${u[0]}</h3><p>${u[1]}</p></div></div><pre class="code">${hl(u[2],u[3])}</pre></div>`).join('')}</div>
+    <div class="use-grid">${use.map((u,i)=>`<div class="use-card"><div class="h"><span class="n">${i+1}</span><div><h3>${u[0]}</h3><p>${u[1]}</p></div></div>${typeof u[2]==='object'?`<div data-pm='${pmAttr(u[2])}'><pre class="code">${hl(u[2][state.pm],u[3])}</pre></div>`:`<pre class="code">${hl(u[2],u[3])}</pre>`}</div>`).join('')}</div>
   </div></section>
 
   <section class="sec"><div class="wrap">
@@ -2394,7 +2391,29 @@ function render(){
   document.querySelector(`#topNav a[data-sec="${f.sec}"]`)?.classList.add('on');
   document.title=f.name+' — ParseUI'; window.scrollTo(0,0); buildToc(); applyTheme(); afterRender();
 }
+/* manual install: steps come from the published registry item, so they always match the CLI */
+const REG_CACHE={};
+const regItem=name=>REG_CACHE[name]||=fetch(`r/${name}.json`).then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); }).catch(e=>{ delete REG_CACHE[name]; throw e; });
+const regName=u=>u.startsWith(REG)?u.slice(REG.length).replace(/\.json$/,''):u;
+function tokensCss(item){ const v=item.cssVars||{}, block=(sel,o)=>o&&Object.keys(o).length?`${sel} {\n${Object.entries(o).map(([k,x])=>`  --${k}: ${x};`).join('\n')}\n}`:'';
+  return [block('@theme inline',v.theme),block(':root',v.light),block('.dark',v.dark)].filter(Boolean).join('\n\n'); }
+async function loadManual(el){ if(el.dataset.ready) return; el.dataset.ready=1; const file=el.dataset.manual;
+  try{
+    const item=await regItem(file), deps=item.dependencies||[], regs=(item.registryDependencies||[]).map(regName), parts=regs.filter(n=>n!=='utils'&&n!=='tokens');
+    const tokens=regs.includes('tokens')?await regItem('tokens'):null;
+    const link=n=>{ const k=Object.keys(C).find(x=>(C[x].file||x.replace(/[^a-z]/g,''))===n); return k?`<a class="inline-link" href="#/docs/${k}">${C[k].name}</a>`:`<code>${n}</code>`; };
+    let h='';
+    if(deps.length) h+=`<div class="step"><h4>Install the dependencies</h4>${pmTabs(pkgAdd(deps.join(' ')))}</div>`;
+    if(tokens) h+=`<div class="step"><h4>Add the ParseUI tokens</h4><p>Paste into your global CSS once. They add status colors and brand shades on top of the standard shadcn tokens.</p>${codeBlock(tokensCss(tokens),'css','globals.css')}</div>`;
+    if(regs.includes('utils')) h+=`<div class="step"><h4>Add the <code>cn()</code> helper</h4><p>Projects set up with <code>shadcn init</code> already have it in <code>lib/utils.ts</code>.</p>${codeBlock(`import { clsx, type ClassValue } from "clsx"\nimport { twMerge } from "tailwind-merge"\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs))\n}`,'tsx','lib/utils.ts')}</div>`;
+    if(parts.length) h+=`<div class="step"><h4>Add the parts it uses</h4><p>Install these first: ${parts.map(link).join(', ')}.</p></div>`;
+    item.files.forEach(f=>{ const path=f.target||`components/ui/${f.path.split('/').pop()}`; h+=`<div class="step"><h4>Copy the source into your project</h4><p>Paste into <code>${esc(path)}</code>.</p>${codeBlock(f.content.replaceAll('@/registry/parseui/ui/','@/components/ui/'),'tsx',path)}</div>`; });
+    h+=`<div class="step"><h4>Update the import paths</h4><p>The source imports <code>@/lib/utils</code> and <code>@/components/ui/…</code>. Change them if your aliases differ.</p></div>`;
+    el.innerHTML=h;
+  }catch(e){ el.dataset.ready=''; el.innerHTML=`<div class="step"><h4>Couldn't load the source</h4><p>Open <a class="inline-link" href="${REG}${file}.json" target="_blank" rel="noopener">${file}.json</a> or <a class="inline-link" href="${SRC}${file}.tsx" target="_blank" rel="noopener">the source on GitHub</a>. If you opened this page from a file, run a local server instead (see the README).</p></div>`; }
+}
 function afterRender(){
+  document.querySelectorAll('[data-manual]').forEach(loadManual);
   document.querySelectorAll('[data-indet]').forEach(el=>el.indeterminate=true);
   document.querySelectorAll('[data-slider]').forEach(el=>el.dispatchEvent(new Event('input',{bubbles:true})));
   document.querySelectorAll('[data-dp]').forEach(dpInit);
@@ -2803,10 +2822,10 @@ document.addEventListener('click',e=>{
   if(t.dataset.radius){ state.radius=t.dataset.radius; store.set('radius',state.radius); applyTheme(); return; }
   if(t.dataset.mode){ state.theme=t.dataset.mode; store.set('theme',state.theme); applyTheme(); return; }
   if(t.dataset.reset!==undefined){ Object.assign(state,{brand:'parse',radius:'8',theme:'system'}); ['brand','radius','theme'].forEach(k=>store.set(k,state[k])); applyTheme(); return; }
-  if(t.dataset.copytheme!==undefined){ const b=BRANDS.find(x=>x.id===state.brand); copyText(`:root {\n  --brand: ${b.c||'var(--text)'};\n  --brand-fg: ${b.c?'#ffffff':'var(--bg)'};\n  --radius: ${state.radius}px;\n}`,'Theme CSS copied'); return; }
+  if(t.dataset.copytheme!==undefined){ const b=BRANDS.find(x=>x.id===state.brand); copyText(`:root {\n  --primary: ${b.c||'var(--foreground)'};\n  --primary-foreground: ${b.c?'#FFFFFF':'var(--background)'};\n  --ring: ${b.c||'var(--foreground)'};\n  --radius: ${+state.radius/16}rem;\n}`,'Theme CSS copied'); return; }
   if(t.dataset.view){ const d=t.closest('[data-demo]'); t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); d.querySelector('[data-pv]').classList.toggle('hidden',t.dataset.view!=='p'); d.querySelector('[data-cv]').classList.toggle('hidden',t.dataset.view!=='c'); return; }
   if(t.dataset.scope!==undefined){ const d=t.closest('[data-demo]'); t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); const pv=d.querySelector('[data-pv]'); pv.classList.remove('scope-light','scope-dark'); if(t.dataset.scope) pv.classList.add(t.dataset.scope); return; }
-  if(t.dataset.pmk){ const blk=t.closest('[data-pm]'), v=JSON.parse(blk.dataset.pm); t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); blk.querySelector('pre').innerHTML=hl(v[t.dataset.pmk],'bash'); CODES[+blk.querySelector('.copy').dataset.copy]=v[t.dataset.pmk]; return; }
+  if(t.dataset.pmk){ setPm(t.dataset.pmk); return; }
   if(t.dataset.instT){ const w=t.closest('[data-inst]'); w.querySelectorAll('[data-inst-t]').forEach(b=>b.classList.toggle('on',b===t)); w.querySelectorAll('[data-inst-p]').forEach(p=>p.classList.toggle('hidden',p.dataset.instP!==t.dataset.instT)); return; }
   if(t.dataset.i!==undefined && t.closest('[data-tabs]')){ const w=t.closest('[data-tabs]'); t.parentNode.querySelectorAll('button').forEach(b=>{ b.classList.toggle('on',b===t); if(b.getAttribute('role')==='tab'){ b.setAttribute('aria-selected',b===t); b.tabIndex=b===t?0:-1; } }); w.querySelectorAll('[data-p]').forEach(p=>p.classList.toggle('hidden',p.dataset.p!==t.dataset.i)); return; }
   if(t.closest('[data-group]')){ t.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===t)); return; }

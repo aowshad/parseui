@@ -1,0 +1,59 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theme",
+  "title": "ParseUI theme",
+  "description": "The full ParseUI look for a shadcn project: Parse blue brand, neutrals, status colors and the radius scale, in light and dark.",
+  "registryDependencies": [
+    "https://aowshad.github.io/parseui/r/tokens.json"
+  ],
+  "cssVars": {
+    "theme": {
+      "radius-sm": "calc(var(--radius) * 0.75)",
+      "radius-md": "var(--radius)",
+      "radius-lg": "calc(var(--radius) * 1.5)",
+      "radius-xl": "calc(var(--radius) * 2)"
+    },
+    "light": {
+      "radius": "0.5rem",
+      "background": "#FFFFFF",
+      "foreground": "#14141B",
+      "card": "#FFFFFF",
+      "card-foreground": "#14141B",
+      "popover": "#FFFFFF",
+      "popover-foreground": "#14141B",
+      "primary": "#2488FF",
+      "primary-foreground": "#FFFFFF",
+      "secondary": "#F1F1F4",
+      "secondary-foreground": "#14141B",
+      "muted": "#F1F1F4",
+      "muted-foreground": "#51515E",
+      "accent": "#F1F1F4",
+      "accent-foreground": "#14141B",
+      "destructive": "#DC3E42",
+      "border": "#E7E7EC",
+      "input": "#D6D6DD",
+      "ring": "#2488FF"
+    },
+    "dark": {
+      "background": "#0F0F14",
+      "foreground": "#EDEDF2",
+      "card": "#15151C",
+      "card-foreground": "#EDEDF2",
+      "popover": "#15151C",
+      "popover-foreground": "#EDEDF2",
+      "primary": "#2488FF",
+      "primary-foreground": "#FFFFFF",
+      "secondary": "#1C1C24",
+      "secondary-foreground": "#EDEDF2",
+      "muted": "#1C1C24",
+      "muted-foreground": "#A6A6B3",
+      "accent": "#1C1C24",
+      "accent-foreground": "#EDEDF2",
+      "destructive": "#F26B6E",
+      "border": "#26262F",
+      "input": "#34343F",
+      "ring": "#2488FF"
+    }
+  },
+  "type": "registry:theme"
+}
