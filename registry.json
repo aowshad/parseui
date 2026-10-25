@@ -1,0 +1,104 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "parseui",
+  "homepage": "https://aowshad.github.io/parseui/",
+  "items": [
+    {
+      "name": "tokens",
+      "type": "registry:theme",
+      "title": "ParseUI tokens",
+      "description": "Status colors and derived brand shades that ParseUI components use on top of the standard shadcn tokens. Installed automatically with every component.",
+      "cssVars": {
+        "theme": {
+          "color-primary-hover": "color-mix(in oklab, var(--primary) 86%, var(--foreground))",
+          "color-primary-soft": "color-mix(in oklab, var(--primary) 11%, var(--background))",
+          "color-primary-soft-hover": "color-mix(in oklab, var(--primary) 20%, var(--background))",
+          "color-primary-text": "color-mix(in oklab, var(--primary) 82%, var(--foreground))",
+          "color-destructive-hover": "color-mix(in oklab, var(--destructive) 88%, black)",
+          "color-destructive-soft": "color-mix(in oklab, var(--destructive) 11%, var(--background))",
+          "color-success": "var(--success)",
+          "color-success-soft": "color-mix(in oklab, var(--success) 11%, var(--background))",
+          "color-warning": "var(--warning)",
+          "color-warning-soft": "color-mix(in oklab, var(--warning) 12%, var(--background))",
+          "color-info": "var(--info)",
+          "color-info-soft": "color-mix(in oklab, var(--info) 11%, var(--background))"
+        },
+        "light": {
+          "success": "#12915A",
+          "warning": "#C27A04",
+          "info": "#2F6FEB"
+        },
+        "dark": {
+          "success": "#3DC98A",
+          "warning": "#F0B34A",
+          "info": "#6B9CF7"
+        }
+      }
+    },
+    {
+      "name": "theme",
+      "type": "registry:theme",
+      "title": "ParseUI theme",
+      "description": "The full ParseUI look for a shadcn project: Parse blue brand, neutrals, status colors and the radius scale, in light and dark.",
+      "registryDependencies": ["https://aowshad.github.io/parseui/r/tokens.json"],
+      "cssVars": {
+        "theme": {
+          "radius-sm": "calc(var(--radius) * 0.75)",
+          "radius-md": "var(--radius)",
+          "radius-lg": "calc(var(--radius) * 1.5)",
+          "radius-xl": "calc(var(--radius) * 2)"
+        },
+        "light": {
+          "radius": "0.5rem",
+          "background": "#FFFFFF",
+          "foreground": "#14141B",
+          "card": "#FFFFFF",
+          "card-foreground": "#14141B",
+          "popover": "#FFFFFF",
+          "popover-foreground": "#14141B",
+          "primary": "#2488FF",
+          "primary-foreground": "#FFFFFF",
+          "secondary": "#F1F1F4",
+          "secondary-foreground": "#14141B",
+          "muted": "#F1F1F4",
+          "muted-foreground": "#51515E",
+          "accent": "#F1F1F4",
+          "accent-foreground": "#14141B",
+          "destructive": "#DC3E42",
+          "border": "#E7E7EC",
+          "input": "#D6D6DD",
+          "ring": "#2488FF"
+        },
+        "dark": {
+          "background": "#0F0F14",
+          "foreground": "#EDEDF2",
+          "card": "#15151C",
+          "card-foreground": "#EDEDF2",
+          "popover": "#15151C",
+          "popover-foreground": "#EDEDF2",
+          "primary": "#2488FF",
+          "primary-foreground": "#FFFFFF",
+          "secondary": "#1C1C24",
+          "secondary-foreground": "#EDEDF2",
+          "muted": "#1C1C24",
+          "muted-foreground": "#A6A6B3",
+          "accent": "#1C1C24",
+          "accent-foreground": "#EDEDF2",
+          "destructive": "#F26B6E",
+          "border": "#26262F",
+          "input": "#34343F",
+          "ring": "#2488FF"
+        }
+      }
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Triggers an action or event, such as submitting a form, opening a dialog, or saving changes.",
+      "dependencies": ["radix-ui", "class-variance-authority", "lucide-react"],
+      "registryDependencies": ["utils", "https://aowshad.github.io/parseui/r/tokens.json"],
+      "files": [{ "path": "registry/parseui/ui/button.tsx", "type": "registry:ui" }]
+    }
+  ]
+}

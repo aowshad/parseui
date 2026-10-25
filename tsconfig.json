@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/lib/*": ["registry/parseui/lib/*"],
+      "@/hooks/*": ["registry/parseui/hooks/*"],
+      "@/registry/*": ["registry/*"]
+    }
+  },
+  "include": ["registry/**/*.ts", "registry/**/*.tsx"]
+}
