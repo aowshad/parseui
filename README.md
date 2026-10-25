@@ -73,6 +73,8 @@ Routes use hash URLs (`#/docs/button`), so deep links work on GitHub Pages witho
 
 ## Roadmap
 
+The current upgrade plan, phase by phase with status, is in [docs/upgrade-brief.md](docs/upgrade-brief.md).
+
 1. **Now:** foundations and base components
 2. **Next:** blocks and sections
 3. **Then:** full admin dashboard examples
